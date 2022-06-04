@@ -13,11 +13,14 @@ const DEFAULT_WIDTH_FOR_ROOT = 50;
 
 const elk = new Elk({
   defaultLayoutOptions: {
-    "elk.algorithm": "layered",
-    "elk.direction": "DOWN",
-    "elk.spacing.nodeNode": "100",
-    "elk.layered.spacing.nodeNodeBetweenLayers": "100",
-    "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
+    "elk.debugMode": "true",
+    "elk.algorithm": "mrtree",
+    "elk.spacing.nodeNode": "50",
+    // "elk.direction": "DOWN",
+    // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+    // "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
+    // "elk.stress.fixed": "true",
+    // "elk.alignment": "CENTER",
   },
 });
 
@@ -46,6 +49,9 @@ export const createGraphLayout = async (
   nodes.forEach((flowNode) => {
     elkNodes.push({
       id: flowNode.id,
+      layoutOptions: {
+        "elk.priority": flowNode.id,
+      },
       width:
         flowNode.id === "0"
           ? DEFAULT_WIDTH_FOR_ROOT

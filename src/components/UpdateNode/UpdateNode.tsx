@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
 import { addEdge, Connection } from "react-flow-renderer";
@@ -9,8 +9,9 @@ import CustomNode from "../CustomNode/CustomNode";
 const UpdateNode = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [fitView, setFitView] = useState("off");
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
-  const fitViewRef = useRef(() => {});
+  const canvas = useRef<ReactFlowInstance>();
   const nodesLengthRef = useRef(edges.length);
 
   const onConnect = useCallback(
@@ -28,7 +29,7 @@ const UpdateNode = () => {
       );
       setNodes(nodes);
       reactFlowInstance.fitView();
-      fitViewRef.current = reactFlowInstance.fitView;
+      canvas.current = reactFlowInstance;
     } catch (error) {
       console.error(error);
     }
@@ -86,15 +87,27 @@ const UpdateNode = () => {
       }
       // TODO: mejorar
       setTimeout(() => {
-        fitViewRef.current();
+        console.log(fitView);
+        if (!canvas.current || fitView !== "on") return;
+        canvas.current.fitView();
       }, 500);
     },
-    [edges, nodes, setNodes, onNodesChange]
+    [edges, nodes, setNodes, onNodesChange, fitView]
   );
 
   return (
     <>
       <button onClick={() => nodeClickHandler(null)}>Create node</button>
+      <label>
+        <input
+          type="checkbox"
+          onChange={(e) => {
+            setFitView(e.target.checked ? "on" : "off");
+          }}
+          value={fitView}
+        />
+        Fit view
+      </label>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -108,7 +121,7 @@ const UpdateNode = () => {
         defaultZoom={1.5}
         fitView
         // attributionPosition="bottom-left"
-      ></ReactFlow>
+      />
     </>
   );
 };
