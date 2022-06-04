@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
+import { ReactFlowInstance } from "react-flow-renderer";
 import { addEdge } from "react-flow-renderer";
 import { Node } from "react-flow-renderer";
+import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
 
 const initialNodes: Node[] = [
@@ -34,27 +36,50 @@ const UpdateNode = () => {
     [setEdges]
   );
 
+  const onInit = (reactFlowInstance: ReactFlowInstance) => {
+    console.log("flow loaded:", reactFlowInstance);
+    createGraphLayout(
+      reactFlowInstance.getNodes(),
+      reactFlowInstance.getEdges()
+    )
+      .then((els) => setNodes(els))
+      .catch((err) => console.error(err));
+    reactFlowInstance.fitView();
+  };
+
   useEffect(() => {
+    const createNode = (parentNode: Node, id: string) => {
+      const { position } = parentNode;
+      const newNode = {
+        id,
+        type: "customNode",
+        data: {
+          label: `Node ${id}`,
+          onClick: () => {},
+        },
+        position: {
+          // @ts-ignore
+          x: position.x - parentNode.width / 2 + Math.random() / 1000,
+          // @ts-ignore
+          y: position.y - parentNode.height / 2,
+        },
+      };
+      newNode.data.onClick = () => clickHandler(newNode);
+      return newNode;
+    };
+
+    const clickHandler = (node: Node) => {
+      console.log("clicked", { node });
+      setNodes((prev) => [...prev, createNode(node, `${prev.length}`)]);
+    };
+
     setNodes((nds) =>
       nds.map((node) => {
-        const clickHandler = () => {
-          console.log("clicked", { node });
-          const { position } = node;
-          setNodes((prev) => [
-            ...prev,
-            {
-              id: prev.length.toString(),
-              type: "customNode",
-              data: { label: `Node ${prev.length}`, onClick: clickHandler },
-              position: { x: 100, y: position.y + 100 },
-            },
-          ]);
-        };
         // it's important that you create a new object here
         // in order to notify react flow about the change
         node.data = {
           ...node.data,
-          onClick: clickHandler,
+          onClick: () => clickHandler(node),
         };
 
         return node;
@@ -69,6 +94,7 @@ const UpdateNode = () => {
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
+      onInit={onInit}
       // style={{ background: bgColor }}
       nodeTypes={nodeTypes}
       // connectionLineStyle={connectionLineStyle}
@@ -77,27 +103,7 @@ const UpdateNode = () => {
       defaultZoom={1.5}
       fitView
       attributionPosition="bottom-left"
-    >
-      {/* <div className="updatenode__controls">
-        <label>label:</label>
-        <input
-          value={nodeName}
-          onChange={(evt) => setNodeName(evt.target.value)}
-        />
-
-        <label className="updatenode__bglabel">background:</label>
-        <input value={nodeBg} onChange={(evt) => setNodeBg(evt.target.value)} />
-
-        <div className="updatenode__checkboxwrapper">
-          <label>hidden:</label>
-          <input
-            type="checkbox"
-            checked={nodeHidden}
-            onChange={(evt) => setNodeHidden(evt.target.checked)}
-          />
-        </div>
-      </div> */}
-    </ReactFlow>
+    />
   );
 };
 
