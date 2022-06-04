@@ -1,9 +1,8 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Handle, Position } from "react-flow-renderer";
 
 const CustomNode = (props: any) => {
   const { isConnectable, data } = props;
-  console.log({ props });
 
   return (
     <div onClick={data.onClick}>

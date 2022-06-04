@@ -1,43 +1,24 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
-import { addEdge } from "react-flow-renderer";
+import { addEdge, Connection } from "react-flow-renderer";
 import { Node } from "react-flow-renderer";
 import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
 
-const initialNodes: Node[] = [
-  {
-    id: "0",
-    type: "customNode",
-    data: {
-      label: "Node 0",
-    },
-    position: { x: 100, y: 0 },
-  },
-  {
-    id: "1",
-    type: "customNode",
-    data: { label: "Node 1" },
-    position: { x: 100, y: 100 },
-  },
-];
-
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-
 const UpdateNode = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
 
   const onConnect = useCallback(
-    (params: any) =>
-      setEdges((eds) => addEdge({ ...params, markerEnd: true }, eds)),
+    (params: Connection) => {
+      return setEdges((edges) => addEdge({ ...params }, edges));
+    },
     [setEdges]
   );
 
   const onInit = (reactFlowInstance: ReactFlowInstance) => {
-    console.log("flow loaded:", reactFlowInstance);
     createGraphLayout(
       reactFlowInstance.getNodes(),
       reactFlowInstance.getEdges()
@@ -47,63 +28,66 @@ const UpdateNode = () => {
     reactFlowInstance.fitView();
   };
 
-  useEffect(() => {
-    const createNode = (parentNode: Node, id: string) => {
+  const createNode = (parentNode: Node | null, id: string): Node => {
+    const newNode = {
+      id,
+      type: "customNode",
+      data: {
+        label: `Node ${id}`,
+      },
+      position: { x: 0, y: 0 },
+    };
+    if (parentNode) {
       const { position } = parentNode;
-      const newNode = {
-        id,
-        type: "customNode",
-        data: {
-          label: `Node ${id}`,
-          onClick: () => {},
-        },
-        position: {
-          // @ts-ignore
-          x: position.x - parentNode.width / 2 + Math.random() / 1000,
-          // @ts-ignore
-          y: position.y - parentNode.height / 2,
-        },
+      newNode.position = {
+        // @ts-ignore
+        x: position.x - parentNode.width / 2 + Math.random() / 1000,
+        // @ts-ignore
+        y: position.y - parentNode.height / 2,
       };
-      newNode.data.onClick = () => clickHandler(newNode);
-      return newNode;
-    };
+    }
+    return newNode;
+  };
 
-    const clickHandler = (node: Node) => {
-      console.log("clicked", { node });
-      setNodes((prev) => [...prev, createNode(node, `${prev.length}`)]);
-    };
-
-    setNodes((nds) =>
-      nds.map((node) => {
-        // it's important that you create a new object here
-        // in order to notify react flow about the change
-        node.data = {
-          ...node.data,
-          onClick: () => clickHandler(node),
-        };
-
-        return node;
-      })
-    );
-  }, [setNodes]);
+  const nodeClickHandler = (node: Node | null) => {
+    setNodes((prev) => {
+      const newNode = createNode(node, `${prev.length}`);
+      if (node) {
+        setEdges((prev) =>
+          addEdge(
+            {
+              id: `${node.id}-${newNode.id}`,
+              source: node.id,
+              target: newNode.id,
+              sourceHandle: "a",
+              targetHandle: "b",
+            },
+            prev
+          )
+        );
+      }
+      return [...prev, newNode];
+    });
+  };
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      onInit={onInit}
-      // style={{ background: bgColor }}
-      nodeTypes={nodeTypes}
-      // connectionLineStyle={connectionLineStyle}
-      snapToGrid={true}
-      // snapGrid={snapGrid}
-      defaultZoom={1.5}
-      fitView
-      attributionPosition="bottom-left"
-    />
+    <>
+      <button onClick={() => nodeClickHandler(null)}>Create node</button>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onInit={onInit}
+        nodeTypes={nodeTypes}
+        onNodeClick={(e, node) => nodeClickHandler(node)}
+        snapToGrid={true}
+        defaultZoom={1.5}
+        fitView
+        attributionPosition="bottom-left"
+      ></ReactFlow>
+    </>
   );
 };
 
