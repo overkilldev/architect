@@ -1,109 +1,128 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
-import { addEdge } from "react-flow-renderer";
-import { Node } from "react-flow-renderer";
+import { addEdge, Connection } from "react-flow-renderer";
+import { Node, OnNodesChange } from "react-flow-renderer";
 import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
 
-const initialNodes: Node[] = [
-  {
-    id: "0",
-    type: "customNode",
-    data: {
-      label: "Node 0",
-    },
-    position: { x: 100, y: 0 },
-  },
-  {
-    id: "1",
-    type: "customNode",
-    data: { label: "Node 1" },
-    position: { x: 100, y: 100 },
-  },
-];
-
-const initialEdges = [{ id: "e1-2", source: "1", target: "2" }];
-
 const UpdateNode = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [nodes, setNodes, onNodesChange] = useNodesState<Node[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
+  const [fitView, setFitView] = useState("off");
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
+  const canvas = useRef<ReactFlowInstance>();
+  const nodesLengthRef = useRef(edges.length);
 
   const onConnect = useCallback(
-    (params: any) =>
-      setEdges((eds) => addEdge({ ...params, markerEnd: true }, eds)),
+    (params: Connection) => {
+      return setEdges((edges) => addEdge({ ...params }, edges));
+    },
     [setEdges]
   );
 
-  const onInit = (reactFlowInstance: ReactFlowInstance) => {
-    console.log("flow loaded:", reactFlowInstance);
-    createGraphLayout(
-      reactFlowInstance.getNodes(),
-      reactFlowInstance.getEdges()
-    )
-      .then((els) => setNodes(els))
-      .catch((err) => console.error(err));
-    reactFlowInstance.fitView();
+  const onInit = async (reactFlowInstance: ReactFlowInstance) => {
+    try {
+      const nodes = await createGraphLayout(
+        reactFlowInstance.getNodes(),
+        reactFlowInstance.getEdges()
+      );
+      setNodes(nodes);
+      reactFlowInstance.fitView();
+      canvas.current = reactFlowInstance;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  useEffect(() => {
-    const createNode = (parentNode: Node, id: string) => {
+  const createNode = (parentNode: Node | null, id: string): Node => {
+    const newNode = {
+      id,
+      type: "customNode",
+      data: { label: `Node ${id}` },
+      position: { x: 0, y: 0 },
+    };
+    const { width, height } = parentNode ?? {};
+    if (parentNode && width && height) {
       const { position } = parentNode;
-      const newNode = {
-        id,
-        type: "customNode",
-        data: {
-          label: `Node ${id}`,
-          onClick: () => {},
-        },
-        position: {
-          // @ts-ignore
-          x: position.x - parentNode.width / 2 + Math.random() / 1000,
-          // @ts-ignore
-          y: position.y - parentNode.height / 2,
-        },
+      newNode.position = {
+        x: position.x,
+        y: position.y + height + 25,
       };
-      newNode.data.onClick = () => clickHandler(newNode);
-      return newNode;
-    };
+    }
+    return newNode;
+  };
 
-    const clickHandler = (node: Node) => {
-      console.log("clicked", { node });
-      setNodes((prev) => [...prev, createNode(node, `${prev.length}`)]);
-    };
+  const nodeClickHandler = useCallback(
+    (node: Node | null) => {
+      setNodes((prev) => {
+        const newNode = createNode(node, `${prev.length}`);
+        if (node) {
+          setEdges((prev) =>
+            addEdge(
+              {
+                id: `${node.id}-${newNode.id}`,
+                source: node.id,
+                target: newNode.id,
+                sourceHandle: "a",
+                targetHandle: "b",
+              },
+              prev
+            )
+          );
+        }
+        return [...prev, newNode];
+      });
+    },
+    [setEdges, setNodes]
+  );
 
-    setNodes((nds) =>
-      nds.map((node) => {
-        // it's important that you create a new object here
-        // in order to notify react flow about the change
-        node.data = {
-          ...node.data,
-          onClick: () => clickHandler(node),
-        };
-
-        return node;
-      })
-    );
-  }, [setNodes]);
+  const nodesChangeHandler: OnNodesChange = useCallback(
+    async (nodeChanges) => {
+      onNodesChange(nodeChanges);
+      if (nodesLengthRef.current !== nodes.length) {
+        const newNodes = await createGraphLayout(nodes, edges);
+        setNodes(newNodes);
+        nodesLengthRef.current = nodes.length;
+      }
+      // TODO: mejorar
+      setTimeout(() => {
+        console.log(fitView);
+        if (!canvas.current || fitView !== "on") return;
+        canvas.current.fitView();
+      }, 500);
+    },
+    [edges, nodes, setNodes, onNodesChange, fitView]
+  );
 
   return (
-    <ReactFlow
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
-      onInit={onInit}
-      // style={{ background: bgColor }}
-      nodeTypes={nodeTypes}
-      // connectionLineStyle={connectionLineStyle}
-      snapToGrid={true}
-      // snapGrid={snapGrid}
-      defaultZoom={1.5}
-      fitView
-      attributionPosition="bottom-left"
-    />
+    <>
+      <button onClick={() => nodeClickHandler(null)}>Create node</button>
+      <label>
+        <input
+          type="checkbox"
+          onChange={(e) => {
+            setFitView(e.target.checked ? "on" : "off");
+          }}
+          value={fitView}
+        />
+        Fit view
+      </label>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={nodesChangeHandler}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        onInit={onInit}
+        nodeTypes={nodeTypes}
+        onNodeClick={(e, node) => nodeClickHandler(node)}
+        snapToGrid={true}
+        defaultZoom={1.5}
+        fitView
+        // attributionPosition="bottom-left"
+      />
+    </>
   );
 };
 

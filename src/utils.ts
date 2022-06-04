@@ -7,18 +7,37 @@ Get a sense of the parameters at:
 https://rtsys.informatik.uni-kiel.de/elklive/examples.html?e=general%2Fspacing%2FnodesEdges 
 */
 
-const DEFAULT_WIDTH = 330;
-const DEFAULT_HEIGHT = 75;
-const DEFAULT_WIDTH_FOR_ROOT = 170;
+const DEFAULT_WIDTH = 50;
+const DEFAULT_HEIGHT = 30;
+const DEFAULT_WIDTH_FOR_ROOT = 50;
 
 const elk = new Elk({
   defaultLayoutOptions: {
-    "elk.algorithm": "layered",
-    "elk.direction": "RIGHT",
-    "elk.spacing.nodeNode": "75",
-    "elk.layered.spacing.nodeNodeBetweenLayers": "75",
+    "elk.debugMode": "true",
+    "elk.algorithm": "mrtree",
+    "elk.spacing.nodeNode": "50",
+    // "elk.direction": "DOWN",
+    // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+    // "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
+    // "elk.stress.fixed": "true",
+    // "elk.alignment": "CENTER",
   },
 });
+
+export const calculateLayout = (flowNode: Node, graph: ElkNode) => {
+  const node = graph?.children?.find((n) => n.id === flowNode.id);
+  if (!node) return flowNode;
+  const { x, y, width, height } = node;
+  if (x && y && width && height) {
+    flowNode.position = {
+      x: x - width,
+      y: y - height,
+    };
+  } else {
+    console.log("error? ");
+  }
+  return flowNode;
+};
 
 export const createGraphLayout = async (
   nodes: Array<Node>,
@@ -30,6 +49,9 @@ export const createGraphLayout = async (
   nodes.forEach((flowNode) => {
     elkNodes.push({
       id: flowNode.id,
+      layoutOptions: {
+        "elk.priority": flowNode.id,
+      },
       width:
         flowNode.id === "0"
           ? DEFAULT_WIDTH_FOR_ROOT
@@ -52,14 +74,5 @@ export const createGraphLayout = async (
     edges: elkEdges,
   });
 
-  return nodes.map((flowNode) => {
-    const node = newGraph?.children?.find((n) => n.id === flowNode.id);
-    if (node?.x && node?.y && node?.width && node?.height) {
-      flowNode.position = {
-        x: node.x - node.width / 2 + Math.random() / 1000,
-        y: node.y - node.height / 2,
-      };
-    }
-    return flowNode;
-  });
+  return nodes.map((flowNode) => calculateLayout(flowNode, newGraph));
 };
