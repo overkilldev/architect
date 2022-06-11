@@ -1,4 +1,17 @@
 {
-  "extends": "../../tsconfig.json",
-  "include": ["src"]
+  "compilerOptions": {
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*"]
+    },
+    "target": "ESNext",
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "noFallthroughCasesInSwitch": true,
+    "types": ["vite/client", "vite-plugin-svgr/client", "vitest/globals"]
+  },
+  "include": ["./src", "./vite.config.ts"],
+  "exclude": ["./node_modules"],
+  "extends": "../../tsconfig.json"
 }
