@@ -12,7 +12,7 @@ export const buildNode = (overrides: Partial<Node> = {}): Node => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -35,7 +35,7 @@ export const buildTemplate = (overrides: Partial<Template> = {}): Template => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -58,7 +58,7 @@ export const buildEnhancer = (overrides: Partial<Enhancer> = {}): Enhancer => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -81,7 +81,7 @@ export const buildSnippet = (overrides: Partial<Snippet> = {}): Snippet => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -108,7 +108,7 @@ export const buildEnhancedTemplate = (
     deletedAt: null,
     enhancersIds: [faker.random.word(), faker.random.word()], // TODO: add enhancers id
     templateId: faker.random.word(), // TODO: add template id
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -131,7 +131,7 @@ export const buildTree = (overrides: Partial<Tree> = {}): Tree => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -154,7 +154,7 @@ export const buildProject = (overrides: Partial<Project> = {}): Project => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };
 
@@ -182,6 +182,6 @@ export const buildAccount = (overrides: Partial<Account> = {}): Account => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
-    ...overrides,
+    ...overrides
   };
 };

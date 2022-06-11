@@ -1,4 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
 
-yarn test:all && yarn build
+yarn turbo run check-types lint format test build

@@ -3,6 +3,7 @@ import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
 import { addEdge, Connection } from "react-flow-renderer";
 import { Node, OnNodesChange } from "react-flow-renderer";
+
 import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
 
@@ -16,7 +17,7 @@ const UpdateNode = () => {
 
   const onConnect = useCallback(
     (params: Connection) => {
-      return setEdges((edges) => addEdge({ ...params }, edges));
+      return setEdges(edges => addEdge({ ...params }, edges));
     },
     [setEdges]
   );
@@ -40,14 +41,14 @@ const UpdateNode = () => {
       id,
       type: "customNode",
       data: { label: `Node ${id}` },
-      position: { x: 0, y: 0 },
+      position: { x: 0, y: 0 }
     };
     const { width, height } = parentNode ?? {};
     if (parentNode && width && height) {
       const { position } = parentNode;
       newNode.position = {
         x: position.x,
-        y: position.y + height + 25,
+        y: position.y + height + 25
       };
     }
     return newNode;
@@ -55,17 +56,17 @@ const UpdateNode = () => {
 
   const nodeClickHandler = useCallback(
     (node: Node | null) => {
-      setNodes((prev) => {
+      setNodes(prev => {
         const newNode = createNode(node, `${prev.length}`);
         if (node) {
-          setEdges((prev) =>
+          setEdges(prev =>
             addEdge(
               {
                 id: `${node.id}-${newNode.id}`,
                 source: node.id,
                 target: newNode.id,
                 sourceHandle: "a",
-                targetHandle: "b",
+                targetHandle: "b"
               },
               prev
             )
@@ -78,7 +79,7 @@ const UpdateNode = () => {
   );
 
   const nodesChangeHandler: OnNodesChange = useCallback(
-    async (nodeChanges) => {
+    async nodeChanges => {
       onNodesChange(nodeChanges);
       if (nodesLengthRef.current !== nodes.length) {
         const newNodes = await createGraphLayout(nodes, edges);
@@ -101,7 +102,7 @@ const UpdateNode = () => {
       <label>
         <input
           type="checkbox"
-          onChange={(e) => {
+          onChange={e => {
             setFitView(e.target.checked ? "on" : "off");
           }}
           value={fitView}

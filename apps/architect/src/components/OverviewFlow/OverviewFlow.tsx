@@ -5,14 +5,14 @@ import ReactFlow, {
   Controls,
   Background,
   useNodesState,
-  useEdgesState,
+  useEdgesState
 } from "react-flow-renderer";
 
 import { nodes as initialNodes } from "./OverviewFlow.helpers";
 import { edges as initialEdges } from "./OverviewFlow.helpers";
 
 // @ts-ignore
-const onInit = (reactFlowInstance) =>
+const onInit = reactFlowInstance =>
   console.log("flow loaded:", reactFlowInstance);
 
 const OverviewFlow = () => {
@@ -20,23 +20,23 @@ const OverviewFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   // @ts-ignore
-  const onConnect = (params) => setEdges((eds) => addEdge(params, eds));
+  const onConnect = params => setEdges(eds => addEdge(params, eds));
 
   return (
     <>
       <button
         style={{ position: "absolute", top: 10, left: 10, zIndex: 1 }}
         onClick={() =>
-          setNodes((prev) => [
+          setNodes(prev => [
             ...prev,
             {
               id: "1",
               type: "input",
               data: {
-                label: <>Hello world</>,
+                label: <>Hello world</>
               },
-              position: { x: 1000, y: 500 },
-            },
+              position: { x: 1000, y: 500 }
+            }
           ])
         }
       >
@@ -51,11 +51,11 @@ const OverviewFlow = () => {
         onInit={onInit}
         fitView
         attributionPosition="top-right"
-        onError={(e) => console.log(e)}
+        onError={e => console.log(e)}
       >
         <MiniMap
           // @ts-ignore
-          nodeStrokeColor={(n) => {
+          nodeStrokeColor={n => {
             if (n.style?.background) return n.style.background;
             if (n.type === "input") return "#0041d0";
             if (n.type === "output") return "#ff0072";
@@ -64,7 +64,7 @@ const OverviewFlow = () => {
             return "#eee";
           }}
           // @ts-ignore
-          nodeColor={(n) => {
+          nodeColor={n => {
             if (n.style?.background) return n.style.background;
 
             return "#fff";

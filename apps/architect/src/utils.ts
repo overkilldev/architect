@@ -15,23 +15,23 @@ const elk = new Elk({
   defaultLayoutOptions: {
     "elk.debugMode": "true",
     "elk.algorithm": "mrtree",
-    "elk.spacing.nodeNode": "50",
+    "elk.spacing.nodeNode": "50"
     // "elk.direction": "DOWN",
     // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
     // "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
     // "elk.stress.fixed": "true",
     // "elk.alignment": "CENTER",
-  },
+  }
 });
 
 export const calculateLayout = (flowNode: Node, graph: ElkNode) => {
-  const node = graph?.children?.find((n) => n.id === flowNode.id);
+  const node = graph?.children?.find(n => n.id === flowNode.id);
   if (!node) return flowNode;
   const { x, y, width, height } = node;
   if (x && y && width && height) {
     flowNode.position = {
       x: x - width,
-      y: y - height,
+      y: y - height
     };
   } else {
     console.log("error? ");
@@ -46,33 +46,33 @@ export const createGraphLayout = async (
   const elkNodes: ElkNode[] = [];
   const elkEdges: ElkPrimitiveEdge[] = [];
 
-  nodes.forEach((flowNode) => {
+  nodes.forEach(flowNode => {
     elkNodes.push({
       id: flowNode.id,
       layoutOptions: {
-        "elk.priority": flowNode.id,
+        "elk.priority": flowNode.id
       },
       width:
         flowNode.id === "0"
           ? DEFAULT_WIDTH_FOR_ROOT
           : flowNode.width ?? DEFAULT_WIDTH,
-      height: flowNode.height ?? DEFAULT_HEIGHT,
+      height: flowNode.height ?? DEFAULT_HEIGHT
     });
   });
 
-  edges.forEach((flowEdge) => {
+  edges.forEach(flowEdge => {
     elkEdges.push({
       id: flowEdge.id,
       target: flowEdge.target,
-      source: flowEdge.source,
+      source: flowEdge.source
     });
   });
 
   const newGraph = await elk.layout({
     id: "root",
     children: elkNodes,
-    edges: elkEdges,
+    edges: elkEdges
   });
 
-  return nodes.map((flowNode) => calculateLayout(flowNode, newGraph));
+  return nodes.map(flowNode => calculateLayout(flowNode, newGraph));
 };

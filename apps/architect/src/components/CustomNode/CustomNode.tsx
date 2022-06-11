@@ -12,7 +12,7 @@ const CustomNode = (props: any) => {
         id="a"
         style={{ background: "#555" }}
         isConnectable={isConnectable}
-        onError={(e) => console.log({ e })}
+        onError={e => console.log({ e })}
       />
       <p style={{ border: "1px solid black", padding: "16px", margin: 0 }}>
         {data.label}
