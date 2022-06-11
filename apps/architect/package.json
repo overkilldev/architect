@@ -1,22 +1,18 @@
 {
-  "name": "architect-monorepo",
+  "name": "architect",
   "version": "0.0.1",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "start": "yarn workspaces run start",
-    "build": "yarn workspaces run build",
-    "test": "yarn workspaces run test",
-    "lint": "yarn workspaces run eslint",
-    "test:ci": "yarn workspaces run test:ci",
-    "test:all": "yarn workspaces run test:all",
-    "check-types": "yarn workspaces run check-types",
-    "prettier": "yarn workspaces run prettier",
-    "format": "yarn workspaces run format",
-    "check-format": "yarn workspaces run check-format"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "lint": "eslint --ignore-path .gitignore --ignore-pattern !cypress/.eslintrc.js --ext .ts,.tsx .",
+    "test:ci": "cross-env CI=true jest --runInBand",
+    "test:all": "yarn test --watchAll=false --coverage",
+    "check-types": "tsc",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss|html)\"",
+    "format": "yarn prettier --write",
+    "check-format": "yarn prettier --list-different"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -56,14 +52,22 @@
     "prettier": "^2.6.2",
     "turbo": "^1.2.16"
   },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
-  "commitlint": {
+  "eslintConfig": {
     "extends": [
-      "@commitlint/config-conventional"
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

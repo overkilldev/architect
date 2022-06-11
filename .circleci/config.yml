@@ -1,0 +1,247 @@
+# Common sequences
+common:
+  # Build environment
+  - &docker-image
+    docker:
+      - image: circleci/node:latest
+    resource_class: medium
+    working_directory: ~/repo
+  # use the same worspace for every job
+  - &attach-workspace
+    attach_workspace:
+      at: ~/repo
+  # Load cached dependencies
+  - &restore-cache
+    restore_cache:
+      keys:
+        - v3-dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        - v3-dependency-cache-{{ .Branch }}
+        - v3-dependency-cache
+
+  # Download dependencies
+  - &install-dependencies
+    run: npm install
+
+  # Cache dependencies
+  - &save-cache
+    save_cache:
+      key: v3-dependency-cache-{{ .Branch }}-{{ checksum "package-lock.json" }}
+      paths:
+        - ./node_modules
+
+  - &persist-workspace
+    persist_to_workspace:
+      root: ~/repo
+      paths:
+        - .
+
+  # run only in certain branches
+  - &filter-branch
+    filters:
+      branches:
+        only:
+          - develop
+          - master
+          - canary
+          - /release\/.*/
+
+  # run only in development branches
+  - &filter-branch-develop
+    filters:
+      branches:
+        only:
+          - develop
+          - canary
+
+  # run only in master branches
+  - &filter-branch-master
+    filters:
+      branches:
+        only:
+          - master
+          - /release\/.*/
+
+  # Set git credentials
+  - &set-git-credentials
+    run:
+      name: Set git credentials
+      command: |
+        git config --global user.email "devops@trade.ec"
+        git config --global user.name "CI"
+
+  # Authenticate to the repository provider
+  - &authenticate-to-repo
+    add_ssh_keys:
+      fingerprints:
+        - "af:17:d3:cd:48:de:32:0e:93:bc:fa:c5:69:15:d3:db"
+
+  # Update canary branch version with stable branch version
+  - &update-develop
+    run:
+      name: Update develop branch
+      command: |
+        git pull origin ${MASTER_BRANCH:-master} --no-commit && git commit -am "Merge version changes [skip ci]" && git push -u origin $CIRCLE_BRANCH --no-verify && (echo "OK"; exit 0) || (c=$?; echo "NOK"; (exit 0))
+
+##################################################################
+
+# Jobs
+version: 2.1
+orbs:
+  slack: circleci/slack@4.3.3
+jobs:
+  update-develop-branch:
+    <<: *docker-image
+    steps:
+      - checkout
+      - *set-git-credentials
+      - *authenticate-to-repo
+      - *update-develop
+      - *persist-workspace
+  init:
+    <<: *docker-image
+    steps:
+      - checkout
+      - *attach-workspace
+      - *restore-cache
+      - *authenticate-to-repo
+      - *install-dependencies
+      - *save-cache
+      - *persist-workspace
+  validate:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - run:
+          name: Validate code integrity
+          command: npm run validate:ci
+  build:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - run:
+          name: Build project
+          command: npm run build
+      - *persist-workspace
+  test:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - run:
+          name: Run unit & integration tests
+          command: npm run test:ci
+      # - run:
+      #     name: Run e2e tests
+      #     command: npm run test:e2e
+
+  deploy-preview:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - run:
+          name: Deploy a preview in host
+          command: |
+            mkdir ~/repo/.vercel
+            echo {"orgId":"$VERCEL_ORG_ID","projectId":"$VERCEL_PROJECT_ID"} > ~/repo/.vercel/project.json
+            npm run deploy:preview -- --token=$VERCEL_TOKEN --scope=$VERCEL_ORG --global-config=~/repo/.vercel --confirm
+      - slack/notify:
+          event: fail
+          channel: "cicd"
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+
+  deploy:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - run:
+          name: Deploy for production in host
+          command: |
+            mkdir ~/repo/.vercel
+            echo {"orgId":"$VERCEL_ORG_ID","projectId":"$VERCEL_PROJECT_ID"} > ~/repo/.vercel/project.json
+            npm run deploy -- --token=$VERCEL_TOKEN --scope=$VERCEL_ORG --global-config=~/repo/.vercel --confirm
+      - slack/notify:
+          event: fail
+          channel: "cicd"
+          template: basic_fail_1
+      - slack/notify:
+          event: pass
+          template: success_tagged_deploy_1
+
+  release-canary:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - *set-git-credentials
+      - checkout
+      - run:
+          name: Update release version & changelog
+          command: npm run release:canary && git push origin ${MASTER_BRANCH:-master} --no-verify
+
+  release:
+    <<: *docker-image
+    steps:
+      - *attach-workspace
+      - *set-git-credentials
+      - checkout
+      - run:
+          name: Update release version & changelog
+          command: npm run release && git push origin ${MASTER_BRANCH:-master} --no-verify
+
+#################################################################
+
+# Workflow
+workflows:
+  validate_build_test_and_publish:
+    jobs:
+      - update-develop-branch:
+          <<: *filter-branch
+      - init:
+          requires:
+            - update-develop-branch
+          <<: *filter-branch
+      - validate:
+          requires:
+            - init
+          <<: *filter-branch
+      - test:
+          requires:
+            - init
+          <<: *filter-branch
+      - build:
+          requires:
+            - init
+          <<: *filter-branch
+      - release-canary:
+          requires:
+            - validate
+            - build
+            - test
+          <<: *filter-branch-develop
+      - release:
+          requires:
+            - validate
+            - build
+            - test
+          <<: *filter-branch-master
+      - deploy-preview:
+          context:
+            - VERCEL
+            - SLACK
+          requires:
+            - validate
+            - build
+            - test
+          <<: *filter-branch-develop
+      - deploy:
+          context:
+            - VERCEL
+            - SLACK
+          requires:
+            - validate
+            - build
+            - test
+          <<: *filter-branch-master
+# TODO:
+# Add test coverage? cypress testing
