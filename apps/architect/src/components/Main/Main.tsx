@@ -1,4 +1,4 @@
-import { Input, useDisclosure } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
@@ -8,14 +8,14 @@ import { OnNodesChange } from "react-flow-renderer";
 import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
 import { ICustomNode } from "../CustomNode/CustomNode.types";
-import Drawer from "../Drawer/Drawer";
+import NodeDrawer from "components/NodeDrawer/NodeDrawer";
 
 const Main = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef(null);
-  const [fitView, setFitView] = useState("off");
+  const [fitView, setFitView] = useState("on");
+  const [selectedNode, setSelectedNode] = useState<ICustomNode>();
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const canvas = useRef<ReactFlowInstance>();
   const nodesLengthRef = useRef(edges.length);
@@ -44,6 +44,7 @@ const Main = () => {
   const nodeClickHandler = useCallback(
     (node: ICustomNode | null) => {
       if (!node) return;
+      setSelectedNode(node);
       onOpen();
     },
     [onOpen]
@@ -126,9 +127,8 @@ const Main = () => {
       <label>
         <input
           type="checkbox"
-          onChange={e => {
-            setFitView(e.target.checked ? "on" : "off");
-          }}
+          onChange={e => setFitView(e.target.checked ? "on" : "off")}
+          defaultChecked
           value={fitView}
         />
         Fit view
@@ -145,17 +145,14 @@ const Main = () => {
         snapToGrid={true}
         defaultZoom={1.5}
         fitView
-        // attributionPosition="bottom-left"
       />
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-        header="Create your account"
-      >
-        <Input placeholder="Type here..." />
-      </Drawer>
+      {selectedNode ? (
+        <NodeDrawer
+          isOpen={isOpen}
+          onClose={onClose}
+          selectedNode={selectedNode}
+        />
+      ) : null}
     </>
   );
 };

@@ -35,7 +35,10 @@ const CustomNode: FC<CustomNodeProps> = props => {
   );
 
   return (
-    <div className="CustomNode" onClick={() => onClick(node)}>
+    <div
+      className="CustomNode p-4 border border-gray-900"
+      onClick={() => onClick(node)}
+    >
       <Handle
         type="target"
         position={Position.Top}
@@ -43,7 +46,7 @@ const CustomNode: FC<CustomNodeProps> = props => {
         className="CustomNode__dot"
         isConnectable={isConnectable}
       />
-      <p className="CustomNode__text">{label}</p>
+      <p className="CustomNode__text text-[8px] capitalize">{label}</p>
       <Button
         className="CustomNode__add"
         colorScheme="blue"
