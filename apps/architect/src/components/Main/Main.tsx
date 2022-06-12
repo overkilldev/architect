@@ -10,7 +10,7 @@ import CustomNode from "../CustomNode/CustomNode";
 import { ICustomNode } from "../CustomNode/CustomNode.types";
 import Drawer from "../Drawer/Drawer";
 
-const UpdateNode = () => {
+const Main = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -160,4 +160,4 @@ const UpdateNode = () => {
   );
 };
 
-export default UpdateNode;
+export default Main;
