@@ -1,26 +1,17 @@
-import Elk, { ElkNode, ElkPrimitiveEdge } from "elkjs";
+import Elk, { ElkNode, ElkExtendedEdge } from "elkjs";
 import { Node, Edge } from "react-flow-renderer";
-
-/* From https://github.com/wbkd/react-flow/issues/5#issuecomment-954001434 */
-/* 
-Get a sense of the parameters at:
-https://rtsys.informatik.uni-kiel.de/elklive/examples.html?e=general%2Fspacing%2FnodesEdges 
-*/
 
 const DEFAULT_WIDTH = 50;
 const DEFAULT_HEIGHT = 30;
-const DEFAULT_WIDTH_FOR_ROOT = 50;
 
 const elk = new Elk({
   defaultLayoutOptions: {
-    "elk.debugMode": "true",
-    "elk.algorithm": "mrtree",
-    "elk.spacing.nodeNode": "50"
-    // "elk.direction": "DOWN",
-    // "elk.layered.spacing.nodeNodeBetweenLayers": "100",
-    // "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
-    // "elk.stress.fixed": "true",
-    // "elk.alignment": "CENTER",
+    "elk.algorithm": "layered",
+    "elk.direction": "DOWN",
+    "elk.spacing.nodeNode": "50",
+    "elk.layered.spacing.nodeNodeBetweenLayers": "100",
+    "elk.layered.crossingMinimization.strategy": "INTERACTIVE",
+    "elk.edgeRouting": "SPLINES"
   }
 });
 
@@ -34,8 +25,9 @@ export const calculateLayout = (flowNode: Node, graph: ElkNode) => {
       y: y - height
     };
   } else {
-    console.log("error? ");
+    console.log("error", node);
   }
+
   return flowNode;
 };
 
@@ -44,27 +36,20 @@ export const createGraphLayout = async (
   edges: Array<Edge>
 ): Promise<Array<Node>> => {
   const elkNodes: ElkNode[] = [];
-  const elkEdges: ElkPrimitiveEdge[] = [];
+  const elkEdges: ElkExtendedEdge[] = [];
 
   nodes.forEach(flowNode => {
     elkNodes.push({
       id: flowNode.id,
-      layoutOptions: {
-        "elk.priority": flowNode.id
-      },
-      width:
-        flowNode.id === "0"
-          ? DEFAULT_WIDTH_FOR_ROOT
-          : flowNode.width ?? DEFAULT_WIDTH,
+      width: flowNode.width ?? DEFAULT_WIDTH,
       height: flowNode.height ?? DEFAULT_HEIGHT
     });
   });
-
   edges.forEach(flowEdge => {
     elkEdges.push({
       id: flowEdge.id,
-      target: flowEdge.target,
-      source: flowEdge.source
+      targets: [flowEdge.target],
+      sources: [flowEdge.source]
     });
   });
 
@@ -73,6 +58,5 @@ export const createGraphLayout = async (
     children: elkNodes,
     edges: elkEdges
   });
-
   return nodes.map(flowNode => calculateLayout(flowNode, newGraph));
 };
