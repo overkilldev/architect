@@ -25,7 +25,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
-	"start": "code --extensionDevelopmentPath=/home/alex/Documentos/Trabajo/overkill/poc-react-flow/apps/architect-extension",
+    "start": "uri=$(pwd) && code --extensionDevelopmentPath=$uri",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
