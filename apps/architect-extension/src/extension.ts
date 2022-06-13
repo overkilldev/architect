@@ -1,7 +1,18 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
+import ExtensionProvider from "extensionProvider";
+
 export function activate(context: vscode.ExtensionContext) {
+  const provider = new ExtensionProvider(context.extensionUri);
+
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      ExtensionProvider.viewType,
+      provider
+    )
+  );
+
   context.subscriptions.push(
     vscode.commands.registerCommand("architect-extension.start", () => {
       ReactPanel.createOrShow(context.extensionPath);
