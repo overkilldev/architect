@@ -41,8 +41,8 @@ export const createGraphLayout = async (
   nodes.forEach(flowNode => {
     elkNodes.push({
       id: flowNode.id,
-      width: flowNode.width ?? DEFAULT_WIDTH,
-      height: flowNode.height ?? DEFAULT_HEIGHT
+      width: DEFAULT_WIDTH,
+      height: DEFAULT_HEIGHT
     });
   });
   edges.forEach(flowEdge => {

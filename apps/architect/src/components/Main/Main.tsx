@@ -1,4 +1,4 @@
-import { Input, useDisclosure } from "@chakra-ui/react";
+import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
 import { ReactFlowInstance } from "react-flow-renderer";
@@ -7,15 +7,17 @@ import { OnNodesChange } from "react-flow-renderer";
 
 import { createGraphLayout } from "../../utils";
 import CustomNode from "../CustomNode/CustomNode";
-import { ICustomNode } from "../CustomNode/CustomNode.types";
-import Drawer from "../Drawer/Drawer";
+import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
+import NodeDrawer from "components/NodeDrawer/NodeDrawer";
+import { NodeFormMode } from "components/NodeDrawer/NodeDrawer.types";
 
-const UpdateNode = () => {
+const Main = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef(null);
-  const [fitView, setFitView] = useState("off");
+  const [fitView, setFitView] = useState("on");
+  const [drawerMode, setDrawerMode] = useState<NodeFormMode>("CREATE");
+  const [selectedNode, setSelectedNode] = useState<ICustomNode | null>(null);
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const canvas = useRef<ReactFlowInstance>();
   const nodesLengthRef = useRef(edges.length);
@@ -41,16 +43,26 @@ const UpdateNode = () => {
     }
   };
 
+  const closeHandler = useCallback(() => {
+    onClose();
+    setSelectedNode(null);
+  }, [onClose]);
+
   const nodeClickHandler = useCallback(
-    (node: ICustomNode | null) => {
-      if (!node) return;
+    (node: ICustomNode | null, mode: NodeFormMode) => {
+      setSelectedNode(node);
+      setDrawerMode(mode);
       onOpen();
     },
     [onOpen]
   );
 
   const createNode = useCallback(
-    (parentNode: ICustomNode | null, id: string): ICustomNode => {
+    (
+      parentNode: ICustomNode | null,
+      id: string,
+      overrides: Partial<CustomNodeData> = {}
+    ): ICustomNode => {
       const newNode: ICustomNode = {
         id,
         type: "customNode",
@@ -60,7 +72,8 @@ const UpdateNode = () => {
           setNodes,
           setEdges,
           createNode,
-          onClick: nodeClickHandler
+          onClick: nodeClickHandler,
+          ...overrides
         },
         position: { x: 0, y: 0 }
       };
@@ -76,31 +89,6 @@ const UpdateNode = () => {
       return newNode;
     },
     [setNodes, setEdges, nodeClickHandler]
-  );
-
-  const addNodeHandler = useCallback(
-    (node: ICustomNode | null) => {
-      // @ts-ignore
-      setNodes(prev => {
-        const newNode = createNode(node, `${prev.length}`);
-        if (node) {
-          setEdges(prev =>
-            addEdge(
-              {
-                id: `${node.id}-${newNode.id}`,
-                source: node.id,
-                target: newNode.id,
-                sourceHandle: "a",
-                targetHandle: "b"
-              },
-              prev
-            )
-          );
-        }
-        return [...prev, newNode];
-      });
-    },
-    [createNode, setEdges, setNodes]
   );
 
   const nodesChangeHandler: OnNodesChange = useCallback(
@@ -122,13 +110,14 @@ const UpdateNode = () => {
 
   return (
     <>
-      <button onClick={() => addNodeHandler(null)}>Create node</button>
+      <button onClick={() => nodeClickHandler(null, "CREATE")}>
+        Create node
+      </button>
       <label>
         <input
           type="checkbox"
-          onChange={e => {
-            setFitView(e.target.checked ? "on" : "off");
-          }}
+          onChange={e => setFitView(e.target.checked ? "on" : "off")}
+          defaultChecked
           value={fitView}
         />
         Fit view
@@ -141,23 +130,23 @@ const UpdateNode = () => {
         onConnect={onConnect}
         onInit={onInit}
         nodeTypes={nodeTypes}
-        onNodeClick={(e, node) => nodeClickHandler(node)}
         snapToGrid={true}
         defaultZoom={1.5}
         fitView
-        // attributionPosition="bottom-left"
+        className="bg-zinc-800"
       />
-      <Drawer
+      <NodeDrawer
+        createNode={createNode}
+        // @ts-ignore
+        setNodes={setNodes}
+        setEdges={setEdges}
+        mode={drawerMode}
         isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-        header="Create your account"
-      >
-        <Input placeholder="Type here..." />
-      </Drawer>
+        onClose={closeHandler}
+        selectedNode={selectedNode}
+      />
     </>
   );
 };
 
-export default UpdateNode;
+export default Main;
