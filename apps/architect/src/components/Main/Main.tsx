@@ -133,6 +133,7 @@ const Main = () => {
         snapToGrid={true}
         defaultZoom={1.5}
         fitView
+        className="bg-zinc-800"
       />
       <NodeDrawer
         createNode={createNode}

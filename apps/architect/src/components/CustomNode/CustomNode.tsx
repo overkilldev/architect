@@ -1,5 +1,4 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Button } from "@chakra-ui/react";
 import { FC, memo } from "react";
 import { Handle, Position } from "react-flow-renderer";
 
@@ -12,7 +11,7 @@ const CustomNode: FC<CustomNodeProps> = props => {
 
   return (
     <div
-      className="CustomNode p-4 border border-gray-900"
+      className="CustomNode p-4 border border-gray-900 bg-black text-white"
       onClick={() => onClick(node, "EDIT")}
     >
       <Handle
@@ -23,19 +22,15 @@ const CustomNode: FC<CustomNodeProps> = props => {
         isConnectable={isConnectable}
       />
       <p className="CustomNode__text text-[8px] capitalize">{label}</p>
-      <Button
-        className="CustomNode__add"
-        colorScheme="blue"
-        size="xs"
-        pos="absolute"
-        bottom="-12px"
+      <button
+        className="CustomNode__add left-1/2 absolute bottom-0 px-4 py-2 bg-green-400 h3 w-3 rounded-full shadow-md flex justify-center"
         onClick={e => {
           e.stopPropagation();
           onClick(node, "CREATE");
         }}
       >
         <AddIcon w={2} h={2} />
-      </Button>
+      </button>
       <Handle
         type="source"
         position={Position.Bottom}
