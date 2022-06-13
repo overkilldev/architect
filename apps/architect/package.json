@@ -8,6 +8,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "vite build",
+    "postbuild": "yarn run write-style-path-to-manifest",
+    "write-style-path-to-manifest": "sed -e '$ d' ./build/manifest.json > ./build/manifest-temp.json && echo ',\"styles.css\": \"'$(cd ./build && ls assets/*.css)'\"}' >> ./build/manifest-temp.json && mv -f ./build/manifest-temp.json ./build/manifest.json",
     "preview": "vite preview",
     "lint": "eslint --ignore-path ../../.gitignore --ignore-pattern !cypress/.eslintrc.js --ext .ts,.tsx .",
     "test:ci": "cross-env CI=true jest --runInBand",

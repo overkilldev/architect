@@ -6,7 +6,14 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   build: {
-    outDir: "build"
+    outDir: "build",
+    cssCodeSplit: false,
+    manifest: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined
+      }
+    }
   },
   plugins: [tsconfigPaths(), svgrPlugin(), react()],
   resolve: {
