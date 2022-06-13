@@ -1,5 +1,5 @@
 {
-  "name": "architect",
+  "name": "architect-sidebar",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -19,10 +19,7 @@
     "format": "yarn prettier --write",
     "check-format": "yarn prettier --list-different"
   },
-  "dependencies": {
-    "elkjs": "^0.8.1",
-    "web-worker": "^1.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {},
   "eslintConfig": {
     "extends": [
