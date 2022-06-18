@@ -1,7 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
-import ExtensionProvider from "extensionProvider";
+import ExtensionProvider from "./extensionProvider";
 
 export function activate(context: vscode.ExtensionContext) {
   const provider = new ExtensionProvider(context.extensionUri);
@@ -157,27 +157,6 @@ class ReactPanel {
           <script nonce="${nonce}" src="${scriptUri}"></script>
     		</body>
     		</html>`;
-    //     return `
-    // 	<!DOCTYPE html>
-    // <html lang="es">
-    //   <head>
-    //     <meta charset="utf-8" />
-    //     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    //     <meta name="theme-color" content="#1890FF" />
-    //     <title>Architect</title>
-    // 	<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
-    // 	<base href="${baseUri}/">
-    //     <link rel="shortcut icon" href="/favicon.ico" />
-    //     <link rel="stylesheet" type="text/css" href="${styleUri}">
-    //     </head>
-    //     <body>
-    //     <noscript>You need to enable JavaScript to run this app.</noscript>
-    //     <div id="root"></div>
-    //     <script type="module" crossorigin nonce="${nonce}" src="${scriptUri}"></script>
-
-    //   </body>
-    // </html>
-    // `;
   }
 }
 

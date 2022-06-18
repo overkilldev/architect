@@ -10,7 +10,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:architect-extension.start"
+    "onCommand:architect-extension.start",
+    "onView:architect-extension.start",
+    "onView:architect-extension.sidebar"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -20,12 +22,30 @@
         "title": "Create Architect Project",
         "category": "Architect"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "architect-extension",
+          "title": "Architect",
+          "icon": "$(heart)"
+        }
+      ]
+    },
+    "views": {
+      "architect-extension": [
+        {
+          "type": "webview",
+          "id": "architect-extension.sidebar",
+          "name": "Architect Sidebar"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "npx tsc -p ./",
-    "start": "uri=$(pwd) && code --extensionDevelopmentPath=$uri",
+    "start": "cross-env code --extensionDevelopmentPath=$(pwd)",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
