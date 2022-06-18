@@ -5,9 +5,11 @@ import { AutocompleteProps as Props } from "./Autocomplete.types";
 
 const Autocomplete: React.FC<Props> = props => {
   const { label, options, lastOption: LastOption, inputProps, ...rest } = props;
+  const { optionsProps, ...rest2 } = rest;
   const [selectedOption, setSelectedOption] = useState("");
   const [query, setQuery] = useState("");
-  const optionClasses = "border-b last:border-none";
+  const { height = 200 } = optionsProps ?? {};
+  const optionClasses = "Autocomplete__option border-b last:border-none";
 
   const filteredOptions =
     query === ""
@@ -22,18 +24,18 @@ const Autocomplete: React.FC<Props> = props => {
     selected: boolean
   ) => {
     return (
-      <li
-        className={`py-3 px-2 ${active ? "bg-blue-100" : "bg-white"} ${
-          selected ? "bg-blue-300" : "bg-white"
-        }`}
+      <div
+        className={`py-3 px-2 hover:bg-blue-200 ${
+          active ? "bg-blue-100" : "bg-white"
+        } ${selected ? "bg-blue-300" : "bg-white"}`}
       >
         {option}
-      </li>
+      </div>
     );
   };
 
   return (
-    <Combobox {...rest} value={selectedOption} onChange={setSelectedOption}>
+    <Combobox {...rest2} value={selectedOption} onChange={setSelectedOption}>
       <div className="pb-4 relative">
         <Combobox.Label>{label}</Combobox.Label>
         <Combobox.Input
@@ -41,18 +43,25 @@ const Autocomplete: React.FC<Props> = props => {
           onChange={event => setQuery(event.target.value)}
           {...inputProps}
         />
-        <Combobox.Options className="absolute top-20 bg-white w-full shadow-md">
-          {filteredOptions.map(option => (
+        <Combobox.Options
+          className="Autocomplete__options absolute top-20 bg-white w-full shadow-md overflow-y-auto"
+          style={{ maxHeight: height }}
+        >
+          {filteredOptions.map((option, index) => (
             <Combobox.Option
               className={optionClasses}
-              key={option}
+              key={index}
               value={option}
             >
               {({ active, selected }) => renderOption(option, active, selected)}
             </Combobox.Option>
           ))}
           {LastOption ? (
-            <Combobox.Option className={optionClasses} value="">
+            <Combobox.Option
+              key={options.length}
+              className={optionClasses}
+              value=""
+            >
               {({ active, selected }) =>
                 renderOption(LastOption, active, selected)
               }
