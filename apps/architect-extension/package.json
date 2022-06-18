@@ -10,7 +10,9 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:architect-extension.start"
+    "onCommand:architect-extension.start",
+    "onView:extension-poc.start",
+    "onView:extension-poc.sidebar"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -20,7 +22,23 @@
         "title": "Create Architect Project",
         "category": "Architect"
       }
-    ]
+    ],
+    "activitybar": [
+      {
+        "id": "architect-extension",
+        "title": "Architect",
+        "icon": "$(heart)"
+      }
+    ],
+    "views": {
+      "architect-extension": [
+        {
+          "type": "webview",
+          "id": "architect-extension.sidebar",
+          "name": "Architect Sidebar"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
