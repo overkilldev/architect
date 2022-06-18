@@ -11,8 +11,8 @@
   ],
   "activationEvents": [
     "onCommand:architect-extension.start",
-    "onView:extension-poc.start",
-    "onView:extension-poc.sidebar"
+    "onView:architect-extension.start",
+    "onView:architect-extension.sidebar"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -23,13 +23,15 @@
         "category": "Architect"
       }
     ],
-    "activitybar": [
-      {
-        "id": "architect-extension",
-        "title": "Architect",
-        "icon": "$(heart)"
-      }
-    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "architect-extension",
+          "title": "Architect",
+          "icon": "$(heart)"
+        }
+      ]
+    },
     "views": {
       "architect-extension": [
         {
@@ -43,7 +45,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "compile": "npx tsc -p ./",
-    "start": "uri=$(pwd) && code --extensionDevelopmentPath=$uri",
+    "start": "cross-env code --extensionDevelopmentPath=$(pwd)",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
