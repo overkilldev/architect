@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import ExtensionProvider from "./extensionProvider";
 
 export function activate(context: vscode.ExtensionContext) {
-  const provider = new ExtensionProvider(context.extensionUri);
+  const provider = new ExtensionProvider(context.extensionPath);
 
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
@@ -57,7 +57,7 @@ class ReactPanel {
 
     this._panel = vscode.window.createWebviewPanel(
       ReactPanel.viewType,
-      "React",
+      "Architect",
       column,
       {
         // Enable javascript in the webview

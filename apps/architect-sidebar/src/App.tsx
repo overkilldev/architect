@@ -4,7 +4,7 @@ import Providers from "containers/Providers/Providers";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App flex">
       <Providers>
         <Main />
       </Providers>
