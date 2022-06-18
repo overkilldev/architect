@@ -11,4 +11,9 @@ export interface AutocompleteProps {
   name?: string | undefined;
   nullable?: boolean | undefined;
   multiple?: boolean | undefined;
+  optionsProps?: OptionsProps;
+}
+
+export interface OptionsProps {
+  height?: number;
 }

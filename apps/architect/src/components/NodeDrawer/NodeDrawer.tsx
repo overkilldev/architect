@@ -3,20 +3,13 @@ import { FormEvent, ChangeEvent, memo } from "react";
 import { addEdge } from "react-flow-renderer";
 
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
-import Autocomplete from "components/global/Autocomplete/Autocomplete";
 import Drawer from "components/global/Drawer/Drawer";
+import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
 
 const NodeDrawer: React.FC<Props> = props => {
-  const {
-    mode,
-    selectedNode,
-    onClose,
-    createNode,
-    setNodes,
-    setEdges,
-    ...rest
-  } = props;
+  const { mode, selectedNode, onClose, createNode, setNodes, ...rest } = props;
+  const { setEdges, ...rest2 } = rest;
 
   const { id, data } = selectedNode ?? {};
   const { label = "" } = data ?? {};
@@ -85,7 +78,7 @@ const NodeDrawer: React.FC<Props> = props => {
       header="Create your account"
       size="sm"
       onClose={onClose}
-      {...rest}
+      {...rest2}
     >
       <form onSubmit={submitHandler}>
         <p className="pb-2 text-md font-medium">ID: {id}</p>
@@ -96,12 +89,7 @@ const NodeDrawer: React.FC<Props> = props => {
           onChange={changeHandler}
           autoFocus
         />
-        <Autocomplete
-          options={["Alex", "Dani", "Lucho"]}
-          lastOption={<div onClick={() => console.log("creating")}>Crear</div>}
-          label="Enhanced template"
-          inputProps={{ placeholder: "Choose or add a new template." }}
-        />
+        <EnhancedTemplateAutocomplete />
         <button
           type="submit"
           className="px-4 py-2 border rounded-lg bg-blue-500 text-white"
