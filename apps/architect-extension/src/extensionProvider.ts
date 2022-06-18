@@ -20,7 +20,9 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
       enableScripts: true,
 
       localResourceRoots: [
-        vscode.Uri.file(path.join(this._extensionPath, "../architect-sidebar/build"))
+        vscode.Uri.file(
+          path.join(this._extensionPath, "../architect-sidebar/build")
+        )
       ]
     };
 
@@ -69,6 +71,7 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
 
     // Use a nonce to whitelist which scripts can be run
     const nonce = getNonce();
+    const nonceVsCodeScript = getNonce();
 
     return `<!DOCTYPE html>
     <html lang="en">
@@ -77,7 +80,7 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
       <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
       <meta name="theme-color" content="#000000">
       <title>React App</title>
-      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}' 'nonce-${nonceVsCodeScript}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
       <link rel="stylesheet" type="text/css" href="${styleUri}">
       <base href="${baseUri}/">
     </head>
@@ -85,6 +88,10 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
       <noscript>You need to enable JavaScript to run this app.</noscript>
       <div id="root"></div>
       <script nonce="${nonce}" src="${scriptUri}"></script>
+      <script nonce="${nonceVsCodeScript}">
+      window.isVsCode = true;
+      window.acquireVsCodeApi = acquireVsCodeApi;
+      </script>
     </body>
     </html>`;
   }

@@ -44,12 +44,13 @@
   },
   "scripts": {
     "vscode:prepublish": "yarn run compile",
-    "compile": "npx tsc -p ./",
+    "build": "npx tsc -p ./",
     "start": "cross-env code --extensionDevelopmentPath=$(pwd)",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
-    "test": "echo test architect-extension"
+    "test": "echo skip",
+    "compile": "echo skip"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
