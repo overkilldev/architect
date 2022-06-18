@@ -1,11 +1,12 @@
 import * as vscode from "vscode";
+import * as path from "path";
 
 export default class ExtensionProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "architect-extension.sidebar";
 
   private _view?: vscode.WebviewView;
 
-  constructor(private readonly _extensionUri: vscode.Uri) {}
+  constructor(private readonly _extensionPath: string) {}
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -18,7 +19,9 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
       // Allow scripts in the webview
       enableScripts: true,
 
-      localResourceRoots: [this._extensionUri]
+      localResourceRoots: [
+        vscode.Uri.file(path.join(this._extensionPath, "../architect-sidebar/build"))
+      ]
     };
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
@@ -39,36 +42,51 @@ export default class ExtensionProvider implements vscode.WebviewViewProvider {
 
   private _getHtmlForWebview(webview: vscode.Webview) {
     // Use a nonce to only allow a specific script to be run.
+    const assetsRoot = "../architect-sidebar/build";
+    const manifest = require(path.join(
+      this._extensionPath,
+      `${assetsRoot}/manifest.json`
+    ));
+    const mainScript = manifest["index.html"]["file"];
+    const mainStyle = manifest["styles.css"];
+
+    const scriptPathOnDisk = vscode.Uri.file(
+      path.join(this._extensionPath, assetsRoot, mainScript)
+    );
+    const scriptUri = scriptPathOnDisk.with({ scheme: "vscode-resource" });
+
+    const basePathOnDisk = vscode.Uri.file(
+      path.join(this._extensionPath, assetsRoot)
+    );
+    const baseUri = basePathOnDisk.with({ scheme: "vscode-resource" });
+    const stylePathOnDisk = vscode.Uri.file(
+      path.join(this._extensionPath, assetsRoot, mainStyle)
+    );
+    const styleUri = stylePathOnDisk.with({ scheme: "vscode-resource" });
+
+    // const stylePathOnDisk = vscode.Uri.file(path.join(this._extensionPath, 'build', mainStyle));
+    // const styleUri = stylePathOnDisk.with({ scheme: 'vscode-resource' });
+
+    // Use a nonce to whitelist which scripts can be run
     const nonce = getNonce();
 
     return `<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<!--
-					Use a content security policy to only allow loading images from https or from our extension directory,
-					and only allow scripts that have a specific nonce.
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>Cat Colors</title>
-			</head>
-			<body>
-				<ul class="color-list">
-				</ul>
-				<button id="button" class="add-color-button">Nuevo esquema</button>
-        <button id="createFile" class="add-color-button">Nuevo archivo</button>
-			</body>
-      <script nonce="${nonce}">
-      const vscode = acquireVsCodeApi();
-      document.getElementById("button").addEventListener("click", () => {
-        vscode.postMessage({ type: "callCommand" });
-      })
-      document.getElementById("createFile").addEventListener("click", () => {
-        vscode.postMessage({ type: "createFiles" });
-      })
-      </script>
-			</html>`;
+    <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+      <meta name="theme-color" content="#000000">
+      <title>React App</title>
+      <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src vscode-resource: https:; script-src 'nonce-${nonce}';style-src vscode-resource: 'unsafe-inline' http: https: data:;">
+      <link rel="stylesheet" type="text/css" href="${styleUri}">
+      <base href="${baseUri}/">
+    </head>
+    <body>
+      <noscript>You need to enable JavaScript to run this app.</noscript>
+      <div id="root"></div>
+      <script nonce="${nonce}" src="${scriptUri}"></script>
+    </body>
+    </html>`;
   }
 }
 
