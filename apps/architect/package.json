@@ -15,7 +15,7 @@
     "test:ci": "cross-env CI=true jest --runInBand",
     "test:all": "vitest run --coverage",
     "check-types": "tsc",
-    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss|html)\"",
+    "prettier": "prettier --ignore-path ../../.gitignore \"**/*.+(js|jsx|ts|tsx|json|css|scss|html)\"",
     "format": "yarn prettier --write",
     "check-format": "yarn prettier --list-different"
   },
