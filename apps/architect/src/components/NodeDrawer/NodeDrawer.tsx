@@ -3,6 +3,7 @@ import { FormEvent, ChangeEvent, memo } from "react";
 import { addEdge } from "react-flow-renderer";
 
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
+import Autocomplete from "components/global/Autocomplete/Autocomplete";
 import Drawer from "components/global/Drawer/Drawer";
 import Input from "components/global/Input/Input";
 
@@ -93,10 +94,13 @@ const NodeDrawer: React.FC<Props> = props => {
           label="Label"
           value={formLabel}
           onChange={changeHandler}
+          autoFocus
         />
-        <Input
-          placeholder="Choose or add a new template."
+        <Autocomplete
+          options={["Alex", "Dani", "Lucho"]}
+          lastOption={<div onClick={() => console.log("creating")}>Crear</div>}
           label="Enhanced template"
+          inputProps={{ placeholder: "Choose or add a new template." }}
         />
         <button
           type="submit"
