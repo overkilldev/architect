@@ -5,7 +5,7 @@ import { ReactFlowInstance } from "react-flow-renderer";
 import { addEdge, Connection } from "react-flow-renderer";
 import { OnNodesChange } from "react-flow-renderer";
 
-import { createGraphLayout } from "../../utils";
+import { createGraphLayout } from "../../utils/utils";
 import CustomNode from "../CustomNode/CustomNode";
 import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
 import NodeDrawer from "components/NodeDrawer/NodeDrawer";

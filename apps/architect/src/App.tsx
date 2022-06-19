@@ -1,12 +1,14 @@
-import "./App.css";
-import Main from "./components/Main/Main";
+import Layout from "components/Layout/Layout";
+import Main from "components/Main/Main";
 import Providers from "containers/Providers/Providers";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App text-center h-screen">
       <Providers>
-        <Main />
+        <Layout>
+          <Main />
+        </Layout>
       </Providers>
     </div>
   );

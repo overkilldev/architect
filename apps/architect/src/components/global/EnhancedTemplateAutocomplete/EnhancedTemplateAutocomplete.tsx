@@ -2,7 +2,7 @@ import React from "react";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
 import { EnhancedTemplateAutocompleteProps as Props } from "./EnhancedTemplateAutocomplete.types";
-import { genEnhancedTemplates } from "builders";
+import { genEnhancedTemplates } from "testing/builders/enhancedTemplates.builders";
 
 const enhancedTemplates = genEnhancedTemplates(25);
 
