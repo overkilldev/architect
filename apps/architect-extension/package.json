@@ -50,7 +50,8 @@
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
     "test": "echo skip",
-    "compile": "echo skip"
+    "compile": "echo skip",
+    "check-types": "tsc -p ./ --noEmit"
   },
   "devDependencies": {
     "@types/glob": "^7.2.0",
