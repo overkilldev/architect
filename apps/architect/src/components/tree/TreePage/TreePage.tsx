@@ -5,13 +5,13 @@ import { ReactFlowInstance } from "react-flow-renderer";
 import { addEdge, Connection } from "react-flow-renderer";
 import { OnNodesChange } from "react-flow-renderer";
 
-import { createGraphLayout } from "../../utils/utils";
 import CustomNode from "../CustomNode/CustomNode";
 import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
-import NodeDrawer from "components/NodeDrawer/NodeDrawer";
-import { NodeFormMode } from "components/NodeDrawer/NodeDrawer.types";
+import NodeDrawer from "components/tree/NodeDrawer/NodeDrawer";
+import { NodeFormMode } from "components/tree/NodeDrawer/NodeDrawer.types";
+import { createGraphLayout } from "utils/elk.utils";
 
-const Main = () => {
+const TreePage = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -110,10 +110,13 @@ const Main = () => {
 
   return (
     <>
-      <button onClick={() => nodeClickHandler(null, "CREATE")}>
+      <button
+        className="text-center"
+        onClick={() => nodeClickHandler(null, "CREATE")}
+      >
         Create node
       </button>
-      <label>
+      <label className="text-center">
         <input
           type="checkbox"
           onChange={e => setFitView(e.target.checked ? "on" : "off")}
@@ -133,7 +136,6 @@ const Main = () => {
         snapToGrid={true}
         defaultZoom={1.5}
         fitView
-        className="bg-zinc-800"
       />
       <NodeDrawer
         createNode={createNode}
@@ -149,4 +151,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default TreePage;

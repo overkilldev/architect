@@ -7,7 +7,7 @@ const Layout: React.FC<Props> = props => {
   const { children } = props;
   useFetchAccount();
 
-  return <div className="Layout h-full">{children}</div>;
+  return <div className="Layout h-full bg-zinc-800 text-white">{children}</div>;
 };
 
 Layout.defaultProps = {};

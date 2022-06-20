@@ -2,11 +2,9 @@
 import { Dispatch, SetStateAction } from "react";
 import { Edge } from "react-flow-renderer";
 
-import {
-  ICustomNode,
-  CustomNodeData
-} from "components/CustomNode/CustomNode.types";
 import { DrawerProps } from "components/global/Drawer/Drawer.types";
+import { ICustomNode } from "components/tree/CustomNode/CustomNode.types";
+import { CustomNodeData } from "components/tree/CustomNode/CustomNode.types";
 
 // Component Props
 export interface NodeDrawerProps extends Omit<DrawerProps, "children"> {

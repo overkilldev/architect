@@ -11,7 +11,7 @@
     "postbuild": "yarn run write-style-path-to-manifest",
     "write-style-path-to-manifest": "sed -e '$ d' ./build/manifest.json > ./build/manifest-temp.json && echo ',\"styles.css\": \"'$(cd ./build && ls assets/*.css)'\"}' >> ./build/manifest-temp.json && mv -f ./build/manifest-temp.json ./build/manifest.json",
     "preview": "vite preview",
-    "lint": "eslint --ignore-path ../../.gitignore --ignore-pattern !cypress/.eslintrc.js --ext .ts,.tsx .",
+    "lint": "eslint --ignore-path ../../.gitignore --ignore-pattern !cypress/.eslintrc.js --max-warnings=0 --ext .ts,.tsx .",
     "test:ci": "cross-env CI=true jest --runInBand",
     "test:all": "vitest run --coverage",
     "check-types": "tsc",

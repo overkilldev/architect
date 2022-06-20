@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Edge, Node, NodeProps } from "react-flow-renderer";
 
-import { NodeFormMode } from "components/NodeDrawer/NodeDrawer.types";
+import { NodeFormMode } from "components/tree/NodeDrawer/NodeDrawer.types";
 export interface CustomNodeData {
   onClick: (node: ICustomNode | null, mode: NodeFormMode) => void;
   label: string;

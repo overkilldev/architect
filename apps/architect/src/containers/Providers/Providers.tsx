@@ -2,6 +2,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
 import { QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { BrowserRouter } from "react-router-dom";
 
 import { ProvidersProps as Props } from "./Providers.types";
 import { queryClient } from "config/reactQuery.config";
@@ -12,7 +13,9 @@ const Providers: React.FC<Props> = props => {
     <QueryClientProvider client={queryClient}>
       {process.env.NODE_ENV === "development" ? <ReactQueryDevtools /> : null}
       <GlobalsProvider>
-        <ChakraProvider>{props.children}</ChakraProvider>
+        <ChakraProvider>
+          <BrowserRouter>{props.children}</BrowserRouter>
+        </ChakraProvider>
       </GlobalsProvider>
     </QueryClientProvider>
   );
