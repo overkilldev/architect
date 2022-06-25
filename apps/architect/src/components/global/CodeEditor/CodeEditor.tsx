@@ -31,7 +31,7 @@ const CodeEditor: React.FC<Props> = props => {
   };
 
   return (
-    <div className="CodeEditor flex-col w-screen">
+    <div className="CodeEditor flex-col w-full">
       <pre className="relative w-full h-screen">
         <textarea
           onChange={changeHandler}

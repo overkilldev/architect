@@ -1,0 +1,37 @@
+{
+  "name": "@architect/types",
+  "description": "Artisn's types and interfaces library",
+  "version": "0.0.1",
+  "main": "./dist/bundle.d.ts",
+  "module": "./dist/bundle.d.ts",
+  "types": "./dist/bundle.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "exports": {
+    "default": "./dist/bundle.esm.js"
+  },
+  "scripts": {
+    "compile": "rollup -c",
+    "dev": "yarn compile -w",
+    "clean": "rimraf dist",
+    "prebuild": "yarn clean",
+    "build": "yarn compile",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint --ignore-path ../../.gitignore --ext .ts,.tsx .",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(ts|tsx)\"",
+    "format": "yarn prettier --write",
+    "check-format": "yarn prettier --list-different",
+    "validate": "cross-env CI=true npm-run-all --parallel check-types check-format lint build",
+    "validate:ci": "npm-run-all --parallel check-types check-format lint"
+  },
+  "author": "Luis Eduardo Andrade",
+  "license": "MIT",
+  "devDependencies": {
+    "@react-native-firebase/app": "^12.8.0",
+    "@react-native-firebase/auth": "^12.8.0",
+    "@react-native-firebase/firestore": "^12.8.0",
+    "firebase": "^8.1.1"
+  }
+}

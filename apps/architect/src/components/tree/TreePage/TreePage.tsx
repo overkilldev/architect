@@ -9,6 +9,7 @@ import CustomNode from "../CustomNode/CustomNode";
 import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
 import NodeDrawer from "components/tree/NodeDrawer/NodeDrawer";
 import { NodeFormMode } from "components/tree/NodeDrawer/NodeDrawer.types";
+import useGlobals from "contexts/globals/globals.hooks";
 import { createGraphLayout } from "utils/elk.utils";
 
 const TreePage = () => {
@@ -21,6 +22,7 @@ const TreePage = () => {
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
   const canvas = useRef<ReactFlowInstance>();
   const nodesLengthRef = useRef(edges.length);
+  const { vscode } = useGlobals();
 
   const onConnect = useCallback(
     (params: Connection) => {
@@ -115,6 +117,13 @@ const TreePage = () => {
         onClick={() => nodeClickHandler(null, "CREATE")}
       >
         Create node
+      </button>
+      <button
+        onClick={() => {
+          vscode?.postMessage({ command: "log", source: "web", data: 1 });
+        }}
+      >
+        Send message
       </button>
       <label className="text-center">
         <input

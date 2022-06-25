@@ -1,8 +1,8 @@
-declare interface Window {
-  acquireVsCodeApi: <T = unknown>() => {
-    getState: () => T;
-    setState: (data: T) => void;
-    postMessage: (msg: unknown) => void;
+declare interface Window<T, S = unknown> {
+  acquireVsCodeApi: () => {
+    getState: () => S;
+    setState: (data: S) => void;
+    postMessage: (payload: T) => void;
   };
   isVsCode: boolean;
 }

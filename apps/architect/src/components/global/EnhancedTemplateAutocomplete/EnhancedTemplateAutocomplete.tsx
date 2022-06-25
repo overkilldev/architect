@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
+import Link from "../Link/Link";
 import { EnhancedTemplateAutocompleteProps as Props } from "./EnhancedTemplateAutocomplete.types";
 import { genEnhancedTemplates } from "testing/builders/enhancedTemplates.builders";
 
