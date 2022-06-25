@@ -48,7 +48,7 @@
     "start": "cross-env code --extensionDevelopmentPath=$(pwd)",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "eslint src --ext ts --max-warnings=0",
     "test": "echo skip",
     "compile": "echo skip",
     "check-types": "tsc -p ./ --noEmit"
