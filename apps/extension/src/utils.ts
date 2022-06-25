@@ -1,5 +1,7 @@
-import { Messages } from "@architect/types";
+import { Messages, MessageTargets } from "@architect/types";
 import * as vscode from "vscode";
+
+import MessagesProvider from "./MessagesProvider";
 
 export const getNonce = () => {
   let text = "";
@@ -22,11 +24,24 @@ export const messageReceivedHandler = (message: Messages) => {
       break;
     }
     case "log": {
-      const { command, ...rest } = message;
+      const { command, forwardTo, ...rest } = message;
       console.log(rest);
       break;
     }
     default:
       console.error("Message not supported", message);
   }
+
+  const views = MessagesProvider.views;
+
+  // Forward message to every view
+  if (message.forwardTo === "all") {
+    views?.forEach(view => {
+      view.postMessage(message);
+    });
+    return;
+  }
+  // Forward message to a single view
+  const targetView = views.get(message.forwardTo ?? "none");
+  targetView?.postMessage(message);
 };

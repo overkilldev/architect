@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
+import MessagesProvider from "../MessagesProvider";
 import { getNonce, messageReceivedHandler } from "../utils";
 
 /**
@@ -53,6 +54,8 @@ export default class WebView {
       }
     );
 
+    MessagesProvider.register("web", this._panel.webview);
+
     // Set the webview's initial html content
     this._panel.webview.html = this._getHtmlForWebview();
 
@@ -62,17 +65,10 @@ export default class WebView {
 
     // Handle messages from the webview
     this._panel.webview.onDidReceiveMessage(
-      messageReceivedHandler,
+      message => messageReceivedHandler(message),
       null,
       this._disposables
     );
-  }
-
-  // TODO: remove, it stays here as an example of postMessage from the extension
-  public doRefactor() {
-    // Send a message to the webview webview.
-    // You can send any JSON serializable data.
-    this._panel.webview.postMessage({ command: "refactor" });
   }
 
   public dispose() {

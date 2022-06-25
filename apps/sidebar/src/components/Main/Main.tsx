@@ -25,7 +25,12 @@ const Main = () => {
     <div className="flex flex-col flex-1">
       <button
         onClick={() => {
-          vscode?.postMessage({ command: "log", source: "sidebar", data: 1 });
+          vscode?.postMessage({
+            command: "log",
+            source: "sidebar",
+            data: 1,
+            forwardTo: "all"
+          });
         }}
       >
         send message

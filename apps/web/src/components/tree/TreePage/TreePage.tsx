@@ -120,7 +120,12 @@ const TreePage = () => {
       </button>
       <button
         onClick={() => {
-          vscode?.postMessage({ command: "log", source: "web", data: 1 });
+          vscode?.postMessage({
+            command: "log",
+            source: "web",
+            data: 1,
+            forwardTo: "all"
+          });
         }}
       >
         Send message

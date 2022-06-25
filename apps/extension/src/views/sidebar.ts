@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as vscode from "vscode";
 
+import MessagesProvider from "../MessagesProvider";
 import { getNonce, messageReceivedHandler } from "../utils";
 
 export default class SidebarView implements vscode.WebviewViewProvider {
@@ -28,7 +29,11 @@ export default class SidebarView implements vscode.WebviewViewProvider {
 
     webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-    webviewView.webview.onDidReceiveMessage(messageReceivedHandler);
+    webviewView.webview.onDidReceiveMessage(message =>
+      messageReceivedHandler(message)
+    );
+
+    MessagesProvider.register("sidebar", webviewView.webview);
   }
 
   private _getHtmlForWebview(webview: vscode.Webview) {
