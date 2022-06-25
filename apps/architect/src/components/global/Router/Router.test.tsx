@@ -1,7 +1,7 @@
 import React from "react";
 
-import { render } from "setupTests";
 import Router from "./Router";
+import { render } from "setupTests";
 
 describe("Router", () => {
   it("renders with default props", () => {
