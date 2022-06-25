@@ -22,9 +22,7 @@ export default class SidebarView implements vscode.WebviewViewProvider {
       enableScripts: true,
 
       localResourceRoots: [
-        vscode.Uri.file(
-          path.join(this._extensionPath, "../architect-sidebar/build")
-        )
+        vscode.Uri.file(path.join(this._extensionPath, "../sidebar/build"))
       ]
     };
 
@@ -35,7 +33,7 @@ export default class SidebarView implements vscode.WebviewViewProvider {
 
   private _getHtmlForWebview(webview: vscode.Webview) {
     // Use a nonce to only allow a specific script to be run.
-    const assetsRoot = "../architect-sidebar/build";
+    const assetsRoot = "../sidebar/build";
     const manifest = require(path.join(
       this._extensionPath,
       `${assetsRoot}/manifest.json`

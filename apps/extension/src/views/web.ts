@@ -48,7 +48,7 @@ export default class WebView {
 
         // And restric the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
-          vscode.Uri.file(path.join(this._extensionPath, "../architect/build"))
+          vscode.Uri.file(path.join(this._extensionPath, "../web/build"))
         ]
       }
     );
@@ -90,7 +90,7 @@ export default class WebView {
   }
 
   private _getHtmlForWebview() {
-    const assetsRoot = "../architect/build";
+    const assetsRoot = "../web/build";
     const manifest = require(path.join(
       this._extensionPath,
       `${assetsRoot}/manifest.json`
