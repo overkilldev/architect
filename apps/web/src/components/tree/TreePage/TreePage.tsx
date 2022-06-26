@@ -1,9 +1,9 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
-import { ReactFlowInstance } from "react-flow-renderer";
-import { addEdge, Connection } from "react-flow-renderer";
-import { OnNodesChange } from "react-flow-renderer";
+import { ReactFlowInstance, Background, MiniMap } from "react-flow-renderer";
+import { addEdge, Connection, useReactFlow } from "react-flow-renderer";
+import { OnNodesChange, Controls } from "react-flow-renderer";
 
 import CustomNode from "../CustomNode/CustomNode";
 import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
@@ -11,16 +11,17 @@ import NodeDrawer from "components/tree/NodeDrawer/NodeDrawer";
 import { NodeFormMode } from "components/tree/NodeDrawer/NodeDrawer.types";
 import useGlobals from "contexts/globals/globals.hooks";
 import { createGraphLayout } from "utils/elk.utils";
+import "./TreePage.css";
 
 const TreePage = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [fitView, setFitView] = useState("on");
+  const [formFitView, setFormFitView] = useState("on");
+  const { fitView } = useReactFlow();
   const [drawerMode, setDrawerMode] = useState<NodeFormMode>("CREATE");
   const [selectedNode, setSelectedNode] = useState<ICustomNode | null>(null);
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), []);
-  const canvas = useRef<ReactFlowInstance>();
   const nodesLengthRef = useRef(edges.length);
   const { vscode } = useGlobals();
 
@@ -39,7 +40,6 @@ const TreePage = () => {
       );
       setNodes(nodes);
       reactFlowInstance.fitView();
-      canvas.current = reactFlowInstance;
     } catch (error) {
       console.error(error);
     }
@@ -101,13 +101,10 @@ const TreePage = () => {
         setNodes(newNodes);
         nodesLengthRef.current = nodes.length;
       }
-      // TODO: mejorar
-      setTimeout(() => {
-        if (!canvas.current || fitView !== "on") return;
-        canvas.current.fitView();
-      }, 500);
+      if (formFitView !== "on") return;
+      fitView({ duration: 1000 });
     },
-    [edges, nodes, setNodes, onNodesChange, fitView]
+    [onNodesChange, nodes, edges, setNodes, formFitView, fitView]
   );
 
   return (
@@ -133,13 +130,14 @@ const TreePage = () => {
       <label className="text-center">
         <input
           type="checkbox"
-          onChange={e => setFitView(e.target.checked ? "on" : "off")}
+          onChange={e => setFormFitView(e.target.checked ? "on" : "off")}
           defaultChecked
-          value={fitView}
+          value={formFitView}
         />
         Fit view
       </label>
       <ReactFlow
+        defaultZoom={1.5}
         nodes={nodes}
         edges={edges}
         onNodesChange={nodesChangeHandler}
@@ -147,10 +145,13 @@ const TreePage = () => {
         onConnect={onConnect}
         onInit={onInit}
         nodeTypes={nodeTypes}
-        snapToGrid={true}
-        defaultZoom={1.5}
+        snapToGrid
         fitView
-      />
+      >
+        <Background />
+        <Controls />
+        <MiniMap className="TreePage__minimap" maskColor="rgb(63 63 70)" />
+      </ReactFlow>
       <NodeDrawer
         createNode={createNode}
         // @ts-ignore
