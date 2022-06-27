@@ -2,6 +2,7 @@ import React, { ChangeEvent, FormEvent, useCallback, useState } from "react";
 
 import { EnhancedTemplateDrawerProps as Props } from "./EnhancedTemplateDrawer.types";
 import Autocomplete from "components/global/Autocomplete/Autocomplete";
+import Button from "components/global/Button/Button";
 import Drawer from "components/global/Drawer/Drawer";
 import Input from "components/global/Input/Input";
 
@@ -22,12 +23,10 @@ const EnhancedTemplateDrawer: React.FC<Props> = props => {
   };
 
   return (
-    <Drawer
-      placement="right"
-      header="New enhanced template"
-      size="sm"
-      {...rest}
-    >
+    <Drawer placement="right" size="sm" {...rest}>
+      <h2 className="font-bold text-xl uppercase py-3">
+        New enhanced template
+      </h2>
       <form onSubmit={submitHandler}>
         <Input
           placeholder="Enhanced template name"
@@ -50,12 +49,7 @@ const EnhancedTemplateDrawer: React.FC<Props> = props => {
             placeholder: "Choose enhancers"
           }}
         />
-        <button
-          type="submit"
-          className="px-4 py-2 border rounded-lg bg-blue-500 text-white"
-        >
-          Save
-        </button>
+        <Button type="submit">Save</Button>
       </form>
     </Drawer>
   );

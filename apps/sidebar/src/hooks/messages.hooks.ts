@@ -6,6 +6,8 @@ export const useListenMessages = () => {
   const [message, setMessage] = useState<Messages>();
 
   useEffect(() => {
+    if (!window.isVsCode) return;
+
     const subscriber = (event: MessageEvent) => {
       setMessage(event.data);
     };

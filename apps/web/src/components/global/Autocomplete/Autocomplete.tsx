@@ -9,7 +9,8 @@ const Autocomplete: React.FC<Props> = props => {
   const [selectedOption, setSelectedOption] = useState("");
   const [query, setQuery] = useState("");
   const { height = 200 } = optionsProps ?? {};
-  const optionClasses = "Autocomplete__option border-b last:border-none";
+  const optionClasses =
+    "Autocomplete__option border-b border-stone-900 last:border-none";
 
   const filteredOptions =
     query === ""
@@ -25,11 +26,11 @@ const Autocomplete: React.FC<Props> = props => {
   ) => {
     return (
       <div
-        className={`py-3 px-2 hover:bg-blue-200 ${
-          active ? "bg-blue-100" : "bg-white"
-        } ${selected ? "bg-blue-300" : "bg-white"}`}
+        className={`py-3 px-2 hover:bg-violet-500/30 ${
+          active ? "bg-violet-500" : "bg-black"
+        } ${selected ? "bg-violet-500" : "bg-black"}`}
       >
-        {option}
+        <p className="text-white">{option}</p>
       </div>
     );
   };
@@ -37,14 +38,20 @@ const Autocomplete: React.FC<Props> = props => {
   return (
     <Combobox {...rest2} value={selectedOption} onChange={setSelectedOption}>
       <div className="pb-4 relative">
-        <Combobox.Label>{label}</Combobox.Label>
+        <Combobox.Label className="inline-flex text-white pb-1">
+          {label}
+        </Combobox.Label>
         <Combobox.Input
-          className="w-full p-2 border rounded-md"
+          className="
+          w-full p-2 rounded-md bg-black text-white
+          focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border focus:border-violet-500
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:border focus-visible:border-violet-500
+          "
           onChange={event => setQuery(event.target.value)}
           {...inputProps}
         />
         <Combobox.Options
-          className="Autocomplete__options absolute top-20 bg-white w-full shadow-md overflow-y-auto"
+          className="Autocomplete__options absolute top-20 bg-black w-full shadow-md overflow-y-auto rounded-lg"
           style={{ maxHeight: height }}
         >
           {filteredOptions.map((option, index) => (

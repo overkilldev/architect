@@ -1,12 +1,13 @@
 import { useDisclosure } from "@chakra-ui/react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import ReactFlow, { useNodesState, useEdgesState } from "react-flow-renderer";
-import { ReactFlowInstance, Background, MiniMap } from "react-flow-renderer";
+import { ReactFlowInstance, MiniMap } from "react-flow-renderer";
 import { addEdge, Connection, useReactFlow } from "react-flow-renderer";
 import { OnNodesChange, Controls } from "react-flow-renderer";
 
 import CustomNode from "../CustomNode/CustomNode";
 import { CustomNodeData, ICustomNode } from "../CustomNode/CustomNode.types";
+import Button from "components/global/Button/Button";
 import NodeDrawer from "components/tree/NodeDrawer/NodeDrawer";
 import { NodeFormMode } from "components/tree/NodeDrawer/NodeDrawer.types";
 import useGlobals from "contexts/globals/globals.hooks";
@@ -14,7 +15,7 @@ import { createGraphLayout } from "utils/elk.utils";
 import "./TreePage.css";
 
 const TreePage = () => {
-  const [nodes, setNodes, onNodesChange] = useNodesState<ICustomNode[]>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<CustomNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [formFitView, setFormFitView] = useState("on");
@@ -70,11 +71,11 @@ const TreePage = () => {
         type: "customNode",
         data: {
           label: `Node ${id}`,
-          // @ts-ignore
           setNodes,
           setEdges,
           createNode,
           onClick: nodeClickHandler,
+          node: null,
           ...overrides
         },
         position: { x: 0, y: 0 }
@@ -95,27 +96,25 @@ const TreePage = () => {
 
   const nodesChangeHandler: OnNodesChange = useCallback(
     async nodeChanges => {
-      onNodesChange(nodeChanges);
       if (nodesLengthRef.current !== nodes.length) {
+        nodesLengthRef.current = nodes.length;
         const newNodes = await createGraphLayout(nodes, edges);
         setNodes(newNodes);
-        nodesLengthRef.current = nodes.length;
+        if (formFitView !== "on") return;
+        fitView({ duration: 1000 });
+      } else {
+        onNodesChange(nodeChanges);
       }
-      if (formFitView !== "on") return;
-      fitView({ duration: 1000 });
     },
     [onNodesChange, nodes, edges, setNodes, formFitView, fitView]
   );
 
   return (
     <>
-      <button
-        className="text-center"
-        onClick={() => nodeClickHandler(null, "CREATE")}
-      >
+      <Button onClick={() => nodeClickHandler(null, "CREATE")}>
         Create node
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           vscode?.postMessage({
             command: "log",
@@ -126,7 +125,7 @@ const TreePage = () => {
         }}
       >
         Send message
-      </button>
+      </Button>
       <label className="text-center">
         <input
           type="checkbox"
@@ -137,7 +136,7 @@ const TreePage = () => {
         Fit view
       </label>
       <ReactFlow
-        defaultZoom={1.5}
+        defaultZoom={1}
         nodes={nodes}
         edges={edges}
         onNodesChange={nodesChangeHandler}
@@ -148,13 +147,11 @@ const TreePage = () => {
         snapToGrid
         fitView
       >
-        <Background />
         <Controls />
         <MiniMap className="TreePage__minimap" maskColor="rgb(63 63 70)" />
       </ReactFlow>
       <NodeDrawer
         createNode={createNode}
-        // @ts-ignore
         setNodes={setNodes}
         setEdges={setEdges}
         mode={drawerMode}

@@ -1,7 +1,7 @@
 import Elk, { ElkNode, ElkExtendedEdge } from "elkjs";
 import { Node, Edge } from "react-flow-renderer";
 
-const DEFAULT_WIDTH = 50;
+const DEFAULT_WIDTH = 192;
 const DEFAULT_HEIGHT = 30;
 
 const elk = new Elk({

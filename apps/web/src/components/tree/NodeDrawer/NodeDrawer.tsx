@@ -3,6 +3,7 @@ import { FormEvent, ChangeEvent, memo } from "react";
 import { addEdge } from "react-flow-renderer";
 
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
+import Button from "components/global/Button/Button";
 import Drawer from "components/global/Drawer/Drawer";
 import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
@@ -73,13 +74,8 @@ const NodeDrawer: React.FC<Props> = props => {
   }, [label, mode]);
 
   return (
-    <Drawer
-      placement="right"
-      header="Create your account"
-      size="sm"
-      onClose={onClose}
-      {...rest2}
-    >
+    <Drawer placement="right" size="sm" onClose={onClose} {...rest2}>
+      <h2 className="font-bold text-xl uppercase py-3">Create your account</h2>
       <form onSubmit={submitHandler}>
         <p className="pb-2 text-md font-medium">ID: {id}</p>
         <Input
@@ -90,12 +86,7 @@ const NodeDrawer: React.FC<Props> = props => {
           autoFocus
         />
         <EnhancedTemplateAutocomplete />
-        <button
-          type="submit"
-          className="px-4 py-2 border rounded-lg bg-blue-500 text-white"
-        >
-          Save
-        </button>
+        <Button type="submit">Save</Button>
       </form>
     </Drawer>
   );
