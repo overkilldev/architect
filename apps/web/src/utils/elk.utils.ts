@@ -1,8 +1,11 @@
 import Elk, { ElkNode, ElkExtendedEdge } from "elkjs";
 import { Node, Edge } from "react-flow-renderer";
 
-const DEFAULT_WIDTH = 192;
-const DEFAULT_HEIGHT = 30;
+import CONSTANTS from "config/constants";
+
+const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
+const DEFAULT_WIDTH = NODE_WIDTH;
+const DEFAULT_HEIGHT = NODE_HEIGHT;
 
 const elk = new Elk({
   defaultLayoutOptions: {
@@ -18,12 +21,9 @@ const elk = new Elk({
 export const calculateLayout = (flowNode: Node, graph: ElkNode) => {
   const node = graph?.children?.find(n => n.id === flowNode.id);
   if (!node) return flowNode;
-  const { x, y, width, height } = node;
-  if (x && y && width && height) {
-    flowNode.position = {
-      x: x - width,
-      y: y - height
-    };
+  const { x, y } = node;
+  if (typeof x === "number" && typeof y === "number") {
+    flowNode.position = { x, y };
   } else {
     console.log("error", node);
   }

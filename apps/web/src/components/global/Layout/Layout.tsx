@@ -11,7 +11,11 @@ const Layout: React.FC<Props> = props => {
 
   console.log("web", message);
 
-  return <div className="Layout h-full bg-black text-white">{children}</div>;
+  return (
+    <div className="Layout h-full bg-black text-white flex flex-col">
+      {children}
+    </div>
+  );
 };
 
 Layout.defaultProps = {};

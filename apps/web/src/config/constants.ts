@@ -40,7 +40,10 @@ const CONSTANTS = {
     hd: 2560
   },
   // General settings
-  GENERAL: {}
+  GENERAL: {
+    NODE_WIDTH: 192,
+    NODE_HEIGHT: 30
+  }
   // OTHERS\
 };
 

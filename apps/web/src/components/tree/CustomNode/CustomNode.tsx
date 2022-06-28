@@ -1,14 +1,24 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { FC, memo } from "react";
-import { Handle, Position } from "react-flow-renderer";
+import { Handle, Position, useReactFlow } from "react-flow-renderer";
 
 import NodeContextMenu from "../NodeContextMenu/NodeContextMenu";
 import { CustomNodeProps } from "./CustomNode.types";
+import CONSTANTS from "config/constants";
 import "./CustomNode.css";
 
+const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
+
 const CustomNode: FC<CustomNodeProps> = props => {
-  const { isConnectable, data, selected } = props;
+  const { isConnectable, data, selected, xPos, yPos } = props;
   const { onClick, label, node } = data;
+  const { setCenter } = useReactFlow();
+
+  const clickHandler = () => {
+    setCenter(xPos + NODE_WIDTH / 2, yPos + NODE_HEIGHT / 2, {
+      duration: 1000
+    });
+  };
 
   let nodeClasses = "flex p-2 rounded-lg ";
   if (selected) nodeClasses = `${nodeClasses} ring-violet-500/50 ring-2`;
@@ -18,7 +28,10 @@ const CustomNode: FC<CustomNodeProps> = props => {
   };
 
   return (
-    <div className="CustomNode bg-stone-900 shadow-2xl rounded-lg w-48">
+    <div
+      className="CustomNode bg-stone-900 shadow-2xl rounded-lg w-48"
+      onClick={clickHandler}
+    >
       <div className={nodeClasses} style={selected ? nodeStyles : undefined}>
         <Handle
           type="target"
