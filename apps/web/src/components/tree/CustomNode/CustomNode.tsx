@@ -6,18 +6,29 @@ import NodeContextMenu from "../NodeContextMenu/NodeContextMenu";
 import { CustomNodeProps } from "./CustomNode.types";
 import CONSTANTS from "config/constants";
 import "./CustomNode.css";
+import { FormDrawerStates } from "contexts/globals/globals.context.types";
+import useGlobals from "contexts/globals/globals.hooks";
+import useTree from "contexts/tree/tree.hooks";
 
 const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
 
 const CustomNode: FC<CustomNodeProps> = props => {
   const { isConnectable, data, selected, xPos, yPos } = props;
-  const { onClick, label, node } = data;
+  const { label, node } = data;
   const { setCenter } = useReactFlow();
+  const { setSelectedNode } = useTree();
+  const { setFormMode, onOpen } = useGlobals().nodeDrawer;
 
   const clickHandler = () => {
     setCenter(xPos + NODE_WIDTH / 2, yPos + NODE_HEIGHT / 2, {
       duration: 1000
     });
+  };
+
+  const actionHandler = (mode: FormDrawerStates) => {
+    setSelectedNode(node);
+    setFormMode(mode);
+    onOpen();
   };
 
   let nodeClasses = "flex p-2 rounded-lg ";
@@ -45,13 +56,13 @@ const CustomNode: FC<CustomNodeProps> = props => {
           <p className="CustomNode__text flex-1 text-xs capitalize text-white font-bold ">
             {label}
           </p>
-          <NodeContextMenu onEdit={() => onClick(node, "EDIT")} node={data} />
+          <NodeContextMenu onEdit={() => actionHandler("EDIT")} node={data} />
         </div>
         <button
           className="CustomNode__add left-1/2 absolute bottom-0 px-4 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
           onClick={e => {
             e.stopPropagation();
-            onClick(node, "CREATE");
+            actionHandler("CREATE");
           }}
         >
           <AddIcon w={2} h={2} />

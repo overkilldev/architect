@@ -7,15 +7,18 @@ import Button from "components/global/Button/Button";
 import Drawer from "components/global/Drawer/Drawer";
 import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
+import useGlobals from "contexts/globals/globals.hooks";
+import useTree from "contexts/tree/tree.hooks";
 
 const NodeDrawer: React.FC<Props> = props => {
-  const { mode, selectedNode, onClose, createNode, setNodes, ...rest } = props;
-  const { setEdges, ...rest2 } = rest;
+  const { formMode, onClose, isOpen } = useGlobals().nodeDrawer;
+  const { selectedNode, setNodes, setEdges, createNode } = useTree();
 
   const { id, data } = selectedNode ?? {};
   const { label = "" } = data ?? {};
   const [formLabel, setFormLabel] = useState("");
 
+  // TODO: mover como action del context
   const createHandler = useCallback(() => {
     setNodes(prev => {
       const newNode = createNode(selectedNode, `${prev.length}`, {
@@ -57,12 +60,12 @@ const NodeDrawer: React.FC<Props> = props => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (mode === "CREATE") {
+    if (formMode === "CREATE") {
       createHandler();
-    } else if (mode === "EDIT") {
+    } else if (formMode === "EDIT") {
       editHandler();
     } else {
-      throw new Error(`Unhandled mode: ${mode}`);
+      throw new Error(`Unhandled mode: ${formMode}`);
     }
     // Reset form
     setFormLabel("");
@@ -70,11 +73,17 @@ const NodeDrawer: React.FC<Props> = props => {
   };
 
   useEffect(() => {
-    if (mode === "EDIT") setFormLabel(label);
-  }, [label, mode]);
+    if (formMode === "EDIT") setFormLabel(label);
+  }, [label, formMode]);
 
   return (
-    <Drawer placement="right" size="sm" onClose={onClose} {...rest2}>
+    <Drawer
+      placement="right"
+      size="sm"
+      onClose={onClose}
+      isOpen={isOpen}
+      {...props}
+    >
       <h2 className="font-bold text-xl uppercase py-3">Create your account</h2>
       <form onSubmit={submitHandler}>
         <p className="pb-2 text-md font-medium">ID: {id}</p>

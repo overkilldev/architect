@@ -4,6 +4,7 @@ import { Edge, OnInit, OnNodesChange } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
 import { INode } from "components/tree/CustomNode/CustomNode.types";
+import { CustomNodeData } from "components/tree/CustomNode/CustomNode.types";
 
 // Provider Props
 export interface TreeProviderProps {
@@ -23,4 +24,9 @@ export interface TreeProviderValue {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
+  createNode: (
+    parentNode: INode | null,
+    id: string,
+    data?: Partial<CustomNodeData>
+  ) => INode;
 }

@@ -8,13 +8,14 @@ import { TreeProviderProps as Props } from "./tree.context.types";
 import { TreeProviderValue } from "./tree.context.types";
 import CustomNode from "components/tree/CustomNode/CustomNode";
 import { INode } from "components/tree/CustomNode/CustomNode.types";
+import { CustomNodeData } from "components/tree/CustomNode/CustomNode.types";
 import { createGraphLayout } from "utils/elk.utils";
 
 // @ts-ignore
 export const TreeContext = createContext<TreeProviderValue>();
 
 const TreeProvider: React.FC<Props> = props => {
-  const { fitView } = useReactFlow();
+  const { fitView, getViewport } = useReactFlow();
   const [nodes, setNodes] = useState<INode[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   const [selectedNode, setSelectedNode] = useState<INode | null>(null);
@@ -39,8 +40,9 @@ const TreeProvider: React.FC<Props> = props => {
         const newNodes = await createGraphLayout(nodes, edges);
         setNodes(applyNodeChanges(changes, newNodes));
         fitView({ duration: 1000 });
+      } else {
+        setNodes(prev => applyNodeChanges(changes, prev));
       }
-      setNodes(prev => applyNodeChanges(changes, prev));
     },
     [nodes, edges, setNodes, fitView]
   );
@@ -59,6 +61,40 @@ const TreeProvider: React.FC<Props> = props => {
 
   const nodeTypes = useMemo<NodeTypes>(() => ({ customNode: CustomNode }), []);
 
+  const createNode = useCallback(
+    (
+      parentNode: INode | null,
+      id: string,
+      data: Partial<CustomNodeData> = {}
+    ): INode => {
+      const { x, y } = getViewport();
+      const newNode: INode = {
+        id,
+        type: "customNode",
+        data: {
+          label: `Node ${id}`,
+          setNodes,
+          setEdges,
+          createNode,
+          node: null,
+          ...data
+        },
+        position: { x, y }
+      };
+      newNode.data.node = newNode;
+      const { width, height } = parentNode ?? {};
+      if (parentNode && width && height) {
+        const { position } = parentNode;
+        newNode.position = {
+          x: position.x,
+          y: position.y + height + 25
+        };
+      }
+      return newNode;
+    },
+    [getViewport, setNodes, setEdges]
+  );
+
   const value: TreeProviderValue = useMemo(() => {
     return {
       nodes,
@@ -71,9 +107,11 @@ const TreeProvider: React.FC<Props> = props => {
       onInit,
       onNodesChange,
       onEdgesChange,
-      onConnect
+      onConnect,
+      createNode
     };
   }, [
+    createNode,
     edges,
     nodeTypes,
     nodes,
