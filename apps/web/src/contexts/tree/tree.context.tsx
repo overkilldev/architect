@@ -69,13 +69,11 @@ const TreeProvider: React.FC<Props> = props => {
     ): INode => {
       const { x, y } = getViewport();
       const newNode: INode = {
+        // TODO: ver si eliminamos param y usamos useId de react
         id,
         type: "customNode",
         data: {
           label: `Node ${id}`,
-          setNodes,
-          setEdges,
-          createNode,
           node: null,
           ...data
         },
@@ -92,7 +90,7 @@ const TreeProvider: React.FC<Props> = props => {
       }
       return newNode;
     },
-    [getViewport, setNodes, setEdges]
+    [getViewport]
   );
 
   const value: TreeProviderValue = useMemo(() => {

@@ -1,8 +1,6 @@
 import { Menu, Transition } from "@headlessui/react";
 import React, { Fragment, memo } from "react";
-import { useNodes } from "react-flow-renderer";
 
-import { CustomNodeData } from "../CustomNode/CustomNode.types";
 import { ArchiveActiveIcon } from "./NodeContextMenu.helpers";
 import { ArchiveInactiveIcon } from "./NodeContextMenu.helpers";
 import { DeleteActiveIcon } from "./NodeContextMenu.helpers";
@@ -12,15 +10,16 @@ import { DuplicateInactiveIcon } from "./NodeContextMenu.helpers";
 import { EditActiveIcon, EditInactiveIcon } from "./NodeContextMenu.helpers";
 import { MoveActiveIcon, MoveInactiveIcon } from "./NodeContextMenu.helpers";
 import { NodeContextMenuProps as Props } from "./NodeContextMenu.types";
+import useTree from "contexts/tree/tree.hooks";
 
 import { ReactComponent as DotsSVG } from "/public/dots.svg";
 
 const NodeContextMenu: React.FC<Props> = props => {
   const { node, onEdit } = props;
-  const nodes = useNodes<CustomNodeData>();
+  const { setNodes } = useTree();
 
   const deleteHandler = () => {
-    node.setNodes(nodes.filter(item => item.id !== node.node?.id));
+    setNodes(nodes => nodes.filter(item => item.id !== node.node?.id));
   };
 
   return (
