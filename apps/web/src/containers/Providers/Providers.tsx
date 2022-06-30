@@ -8,6 +8,7 @@ import { MemoryRouter, BrowserRouter } from "react-router-dom";
 import { ProvidersProps as Props } from "./Providers.types";
 import { queryClient } from "config/reactQuery.config";
 import GlobalsProvider from "contexts/globals/globals.context";
+import TreeProvider from "contexts/tree/tree.context";
 
 const Providers: React.FC<Props> = props => {
   const Router = window.isVsCode ? MemoryRouter : BrowserRouter;
@@ -16,11 +17,13 @@ const Providers: React.FC<Props> = props => {
     <QueryClientProvider client={queryClient}>
       {process.env.NODE_ENV === "development" ? <ReactQueryDevtools /> : null}
       <ReactFlowProvider>
-        <GlobalsProvider>
-          <ChakraProvider>
-            <Router>{props.children}</Router>
-          </ChakraProvider>
-        </GlobalsProvider>
+        <TreeProvider>
+          <GlobalsProvider>
+            <ChakraProvider>
+              <Router>{props.children}</Router>
+            </ChakraProvider>
+          </GlobalsProvider>
+        </TreeProvider>
       </ReactFlowProvider>
     </QueryClientProvider>
   );

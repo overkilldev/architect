@@ -1,7 +1,4 @@
-.TreePage {
-}
-
-.TreePage__minimap {
+.Tree__minimap {
   --tw-bg-opacity: 1;
   background-color: rgb(39 39 42 / var(--tw-bg-opacity));
 }
