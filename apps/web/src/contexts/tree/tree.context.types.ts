@@ -1,5 +1,4 @@
 // Interfaces and types from context Tree
-import { Dispatch, SetStateAction } from "react";
 import { Edge, OnInit, OnNodesChange } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
@@ -14,19 +13,15 @@ export interface TreeProviderProps {
 // Provider value
 export interface TreeProviderValue {
   nodes: INode[];
-  setNodes: Dispatch<SetStateAction<INode[]>>;
+  setNodes: (nodes: INode[]) => void;
   edges: Edge[];
-  setEdges: Dispatch<SetStateAction<Edge[]>>;
+  setEdges: (edges: Edge[]) => void;
   selectedNode: INode | null;
-  setSelectedNode: Dispatch<SetStateAction<INode | null>>;
+  setSelectedNode: (selectedNode: INode | null) => void;
   nodeTypes: NodeTypes;
   onInit: OnInit;
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  createNode: (
-    parentNode: INode | null,
-    id: string,
-    data?: Partial<CustomNodeData>
-  ) => INode;
+  createNode: (id: string, data?: Partial<CustomNodeData>) => INode;
 }

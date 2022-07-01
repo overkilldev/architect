@@ -8,7 +8,7 @@ import { MemoryRouter, BrowserRouter } from "react-router-dom";
 import { ProvidersProps as Props } from "./Providers.types";
 import { queryClient } from "config/reactQuery.config";
 import GlobalsProvider from "contexts/globals/globals.context";
-import TreeProvider from "contexts/tree/tree.context";
+import { TreeProvider } from "contexts/tree/tree.context";
 
 const Providers: React.FC<Props> = props => {
   const Router = window.isVsCode ? MemoryRouter : BrowserRouter;

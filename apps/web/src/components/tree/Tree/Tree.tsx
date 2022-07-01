@@ -5,11 +5,16 @@ import { Controls } from "react-flow-renderer";
 
 import "./Tree.css";
 import { TreeProps as Props } from "./Tree.types";
-import useTree from "contexts/tree/tree.hooks";
+import useTree from "contexts/tree/tree.context";
 
 const Tree: React.FC<Props> = props => {
-  const { nodes, edges, onNodesChange, onEdgesChange } = useTree();
-  const { onConnect, onInit, nodeTypes } = useTree();
+  const nodes = useTree(state => state.nodes);
+  const edges = useTree(state => state.edges);
+  const nodeTypes = useTree(state => state.nodeTypes);
+  const onInit = useTree(state => state.onInit);
+  const onNodesChange = useTree(state => state.onNodesChange);
+  const onEdgesChange = useTree(state => state.onEdgesChange);
+  const onConnect = useTree(state => state.onConnect);
 
   return (
     <ReactFlow
@@ -17,11 +22,11 @@ const Tree: React.FC<Props> = props => {
       defaultZoom={1}
       nodes={nodes}
       edges={edges}
+      nodeTypes={nodeTypes}
+      onInit={onInit}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
-      onInit={onInit}
-      nodeTypes={nodeTypes}
       snapToGrid
     >
       <Controls />

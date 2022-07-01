@@ -4,13 +4,13 @@ import React, { createContext, useCallback, useMemo, useState } from "react";
 import { FormDrawerStates, NodeDrawerContext } from "./globals.context.types";
 import { GlobalsProviderProps as Props } from "./globals.context.types";
 import { GlobalsProviderValue } from "./globals.context.types";
-import useTree from "contexts/tree/tree.hooks";
+import useTree from "contexts/tree/tree.context";
 
 // @ts-ignore
 export const GlobalsContext = createContext<GlobalsProviderValue>();
 
 const GlobalsProvider: React.FC<Props> = props => {
-  const { setSelectedNode } = useTree();
+  const setSelectedNode = useTree(state => state.setSelectedNode);
 
   // START: node drawer props
   const nodeDrawerTemp = useDisclosure();

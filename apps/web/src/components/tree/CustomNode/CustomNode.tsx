@@ -2,13 +2,13 @@ import { AddIcon } from "@chakra-ui/icons";
 import { FC, memo } from "react";
 import { Handle, Position, useReactFlow } from "react-flow-renderer";
 
+import "./CustomNode.css";
 import NodeContextMenu from "../NodeContextMenu/NodeContextMenu";
 import { CustomNodeProps } from "./CustomNode.types";
 import CONSTANTS from "config/constants";
-import "./CustomNode.css";
 import { FormDrawerStates } from "contexts/globals/globals.context.types";
 import useGlobals from "contexts/globals/globals.hooks";
-import useTree from "contexts/tree/tree.hooks";
+import useTree from "contexts/tree/tree.context";
 
 const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
 
@@ -16,7 +16,7 @@ const CustomNode: FC<CustomNodeProps> = props => {
   const { isConnectable, data, selected, xPos, yPos } = props;
   const { label, node } = data;
   const { setCenter } = useReactFlow();
-  const { setSelectedNode } = useTree();
+  const setSelectedNode = useTree(state => state.setSelectedNode);
   const { setFormMode, onOpen } = useGlobals().nodeDrawer;
 
   const clickHandler = () => {
