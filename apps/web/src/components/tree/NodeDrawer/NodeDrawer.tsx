@@ -7,21 +7,28 @@ import Button from "components/global/Button/Button";
 import Drawer from "components/global/Drawer/Drawer";
 import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
-import useGlobals from "contexts/globals/globals.hooks";
+import useGlobals from "contexts/globals/globals.context";
 import useTree from "contexts/tree/tree.context";
 
 const NodeDrawer: React.FC<Props> = props => {
-  const { formMode, onClose, isOpen } = useGlobals().nodeDrawer;
+  const nodeDrawer = useGlobals(state => state.nodeDrawer);
+  const { formMode, onClose, isOpen } = nodeDrawer;
   const selectedNode = useTree(state => state.selectedNode);
   const setNodes = useTree(state => state.setNodes);
   const setEdges = useTree(state => state.setEdges);
   const createNode = useTree(state => state.createNode);
+  const setSelectedNode = useTree(state => state.setSelectedNode);
   const nodes = useTree(state => state.nodes);
   const edges = useTree(state => state.edges);
 
   const { id, data } = selectedNode ?? {};
   const { label = "" } = data ?? {};
   const [formLabel, setFormLabel] = useState("");
+
+  const closeHandler = () => {
+    setSelectedNode(null);
+    onClose();
+  };
 
   // TODO: mover como action del context
   const createHandler = useCallback(() => {
@@ -70,7 +77,7 @@ const NodeDrawer: React.FC<Props> = props => {
     }
     // Reset form
     setFormLabel("");
-    onClose();
+    closeHandler();
   };
 
   useEffect(() => {
@@ -81,7 +88,7 @@ const NodeDrawer: React.FC<Props> = props => {
     <Drawer
       placement="right"
       size="sm"
-      onClose={onClose}
+      onClose={closeHandler}
       isOpen={isOpen}
       {...props}
     >

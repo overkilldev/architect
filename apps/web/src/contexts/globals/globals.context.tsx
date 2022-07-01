@@ -1,52 +1,34 @@
-import { useDisclosure } from "@chakra-ui/react";
-import React, { createContext, useCallback, useMemo, useState } from "react";
+import React from "react";
+import create, { StoreApi } from "zustand";
+import createContext from "zustand/context";
 
-import { FormDrawerStates, NodeDrawerContext } from "./globals.context.types";
 import { GlobalsProviderProps as Props } from "./globals.context.types";
 import { GlobalsProviderValue } from "./globals.context.types";
-import useTree from "contexts/tree/tree.context";
 
-// @ts-ignore
-export const GlobalsContext = createContext<GlobalsProviderValue>();
+type GlobalsStoreApi = StoreApi<GlobalsProviderValue>;
+const { Provider, useStore: useGlobals } = createContext<GlobalsStoreApi>();
 
-const GlobalsProvider: React.FC<Props> = props => {
-  const setSelectedNode = useTree(state => state.setSelectedNode);
+export const GlobalsProvider: React.FC<Props> = props => {
+  const value = () => {
+    return create<GlobalsProviderValue>((set, get) => ({
+      vscode: window.isVsCode ? window.acquireVsCodeApi() : null,
+      nodeDrawer: {
+        isOpen: false,
+        onOpen: () => {
+          set({ nodeDrawer: { ...get().nodeDrawer, isOpen: true } });
+        },
+        onClose: () => {
+          set({ nodeDrawer: { ...get().nodeDrawer, isOpen: false } });
+        },
+        formMode: "CREATE",
+        setFormMode: mode => {
+          set({ nodeDrawer: { ...get().nodeDrawer, formMode: mode } });
+        }
+      }
+    }));
+  };
 
-  // START: node drawer props
-  const nodeDrawerTemp = useDisclosure();
-  const [nodeDrawerFormMode, setNodeDrawerFormMode] =
-    useState<FormDrawerStates>("CREATE");
-  const nodeDrawerCloseHandler = useCallback(() => {
-    setSelectedNode(null);
-    nodeDrawerTemp.onClose();
-  }, [nodeDrawerTemp, setSelectedNode]);
-  const nodeDrawer = useMemo<NodeDrawerContext>(() => {
-    return {
-      ...nodeDrawerTemp,
-      formMode: nodeDrawerFormMode,
-      setFormMode: setNodeDrawerFormMode,
-      onClose: nodeDrawerCloseHandler
-    };
-  }, [nodeDrawerFormMode, nodeDrawerTemp, nodeDrawerCloseHandler]);
-  // END: node drawer props
-
-  const vscode = useMemo(
-    () => (window.isVsCode ? window.acquireVsCodeApi() : null),
-    []
-  );
-
-  const value: GlobalsProviderValue = useMemo(() => {
-    return {
-      vscode,
-      nodeDrawer
-    };
-  }, [vscode, nodeDrawer]);
-
-  return (
-    <GlobalsContext.Provider value={value}>
-      {props.children}
-    </GlobalsContext.Provider>
-  );
+  return <Provider createStore={value}>{props.children}</Provider>;
 };
 
-export default GlobalsProvider;
+export default useGlobals;

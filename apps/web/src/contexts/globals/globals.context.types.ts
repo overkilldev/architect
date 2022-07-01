@@ -1,6 +1,5 @@
 // Interfaces and types from context Globals
 import { Messages } from "@architect/types";
-import { Dispatch, SetStateAction } from "react";
 
 // Provider Props
 export interface GlobalsProviderProps {
@@ -17,7 +16,7 @@ export type FormDrawerStates = "CREATE" | "EDIT";
 
 export interface NodeDrawerContext {
   formMode: FormDrawerStates;
-  setFormMode: Dispatch<SetStateAction<FormDrawerStates>>;
+  setFormMode: (mode: FormDrawerStates) => void;
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;

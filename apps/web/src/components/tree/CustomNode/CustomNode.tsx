@@ -6,8 +6,8 @@ import "./CustomNode.css";
 import NodeContextMenu from "../NodeContextMenu/NodeContextMenu";
 import { CustomNodeProps } from "./CustomNode.types";
 import CONSTANTS from "config/constants";
+import useGlobals from "contexts/globals/globals.context";
 import { FormDrawerStates } from "contexts/globals/globals.context.types";
-import useGlobals from "contexts/globals/globals.hooks";
 import useTree from "contexts/tree/tree.context";
 
 const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
@@ -17,7 +17,8 @@ const CustomNode: FC<CustomNodeProps> = props => {
   const { label, node } = data;
   const { setCenter } = useReactFlow();
   const setSelectedNode = useTree(state => state.setSelectedNode);
-  const { setFormMode, onOpen } = useGlobals().nodeDrawer;
+  const nodeDrawer = useGlobals(state => state.nodeDrawer);
+  const { setFormMode, onOpen } = nodeDrawer;
 
   const clickHandler = () => {
     setCenter(xPos + NODE_WIDTH / 2, yPos + NODE_HEIGHT / 2, {
