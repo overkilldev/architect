@@ -3,13 +3,13 @@ import { useCallback } from "react";
 import Tree from "../Tree/Tree";
 import Button from "components/global/Button/Button";
 import NodeDrawer from "components/tree/NodeDrawer/NodeDrawer";
-import useGlobals from "contexts/globals/globals.context";
-import useTree from "contexts/tree/tree.context";
+import useGlobalsStore from "contexts/globals/globals.context";
+import useTreeStore from "contexts/tree/tree.context";
 
 const TreePage = () => {
-  const vscode = useGlobals(state => state.vscode);
-  const nodeDrawer = useGlobals(state => state.nodeDrawer);
-  const setSelectedNode = useTree(state => state.setSelectedNode);
+  const vscode = useGlobalsStore(state => state.vscode);
+  const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
   const { setFormMode, onOpen } = nodeDrawer;
 
   const nodeClickHandler = useCallback(() => {

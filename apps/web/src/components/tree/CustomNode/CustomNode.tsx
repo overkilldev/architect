@@ -1,29 +1,25 @@
 import { AddIcon } from "@chakra-ui/icons";
 import { FC, memo } from "react";
-import { Handle, Position, useReactFlow } from "react-flow-renderer";
+import { Handle, Position } from "react-flow-renderer";
 
 import "./CustomNode.css";
 import NodeContextMenu from "../NodeContextMenu/NodeContextMenu";
 import { CustomNodeProps } from "./CustomNode.types";
-import CONSTANTS from "config/constants";
-import useGlobals from "contexts/globals/globals.context";
+import useGlobalsStore from "contexts/globals/globals.context";
 import { FormDrawerStates } from "contexts/globals/globals.context.types";
-import useTree from "contexts/tree/tree.context";
-
-const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
+import useTreeStore from "contexts/tree/tree.context";
+import useTreeAPI from "hooks/tree.hooks";
 
 const CustomNode: FC<CustomNodeProps> = props => {
   const { isConnectable, data, selected, xPos, yPos } = props;
   const { label, node } = data;
-  const { setCenter } = useReactFlow();
-  const setSelectedNode = useTree(state => state.setSelectedNode);
-  const nodeDrawer = useGlobals(state => state.nodeDrawer);
+  const { centerOnNode } = useTreeAPI();
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+  const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { setFormMode, onOpen } = nodeDrawer;
 
   const clickHandler = () => {
-    setCenter(xPos + NODE_WIDTH / 2, yPos + NODE_HEIGHT / 2, {
-      duration: 1000
-    });
+    centerOnNode(xPos, yPos);
   };
 
   const actionHandler = (mode: FormDrawerStates) => {
@@ -57,7 +53,14 @@ const CustomNode: FC<CustomNodeProps> = props => {
           <p className="CustomNode__text flex-1 text-xs capitalize text-white font-bold ">
             {label}
           </p>
-          <NodeContextMenu onEdit={() => actionHandler("EDIT")} node={data} />
+          <div
+            onClick={e => {
+              e.stopPropagation();
+              centerOnNode(xPos, yPos + 100);
+            }}
+          >
+            <NodeContextMenu onEdit={() => actionHandler("EDIT")} node={data} />
+          </div>
         </div>
         <button
           className="CustomNode__add left-1/2 absolute bottom-0 px-4 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
@@ -68,6 +71,7 @@ const CustomNode: FC<CustomNodeProps> = props => {
         >
           <AddIcon w={2} h={2} />
         </button>
+
         <Handle
           type="source"
           position={Position.Bottom}

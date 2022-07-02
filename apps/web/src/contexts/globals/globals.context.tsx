@@ -2,7 +2,7 @@ import create from "zustand";
 
 import { GlobalsProviderValue } from "./globals.context.types";
 
-const useGlobals = create<GlobalsProviderValue>((set, get) => ({
+const useGlobalsStore = create<GlobalsProviderValue>((set, get) => ({
   vscode: window.isVsCode ? window.acquireVsCodeApi() : null,
   nodeDrawer: {
     isOpen: false,
@@ -19,4 +19,4 @@ const useGlobals = create<GlobalsProviderValue>((set, get) => ({
   }
 }));
 
-export default useGlobals;
+export default useGlobalsStore;

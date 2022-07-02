@@ -22,7 +22,7 @@ const createNode = (id: string, data: Partial<CustomNodeData> = {}): INode => {
   return newNode;
 };
 
-const useTree = create<TreeProviderValue>((set, get) => ({
+const useTreeStore = create<TreeProviderValue>((set, get) => ({
   nodes: [],
   setNodes: nodes => set({ nodes }),
   edges: [],
@@ -46,8 +46,10 @@ const useTree = create<TreeProviderValue>((set, get) => ({
     if (changes[0].type === "dimensions") {
       const newNodes = await createGraphLayout(get().nodes, get().edges);
       get().setNodes(applyNodeChanges(changes, newNodes));
+      return newNodes;
     } else {
       get().setNodes(applyNodeChanges(changes, get().nodes));
+      return get().nodes;
     }
   },
   onEdgesChange: changes => {
@@ -60,4 +62,4 @@ const useTree = create<TreeProviderValue>((set, get) => ({
   createNode
 }));
 
-export default useTree;
+export default useTreeStore;

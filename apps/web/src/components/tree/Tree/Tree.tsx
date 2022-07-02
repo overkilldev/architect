@@ -5,21 +5,21 @@ import { Controls } from "react-flow-renderer";
 
 import "./Tree.css";
 import { TreeProps as Props } from "./Tree.types";
-import useTree from "contexts/tree/tree.context";
+import useTreeStore from "contexts/tree/tree.context";
+import useTreeAPI from "hooks/tree.hooks";
 
 const Tree: React.FC<Props> = props => {
-  const nodes = useTree(state => state.nodes);
-  const edges = useTree(state => state.edges);
-  const nodeTypes = useTree(state => state.nodeTypes);
-  const onInit = useTree(state => state.onInit);
-  const onNodesChange = useTree(state => state.onNodesChange);
-  const onEdgesChange = useTree(state => state.onEdgesChange);
-  const onConnect = useTree(state => state.onConnect);
+  const nodes = useTreeStore(state => state.nodes);
+  const edges = useTreeStore(state => state.edges);
+  const nodeTypes = useTreeStore(state => state.nodeTypes);
+  const onInit = useTreeStore(state => state.onInit);
+  const onEdgesChange = useTreeStore(state => state.onEdgesChange);
+  const onConnect = useTreeStore(state => state.onConnect);
+  const { onNodesChange } = useTreeAPI();
 
   return (
     <ReactFlow
       className="h-auto flex-1"
-      defaultZoom={1}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}

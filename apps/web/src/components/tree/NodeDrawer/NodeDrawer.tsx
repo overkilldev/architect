@@ -7,19 +7,19 @@ import Button from "components/global/Button/Button";
 import Drawer from "components/global/Drawer/Drawer";
 import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
-import useGlobals from "contexts/globals/globals.context";
-import useTree from "contexts/tree/tree.context";
+import useGlobalsStore from "contexts/globals/globals.context";
+import useTreeStore from "contexts/tree/tree.context";
 
 const NodeDrawer: React.FC<Props> = props => {
-  const nodeDrawer = useGlobals(state => state.nodeDrawer);
+  const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { formMode, onClose, isOpen } = nodeDrawer;
-  const selectedNode = useTree(state => state.selectedNode);
-  const setNodes = useTree(state => state.setNodes);
-  const setEdges = useTree(state => state.setEdges);
-  const createNode = useTree(state => state.createNode);
-  const setSelectedNode = useTree(state => state.setSelectedNode);
-  const nodes = useTree(state => state.nodes);
-  const edges = useTree(state => state.edges);
+  const selectedNode = useTreeStore(state => state.selectedNode);
+  const setNodes = useTreeStore(state => state.setNodes);
+  const setEdges = useTreeStore(state => state.setEdges);
+  const createNode = useTreeStore(state => state.createNode);
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+  const nodes = useTreeStore(state => state.nodes);
+  const edges = useTreeStore(state => state.edges);
 
   const { id, data } = selectedNode ?? {};
   const { label = "" } = data ?? {};

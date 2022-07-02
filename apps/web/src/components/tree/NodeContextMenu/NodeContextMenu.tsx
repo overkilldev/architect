@@ -10,14 +10,14 @@ import { DuplicateInactiveIcon } from "./NodeContextMenu.helpers";
 import { EditActiveIcon, EditInactiveIcon } from "./NodeContextMenu.helpers";
 import { MoveActiveIcon, MoveInactiveIcon } from "./NodeContextMenu.helpers";
 import { NodeContextMenuProps as Props } from "./NodeContextMenu.types";
-import useTree from "contexts/tree/tree.context";
+import useTreeStore from "contexts/tree/tree.context";
 
 import { ReactComponent as DotsSVG } from "/public/dots.svg";
 
 const NodeContextMenu: React.FC<Props> = props => {
   const { node, onEdit } = props;
-  const nodes = useTree(state => state.nodes);
-  const setNodes = useTree(state => state.setNodes);
+  const nodes = useTreeStore(state => state.nodes);
+  const setNodes = useTreeStore(state => state.setNodes);
 
   const deleteHandler = () => {
     const newNodes = nodes.filter(item => item.id !== node.node?.id);

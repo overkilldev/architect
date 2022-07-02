@@ -1,5 +1,5 @@
 // Interfaces and types from context Tree
-import { Edge, OnInit, OnNodesChange } from "react-flow-renderer";
+import { Edge, NodeChange, OnInit } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
 import { INode } from "components/tree/CustomNode/CustomNode.types";
@@ -20,7 +20,7 @@ export interface TreeProviderValue {
   setSelectedNode: (selectedNode: INode | null) => void;
   nodeTypes: NodeTypes;
   onInit: OnInit;
-  onNodesChange: OnNodesChange;
+  onNodesChange: (nodes: NodeChange[]) => Promise<INode[]>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   createNode: (id: string, data?: Partial<CustomNodeData>) => INode;

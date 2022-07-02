@@ -1,10 +1,10 @@
 import React, { useEffect, useCallback } from "react";
 
 import Tab from "components/Tab/Tab";
-import useGlobals from "contexts/globals/globals.hooks";
+import useGlobalsStore from "contexts/globals/globals.hooks";
 
 const Main = () => {
-  const { vscode } = useGlobals();
+  const { vscode } = useGlobalsStore();
 
   const clickHandler = useCallback(() => {
     if (!vscode) {
