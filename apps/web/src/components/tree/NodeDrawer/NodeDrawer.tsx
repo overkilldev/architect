@@ -33,7 +33,8 @@ const NodeDrawer: React.FC<Props> = props => {
   // TODO: mover como action del context
   const createHandler = useCallback(() => {
     const newNode = createNode(`${nodes.length}`, {
-      label: formLabel
+      label: formLabel,
+      parentId: selectedNode?.id
     });
     if (selectedNode) {
       const newEdges = addEdge(

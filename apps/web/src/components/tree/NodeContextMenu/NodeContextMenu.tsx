@@ -17,10 +17,26 @@ import { ReactComponent as DotsSVG } from "/public/dots.svg";
 const NodeContextMenu: React.FC<Props> = props => {
   const { node, onEdit } = props;
   const nodes = useTreeStore(state => state.nodes);
+  const edges = useTreeStore(state => state.edges);
   const setNodes = useTreeStore(state => state.setNodes);
+  const setEdges = useTreeStore(state => state.setEdges);
+  const getChildren = useTreeStore(state => state.getChildren);
+  const getConnectedEdges = useTreeStore(state => state.getConnectedEdges);
 
   const deleteHandler = () => {
-    const newNodes = nodes.filter(item => item.id !== node.node?.id);
+    const filteredNodes = nodes.filter(item => item.id !== node?.data.node?.id);
+    const childrenIds = getChildren(node).map(child => child.id);
+    const newNodes = filteredNodes.map(node => {
+      if (childrenIds.includes(node.id)) {
+        node.data = { ...node.data, parentId: undefined };
+      }
+      return node;
+    });
+    const edgesIds = getConnectedEdges(node).map(edge => edge.id);
+    const filteredEdges = edges.filter(item => {
+      return !edgesIds.includes(item.id);
+    });
+    setEdges(filteredEdges);
     setNodes(newNodes);
   };
 

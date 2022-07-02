@@ -12,7 +12,7 @@ import useTreeAPI from "hooks/tree.hooks";
 
 const CustomNode: FC<CustomNodeProps> = props => {
   const { isConnectable, data, selected, xPos, yPos } = props;
-  const { label, node } = data;
+  const { label, node, parentId } = data;
   const { centerOnNode } = useTreeAPI();
   const setSelectedNode = useTreeStore(state => state.setSelectedNode);
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
@@ -35,6 +35,8 @@ const CustomNode: FC<CustomNodeProps> = props => {
     outlineOffset: "-1px"
   };
 
+  const validClass = parentId ? "bg-lime-300" : "bg-red-500";
+
   return (
     <div
       className="CustomNode bg-stone-900 shadow-2xl rounded-lg w-48"
@@ -49,18 +51,25 @@ const CustomNode: FC<CustomNodeProps> = props => {
           isConnectable={isConnectable}
         />
         <div className="CustomNode__content flex flex-1 items-center">
-          <span className="CustomNode__status flex w-1 h-1 bg-lime-300 rounded-full mr-1" />
+          <span
+            className={`CustomNode__status flex w-1 h-1 ${validClass} rounded-full mr-1`}
+          />
           <p className="CustomNode__text flex-1 text-xs capitalize text-white font-bold ">
             {label}
           </p>
-          <div
-            onClick={e => {
-              e.stopPropagation();
-              centerOnNode(xPos, yPos + 100);
-            }}
-          >
-            <NodeContextMenu onEdit={() => actionHandler("EDIT")} node={data} />
-          </div>
+          {node ? (
+            <div
+              onClick={e => {
+                e.stopPropagation();
+                centerOnNode(xPos, yPos + 100);
+              }}
+            >
+              <NodeContextMenu
+                onEdit={() => actionHandler("EDIT")}
+                node={node}
+              />
+            </div>
+          ) : null}
         </div>
         <button
           className="CustomNode__add left-1/2 absolute bottom-0 px-4 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
