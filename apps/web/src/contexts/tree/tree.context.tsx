@@ -1,4 +1,5 @@
-import { NodeTypes, addEdge } from "react-flow-renderer";
+import { NodeTypes, addEdge, getIncomers } from "react-flow-renderer";
+import { getOutgoers, getConnectedEdges } from "react-flow-renderer";
 import { applyEdgeChanges, applyNodeChanges } from "react-flow-renderer";
 import create from "zustand";
 
@@ -15,7 +16,7 @@ const createNode = (id: string, data: Partial<CustomNodeData> = {}): INode => {
     // TODO: ver si eliminamos param y usamos useId de react
     id,
     type: "customNode",
-    data: { label: `Node ${id}`, node: null, ...data },
+    data: { label: `Node ${id}`, node: null, parentId: undefined, ...data },
     position: { x: 0, y: 0 }
   };
   newNode.data.node = newNode;
@@ -59,7 +60,10 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
     get().setEdges(addEdge({ ...params }, get().edges));
   },
   nodeTypes,
-  createNode
+  createNode,
+  getParentNode: node => getIncomers(node, get().nodes, get().edges)[0],
+  getChildren: node => getOutgoers(node, get().nodes, get().edges),
+  getConnectedEdges: node => getConnectedEdges([node], get().edges)
 }));
 
 export default useTreeStore;

@@ -24,4 +24,7 @@ export interface TreeProviderValue {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   createNode: (id: string, data?: Partial<CustomNodeData>) => INode;
+  getParentNode: (node: INode) => INode | undefined;
+  getChildren: (node: INode) => INode[];
+  getConnectedEdges: (node: INode) => Edge[];
 }
