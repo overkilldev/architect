@@ -27,4 +27,5 @@ export interface TreeProviderValue {
   getParentNode: (node: INode) => INode | undefined;
   getChildren: (node: INode) => INode[];
   getConnectedEdges: (node: INode) => Edge[];
+  deleteNode: (node: INode) => void;
 }

@@ -63,7 +63,29 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   createNode,
   getParentNode: node => getIncomers(node, get().nodes, get().edges)[0],
   getChildren: node => getOutgoers(node, get().nodes, get().edges),
-  getConnectedEdges: node => getConnectedEdges([node], get().edges)
+  getConnectedEdges: node => getConnectedEdges([node], get().edges),
+  deleteNode: node => {
+    const filteredNodes = get().nodes.filter(
+      item => item.id !== node?.data.node?.id
+    );
+    const childrenIds = get()
+      .getChildren(node)
+      .map(child => child.id);
+    const newNodes = filteredNodes.map(node => {
+      if (childrenIds.includes(node.id)) {
+        node.data = { ...node.data, parentId: undefined };
+      }
+      return node;
+    });
+    const edgesIds = get()
+      .getConnectedEdges(node)
+      .map(edge => edge.id);
+    const filteredEdges = get().edges.filter(item => {
+      return !edgesIds.includes(item.id);
+    });
+    set({ edges: filteredEdges });
+    set({ nodes: newNodes });
+  }
 }));
 
 export default useTreeStore;

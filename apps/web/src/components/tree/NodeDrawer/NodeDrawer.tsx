@@ -25,18 +25,20 @@ const NodeDrawer: React.FC<Props> = props => {
   const nodes = useTreeStore(state => state.nodes);
   const edges = useTreeStore(state => state.edges);
   const { id, data } = selectedNode ?? {};
-  const { label = "" } = data ?? {};
-  const { handleSubmit, register, formState } = useForm<NewNodeFormValues>({
+  const { label } = data ?? {};
+  const formMethods = useForm<NewNodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(newNodeFormSchema),
     defaultValues: {
       label
     }
   });
+  const { handleSubmit, register, formState, reset } = formMethods;
   const { errors } = formState;
 
   const closeHandler = () => {
     setSelectedNode(null);
+    reset();
     onClose();
   };
 

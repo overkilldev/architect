@@ -16,29 +16,7 @@ import { ReactComponent as DotsSVG } from "/public/dots.svg";
 
 const NodeContextMenu: React.FC<Props> = props => {
   const { node, onEdit } = props;
-  const nodes = useTreeStore(state => state.nodes);
-  const edges = useTreeStore(state => state.edges);
-  const setNodes = useTreeStore(state => state.setNodes);
-  const setEdges = useTreeStore(state => state.setEdges);
-  const getChildren = useTreeStore(state => state.getChildren);
-  const getConnectedEdges = useTreeStore(state => state.getConnectedEdges);
-
-  const deleteHandler = () => {
-    const filteredNodes = nodes.filter(item => item.id !== node?.data.node?.id);
-    const childrenIds = getChildren(node).map(child => child.id);
-    const newNodes = filteredNodes.map(node => {
-      if (childrenIds.includes(node.id)) {
-        node.data = { ...node.data, parentId: undefined };
-      }
-      return node;
-    });
-    const edgesIds = getConnectedEdges(node).map(edge => edge.id);
-    const filteredEdges = edges.filter(item => {
-      return !edgesIds.includes(item.id);
-    });
-    setEdges(filteredEdges);
-    setNodes(newNodes);
-  };
+  const deleteNode = useTreeStore(state => state.deleteNode);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -155,7 +133,7 @@ const NodeContextMenu: React.FC<Props> = props => {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={deleteHandler}
+                  onClick={() => deleteNode(node)}
                   className={`${
                     active ? "bg-violet-500 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-xs`}
