@@ -26,12 +26,7 @@
     "validate": "cross-env CI=true npm-run-all --parallel check-types check-format lint build",
     "validate:ci": "npm-run-all --parallel check-types check-format lint"
   },
-  "author": "Luis Eduardo Andrade",
+  "author": "Overkill",
   "license": "MIT",
-  "devDependencies": {
-    "@react-native-firebase/app": "^12.8.0",
-    "@react-native-firebase/auth": "^12.8.0",
-    "@react-native-firebase/firestore": "^12.8.0",
-    "firebase": "^8.1.1"
-  }
+  "devDependencies": {}
 }
