@@ -5,3 +5,8 @@ import { DrawerProps } from "components/global/Drawer/Drawer.types";
 // Component Props
 export interface NodeDrawerProps
   extends Omit<DrawerProps, "children" | "isOpen" | "onClose"> {}
+
+export interface NewNodeFormValues {
+  label: string;
+  enhancedTemplate: string;
+}
