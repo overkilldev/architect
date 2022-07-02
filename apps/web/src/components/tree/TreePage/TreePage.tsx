@@ -23,15 +23,16 @@ const TreePage = () => {
       <Button onClick={nodeClickHandler}>Create node</Button>
       <Button
         onClick={() => {
+          console.log("here");
           vscode?.postMessage({
             command: "log",
             source: "web",
-            data: 1,
+            data: 2,
             forwardTo: "all"
           });
         }}
       >
-        Send message
+        Send message 2
       </Button>
       <Tree />
       <NodeDrawer />

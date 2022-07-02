@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 
 import Tab from "components/Tab/Tab";
 import useGlobalsStore from "contexts/globals/globals.hooks";
@@ -6,20 +6,14 @@ import useGlobalsStore from "contexts/globals/globals.hooks";
 const Main = () => {
   const { vscode } = useGlobalsStore();
 
-  const clickHandler = useCallback(() => {
-    if (!vscode) {
-      console.log("clicked");
-      return;
-    }
-
+  // Init web view
+  useEffect(() => {
+    console.log("fire");
+    if (!vscode) return;
     vscode.postMessage({
       command: "init"
     });
   }, [vscode]);
-
-  useEffect(() => {
-    clickHandler();
-  }, [clickHandler]);
 
   return (
     <div className="flex flex-col flex-1">

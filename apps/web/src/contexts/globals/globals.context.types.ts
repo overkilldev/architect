@@ -6,9 +6,13 @@ export interface GlobalsProviderProps {
   children: React.ReactNode;
 }
 
+// TODO: deberíamos mover al package types
+export type VsCode = ReturnType<Window<Messages>["acquireVsCodeApi"]>;
+
 // Provider value
 export interface GlobalsProviderValue {
-  vscode: ReturnType<Window<Messages>["acquireVsCodeApi"]> | null;
+  setVsCode: (vscode: VsCode | null) => void;
+  vscode: VsCode | null;
   nodeDrawer: NodeDrawerContext;
 }
 
