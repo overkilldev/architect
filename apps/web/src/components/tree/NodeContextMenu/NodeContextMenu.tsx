@@ -16,13 +16,7 @@ import { ReactComponent as DotsSVG } from "/public/dots.svg";
 
 const NodeContextMenu: React.FC<Props> = props => {
   const { node, onEdit } = props;
-  const nodes = useTreeStore(state => state.nodes);
-  const setNodes = useTreeStore(state => state.setNodes);
-
-  const deleteHandler = () => {
-    const newNodes = nodes.filter(item => item.id !== node.node?.id);
-    setNodes(newNodes);
-  };
+  const deleteNode = useTreeStore(state => state.deleteNode);
 
   return (
     <Menu as="div" className="relative inline-block text-left">
@@ -139,7 +133,7 @@ const NodeContextMenu: React.FC<Props> = props => {
             <Menu.Item>
               {({ active }) => (
                 <button
-                  onClick={deleteHandler}
+                  onClick={() => deleteNode(node)}
                   className={`${
                     active ? "bg-violet-500 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-xs`}

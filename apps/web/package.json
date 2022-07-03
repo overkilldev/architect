@@ -21,8 +21,11 @@
     "check-format": "yarn prettier --list-different"
   },
   "dependencies": {
+    "@hookform/resolvers": "^2.9.3",
     "elkjs": "^0.8.1",
-    "web-worker": "^1.2.0"
+    "react-hook-form": "^7.33.1",
+    "web-worker": "^1.2.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@architect/types": "*"

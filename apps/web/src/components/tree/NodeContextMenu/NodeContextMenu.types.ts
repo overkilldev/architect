@@ -1,8 +1,8 @@
 // Interfaces and types from component NodeContextMenu
-import { CustomNodeData } from "../CustomNode/CustomNode.types";
+import { INode } from "../CustomNode/CustomNode.types";
 
 // Component Props
 export interface NodeContextMenuProps {
-  node: CustomNodeData;
+  node: INode;
   onEdit: () => void;
 }

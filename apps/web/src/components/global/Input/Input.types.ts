@@ -5,4 +5,5 @@ import { InputHTMLAttributes } from "react";
 // Component Props
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  errorMessage?: string;
 }

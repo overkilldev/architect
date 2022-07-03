@@ -8,9 +8,9 @@ import useTreeStore from "contexts/tree/tree.context";
 import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const TreePage = () => {
-  const vscode = useGlobalsStore(state => state.vscode);
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+  const vscode = useGlobalsStore(state => state.vscode);
   const { data: accountResponse } = useFetchAccount();
   const { setFormMode, onOpen } = nodeDrawer;
   const { data: account } = accountResponse ?? {};
@@ -21,34 +21,19 @@ const TreePage = () => {
     onOpen();
   }, [onOpen, setFormMode, setSelectedNode]);
 
+  const generateClickHandler = useCallback(() => {
+    vscode?.postMessage({
+      command: "generate",
+      source: "web",
+      data: account?.trees[0].nodes ?? [],
+      forwardTo: "none"
+    });
+  }, [account?.trees, vscode]);
+
   return (
     <>
       <Button onClick={nodeClickHandler}>Create node</Button>
-      <Button
-        onClick={() => {
-          console.log("here");
-          vscode?.postMessage({
-            command: "log",
-            source: "web",
-            data: 2,
-            forwardTo: "all"
-          });
-        }}
-      >
-        Send message 2
-      </Button>
-      <Button
-        onClick={() => {
-          vscode?.postMessage({
-            command: "generate",
-            source: "web",
-            data: account?.trees[0].nodes ?? [],
-            forwardTo: "none"
-          });
-        }}
-      >
-        Generate
-      </Button>
+      <Button onClick={generateClickHandler}>Generate</Button>
       <Tree />
       <NodeDrawer />
     </>
