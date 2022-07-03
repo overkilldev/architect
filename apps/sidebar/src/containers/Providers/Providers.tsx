@@ -1,10 +1,9 @@
 import React from "react";
 
 import { ProvidersProps as Props } from "./Providers.types";
-import GlobalsProvider from "contexts/globals/globals.context";
 
 const Providers: React.FC<Props> = props => {
-  return <GlobalsProvider>{props.children}</GlobalsProvider>;
+  return <>{props.children}</>;
 };
 
 Providers.defaultProps = {};

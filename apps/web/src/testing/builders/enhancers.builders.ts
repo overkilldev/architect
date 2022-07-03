@@ -1,6 +1,5 @@
+import { Enhancer, Snippet } from "@architect/types";
 import faker from "faker";
-
-import { Enhancer, Snippet } from "types/enhancers.types";
 
 export const buildEnhancer = (overrides: Partial<Enhancer> = {}): Enhancer => {
   return {

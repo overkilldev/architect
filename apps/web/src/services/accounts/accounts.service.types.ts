@@ -1,6 +1,6 @@
 // Accounts services types and interfaces
 
-import { Account } from "types/accounts.types";
-import { Response } from "types/services.types";
+import { Account } from "@architect/types";
+import { Response } from "@architect/types";
 
 export type AccountResponse = Response<Account>;

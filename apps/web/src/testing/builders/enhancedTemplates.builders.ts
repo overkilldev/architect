@@ -1,6 +1,5 @@
+import { EnhancedTemplate } from "@architect/types";
 import faker from "faker";
-
-import { EnhancedTemplate } from "types/enhancedTemplates.types";
 
 export const buildEnhancedTemplate = (
   overrides: Partial<EnhancedTemplate> = {}

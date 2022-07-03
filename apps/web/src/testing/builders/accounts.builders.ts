@@ -1,10 +1,10 @@
+import { Account } from "@architect/types";
 import faker from "faker";
 
 import { genEnhancedTemplates } from "./enhancedTemplates.builders";
 import { genEnhancers } from "./enhancers.builders";
 import { genTemplates } from "./templates.builders";
 import { genTrees } from "./trees.builders";
-import { Account } from "types/accounts.types";
 
 export const buildAccount = (overrides: Partial<Account> = {}): Account => {
   return {
