@@ -1,6 +1,5 @@
+import { Node, Tree } from "@architect/types";
 import faker from "faker";
-
-import { Node, Tree } from "types/trees.types";
 
 export const buildNode = (overrides: Partial<Node> = {}): Node => {
   return {
@@ -26,11 +25,17 @@ export const genNodes = (quantity?: number): Node[] => {
   return nodes;
 };
 
+const nodeOne = buildNode({ path: "src/containers/App.tsx" });
+const nodeTwo = buildNode({ path: "src/types/product.types.ts" });
+const nodeThree = buildNode({ path: "src/component/global/ProductCard.tsx" });
+
+const nodes = [nodeOne, nodeTwo, nodeThree];
+
 export const buildTree = (overrides: Partial<Tree> = {}): Tree => {
   return {
     id: faker.datatype.uuid(),
     name: faker.random.word(),
-    nodes: genNodes(),
+    nodes,
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,

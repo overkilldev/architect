@@ -1,5 +1,7 @@
 import { Messages, MessageTargets } from "@architect/types";
 import * as vscode from "vscode";
+import * as fs from "fs-extra";
+import * as path from "path";
 
 import MessagesProvider from "./MessagesProvider";
 
@@ -13,7 +15,12 @@ export const getNonce = () => {
   return text;
 };
 
-export const messageReceivedHandler = (message: Messages) => {
+export const messageReceivedHandler = async (message: Messages) => {
+  let directoryPath = vscode.workspace.rootPath ?? "";
+
+  if (!(await fs.stat(directoryPath)).isDirectory()) {
+    directoryPath = path.dirname(directoryPath);
+  }
   switch (message.command) {
     case "init": {
       vscode.commands.executeCommand("architect-extension.start");
@@ -28,6 +35,28 @@ export const messageReceivedHandler = (message: Messages) => {
       console.log(rest);
       break;
     }
+    case "sync": {
+      console.log(message);
+      break;
+    }
+    case "generate": {
+      const { data: nodes } = message;
+      if (!directoryPath) {
+        vscode.window.showErrorMessage("There is no directory created yet");
+      }
+
+      nodes?.map(node => {
+        const { name, path: nodePath } = node;
+        console.log(nodePath);
+        const newPath = path.join(directoryPath, nodePath);
+        fs.outputFile(newPath, name);
+      });
+      break;
+    }
+    // case "open": {
+    //   console.log(message);
+    //   break;
+    // }
     default:
       console.error("Message not supported", message);
   }

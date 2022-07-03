@@ -1,9 +1,9 @@
 // Services builder functions
-import faker from "faker";
 
-import type { ErrorResponse, PaginatedResponse } from "types/services.types";
-import type { Response, PaginatedResponseLinks } from "types/services.types";
-import type { PaginatedResponseMeta } from "types/services.types";
+import type { ErrorResponse, PaginatedResponse } from "@architect/types";
+import type { Response, PaginatedResponseLinks } from "@architect/types";
+import type { PaginatedResponseMeta } from "@architect/types";
+import faker from "faker";
 
 export const buildResponse = <T>(
   overrides: Partial<Response<T>> = {}

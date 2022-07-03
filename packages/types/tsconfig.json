@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {},
-  "include": ["src"],
+  "include": ["src", "../../apps/web/src/types/forms.types.ts"],
   "exclude": ["node_modules", "dist"]
 }

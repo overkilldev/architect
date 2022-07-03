@@ -1,6 +1,5 @@
+import { Template } from "@architect/types";
 import faker from "faker";
-
-import { Template } from "types/templates.types";
 
 export const buildTemplate = (overrides: Partial<Template> = {}): Template => {
   return {
