@@ -1,7 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React, { useCallback } from "react";
+import React from "react";
 import { memo } from "react";
-import { addEdge } from "react-flow-renderer";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
@@ -18,12 +17,9 @@ const NodeDrawer: React.FC<Props> = props => {
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { formMode, onClose, isOpen } = nodeDrawer;
   const selectedNode = useTreeStore(state => state.selectedNode);
-  const setNodes = useTreeStore(state => state.setNodes);
-  const setEdges = useTreeStore(state => state.setEdges);
-  const createNode = useTreeStore(state => state.createNode);
+  const addNode = useTreeStore(state => state.addNode);
+  const updateNote = useTreeStore(state => state.updateNote);
   const setSelectedNode = useTreeStore(state => state.setSelectedNode);
-  const nodes = useTreeStore(state => state.nodes);
-  const edges = useTreeStore(state => state.edges);
   const { id, data } = selectedNode ?? {};
   const { label } = data ?? {};
   const formMethods = useForm<NewNodeFormValues>({
@@ -42,51 +38,13 @@ const NodeDrawer: React.FC<Props> = props => {
     onClose();
   };
 
-  // TODO: mover como action del context
-  const createHandler = useCallback(
-    (label: string) => {
-      const newNode = createNode(`${nodes.length}`, {
-        label,
-        parentId: selectedNode?.id
-      });
-      if (selectedNode) {
-        const newEdges = addEdge(
-          {
-            id: `${selectedNode.id}-${newNode.id}`,
-            source: selectedNode.id,
-            target: newNode.id,
-            sourceHandle: "a",
-            targetHandle: "b"
-          },
-          edges
-        );
-        setEdges(newEdges);
-      }
-      setNodes([...nodes, newNode]);
-    },
-    [createNode, edges, nodes, selectedNode, setEdges, setNodes]
-  );
-
-  const editHandler = useCallback(
-    (label: string) => {
-      if (!selectedNode) return;
-      const newNodes = nodes.map(node => {
-        if (node.id === id) {
-          return { ...node, data: { ...node.data, label } };
-        }
-        return node;
-      });
-      setNodes(newNodes);
-    },
-    [selectedNode, nodes, setNodes, id]
-  );
-
   const submitHandler: SubmitHandler<NewNodeFormValues> = values => {
     const { label } = values;
+    if (!selectedNode) throw new Error("There must be a selected node now");
     if (formMode === "CREATE") {
-      createHandler(label);
+      addNode({ label }, selectedNode);
     } else if (formMode === "EDIT") {
-      editHandler(label);
+      updateNote(selectedNode, { label });
     } else {
       throw new Error(`Unhandled mode: ${formMode}`);
     }

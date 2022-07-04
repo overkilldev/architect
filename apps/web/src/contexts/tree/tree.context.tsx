@@ -4,19 +4,30 @@ import { applyEdgeChanges, applyNodeChanges } from "react-flow-renderer";
 import create from "zustand";
 
 import { TreeProviderValue } from "./tree.context.types";
-import CustomNode from "components/tree/CustomNode/CustomNode";
-import { INode } from "components/tree/CustomNode/CustomNode.types";
-import { CustomNodeData } from "components/tree/CustomNode/CustomNode.types";
+import DefaultNode from "components/tree/DefaultNode/DefaultNode";
+import { DefaultNode as IDefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
+import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
+import RootNode from "components/tree/RootNode/RootNode";
 import { createGraphLayout } from "utils/elk.utils";
 
-const nodeTypes: NodeTypes = { customNode: CustomNode };
+const nodeTypes: NodeTypes = { rootNode: RootNode, defaultNode: DefaultNode };
 
-const createNode = (id: string, data: Partial<CustomNodeData> = {}): INode => {
-  const newNode: INode = {
+const createNode = (
+  id: string,
+  data: Partial<DefaultNodeData> = {},
+  type = "defaultNode"
+) => {
+  const newNode: IDefaultNode = {
     // TODO: ver si eliminamos param y usamos useId de react
     id,
-    type: "customNode",
-    data: { label: `Node ${id}`, node: null, parentId: undefined, ...data },
+    type,
+    data: {
+      label: `Node ${id}`,
+      // @ts-ignore node is later assigned to itself
+      node: null,
+      parentId: undefined,
+      ...data
+    },
     position: { x: 0, y: 0 }
   };
   newNode.data.node = newNode;
@@ -24,7 +35,7 @@ const createNode = (id: string, data: Partial<CustomNodeData> = {}): INode => {
 };
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
-  nodes: [],
+  nodes: [createNode("0", { label: "Root" }, "rootNode")],
   setNodes: nodes => set({ nodes }),
   edges: [],
   setEdges: edges => set({ edges }),
@@ -60,10 +71,40 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
     get().setEdges(addEdge({ ...params }, get().edges));
   },
   nodeTypes,
-  createNode,
   getParentNode: node => getIncomers(node, get().nodes, get().edges)[0],
   getChildren: node => getOutgoers(node, get().nodes, get().edges),
   getConnectedEdges: node => getConnectedEdges([node], get().edges),
+  createNode,
+  addNode: (data, parentNode) => {
+    const { label } = data;
+    const parentId = parentNode.id;
+
+    const newNode = get().createNode(`${get().nodes.length}`, {
+      label,
+      parentId
+    });
+    const newEdges = addEdge(
+      {
+        id: `${parentId}-${newNode.id}`,
+        source: parentId,
+        target: newNode.id,
+        sourceHandle: "a",
+        targetHandle: "b"
+      },
+      get().edges
+    );
+    get().setEdges(newEdges);
+    get().setNodes([...get().nodes, newNode]);
+  },
+  updateNote: (node, data) => {
+    const newNodes = get().nodes.map(item => {
+      if (item.id === node.id) {
+        return { ...item, data: { ...item.data, ...data } };
+      }
+      return node;
+    });
+    get().setNodes(newNodes);
+  },
   deleteNode: node => {
     const filteredNodes = get().nodes.filter(
       item => item.id !== node?.data.node?.id

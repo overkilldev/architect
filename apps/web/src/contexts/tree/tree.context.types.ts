@@ -2,8 +2,9 @@
 import { Edge, NodeChange, OnInit } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
-import { INode } from "components/tree/CustomNode/CustomNode.types";
-import { CustomNodeData } from "components/tree/CustomNode/CustomNode.types";
+import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
+import { DefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
+import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
 
 // Provider Props
 export interface TreeProviderProps {
@@ -12,20 +13,29 @@ export interface TreeProviderProps {
 
 // Provider value
 export interface TreeProviderValue {
-  nodes: INode[];
-  setNodes: (nodes: INode[]) => void;
+  nodes: BaseNode[];
+  setNodes: (nodes: BaseNode[]) => void;
   edges: Edge[];
   setEdges: (edges: Edge[]) => void;
-  selectedNode: INode | null;
-  setSelectedNode: (selectedNode: INode | null) => void;
+  selectedNode: BaseNode | null;
+  setSelectedNode: (selectedNode: BaseNode | null) => void;
   nodeTypes: NodeTypes;
   onInit: OnInit;
-  onNodesChange: (nodes: NodeChange[]) => Promise<INode[]>;
+  onNodesChange: (nodes: NodeChange[]) => Promise<BaseNode[]>;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  createNode: (id: string, data?: Partial<CustomNodeData>) => INode;
-  getParentNode: (node: INode) => INode | undefined;
-  getChildren: (node: INode) => INode[];
-  getConnectedEdges: (node: INode) => Edge[];
-  deleteNode: (node: INode) => void;
+  createNode: (
+    id: string,
+    data?: Partial<DefaultNodeData>,
+    type?: "defaultNode" | "rootNode"
+  ) => BaseNode;
+  getParentNode: (node: BaseNode) => BaseNode | undefined;
+  getChildren: (node: BaseNode) => BaseNode[];
+  getConnectedEdges: (node: BaseNode) => Edge[];
+  addNode: (nodeData: AddNodeData, parentNode: BaseNode) => void;
+  updateNote: (node: BaseNode, data: Partial<DefaultNodeData>) => void;
+  deleteNode: (node: DefaultNode) => void;
 }
+
+export interface AddNodeData
+  extends Omit<DefaultNodeData, "node" | "parentId"> {}
