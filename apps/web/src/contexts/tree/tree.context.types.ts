@@ -25,7 +25,6 @@ export interface TreeProviderValue {
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
   createNode: (
-    id: string,
     data?: Partial<DefaultNodeData>,
     type?: "defaultNode" | "rootNode"
   ) => BaseNode;

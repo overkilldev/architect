@@ -1,6 +1,7 @@
 import { NodeTypes, addEdge, getIncomers } from "react-flow-renderer";
 import { getOutgoers, getConnectedEdges } from "react-flow-renderer";
 import { applyEdgeChanges, applyNodeChanges } from "react-flow-renderer";
+import { v4 as uuidv4 } from "uuid";
 import create from "zustand";
 
 import { TreeProviderValue } from "./tree.context.types";
@@ -13,16 +14,14 @@ import { createGraphLayout } from "utils/elk.utils";
 const nodeTypes: NodeTypes = { rootNode: RootNode, defaultNode: DefaultNode };
 
 const createNode = (
-  id: string,
   data: Partial<DefaultNodeData> = {},
   type = "defaultNode"
 ) => {
   const newNode: IDefaultNode = {
-    // TODO: ver si eliminamos param y usamos useId de react
-    id,
+    id: uuidv4(),
     type,
     data: {
-      label: `Node ${id}`,
+      label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
       parentId: undefined,
@@ -35,7 +34,7 @@ const createNode = (
 };
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
-  nodes: [createNode("0", { label: "Root" }, "rootNode")],
+  nodes: [createNode({ label: "./" }, "rootNode")],
   setNodes: nodes => set({ nodes }),
   edges: [],
   setEdges: edges => set({ edges }),
@@ -76,13 +75,8 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   getConnectedEdges: node => getConnectedEdges([node], get().edges),
   createNode,
   addNode: (data, parentNode) => {
-    const { label } = data;
     const parentId = parentNode.id;
-
-    const newNode = get().createNode(`${get().nodes.length}`, {
-      label,
-      parentId
-    });
+    const newNode = get().createNode({ ...data, parentId });
     const newEdges = addEdge(
       {
         id: `${parentId}-${newNode.id}`,
@@ -101,7 +95,7 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       if (item.id === node.id) {
         return { ...item, data: { ...item.data, ...data } };
       }
-      return node;
+      return item;
     });
     get().setNodes(newNodes);
   },

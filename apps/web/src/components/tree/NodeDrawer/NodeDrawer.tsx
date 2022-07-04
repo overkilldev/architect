@@ -25,9 +25,7 @@ const NodeDrawer: React.FC<Props> = props => {
   const formMethods = useForm<NewNodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(newNodeFormSchema),
-    defaultValues: {
-      label
-    }
+    defaultValues: formMode === "EDIT" ? { label } : undefined
   });
   const { handleSubmit, register, formState, reset } = formMethods;
   const { errors } = formState;

@@ -12,8 +12,6 @@ export const useFetchAccount = () => {
     enabled: !!token,
     onSuccess: accountResponse => {
       const { data } = accountResponse;
-      // TODO: post message to other apps
-      console.log("account data", data);
       vscode?.postMessage({
         command: "sync",
         source: "web",
