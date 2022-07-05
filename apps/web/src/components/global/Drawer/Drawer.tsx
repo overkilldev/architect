@@ -11,7 +11,12 @@ const Drawer: FC<DrawerProps> = props => {
   return (
     <DrawerUI {...rest}>
       <DrawerOverlay />
-      <DrawerContent style={{ backgroundColor: "rgb(28 25 23)" }}>
+      <DrawerContent
+        style={{
+          backgroundColor: "rgb(28 25 23)",
+          boxShadow: "-2px 0 4px rgb(255 255 255 / 20%)"
+        }}
+      >
         <DrawerCloseButton />
         {header ? <DrawerHeader>{header}</DrawerHeader> : null}
         <DrawerBody>{children}</DrawerBody>

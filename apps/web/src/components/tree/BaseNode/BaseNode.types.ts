@@ -15,6 +15,7 @@ export interface BaseNodeData<T extends BaseNode = BaseNode> {
   pathname: string;
   absolutePathname: string | undefined;
   alias?: string | undefined;
+  description?: string;
   node: T;
   parentId: BaseNode["id"] | undefined;
 }

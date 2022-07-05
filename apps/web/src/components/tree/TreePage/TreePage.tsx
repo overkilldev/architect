@@ -1,3 +1,4 @@
+import { TriangleDownIcon } from "@chakra-ui/icons";
 import { useCallback } from "react";
 
 import Tree from "../Tree/Tree";
@@ -23,9 +24,14 @@ const TreePage = () => {
 
   return (
     <>
-      <Button onClick={generateClickHandler}>Generate</Button>
       <Tree />
       <NodeDrawer key={selectedNodeId} />
+      <Button
+        onClick={generateClickHandler}
+        className="absolute bottom-8 right-8 z-10 w-16 h-16 ring-2 hover:ring-4 active:ring-1 rounded-full"
+      >
+        <TriangleDownIcon w={4} h={4} />
+      </Button>
     </>
   );
 };
