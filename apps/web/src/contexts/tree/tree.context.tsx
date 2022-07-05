@@ -24,7 +24,6 @@ const createNode = (
       label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
-      parentId: undefined,
       ...data
     },
     position: { x: 0, y: 0 }
@@ -34,7 +33,7 @@ const createNode = (
 };
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
-  nodes: [createNode({ label: "./" }, "rootNode")],
+  nodes: [createNode({ pathname: "./", absolutePathname: "." }, "rootNode")],
   setNodes: nodes => set({ nodes }),
   edges: [],
   setEdges: edges => set({ edges }),
@@ -75,8 +74,15 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   getConnectedEdges: node => getConnectedEdges([node], get().edges),
   createNode,
   addNode: (data, parentNode) => {
-    const parentId = parentNode.id;
-    const newNode = get().createNode({ ...data, parentId });
+    const { id: parentId, data: parentData } = parentNode;
+    const { pathname, absolutePathname = pathname } = parentData;
+    const childAbsolutePathname = `${absolutePathname}/${data.pathname}`;
+    const childData = {
+      ...data,
+      parentId,
+      absolutePathname: childAbsolutePathname
+    };
+    const newNode = get().createNode(childData);
     const newEdges = addEdge(
       {
         id: `${parentId}-${newNode.id}`,
@@ -108,7 +114,11 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       .map(child => child.id);
     const newNodes = filteredNodes.map(node => {
       if (childrenIds.includes(node.id)) {
-        node.data = { ...node.data, parentId: undefined };
+        node.data = {
+          ...node.data,
+          parentId: undefined,
+          absolutePathname: node.data.pathname
+        };
       }
       return node;
     });

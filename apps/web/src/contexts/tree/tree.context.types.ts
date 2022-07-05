@@ -37,4 +37,4 @@ export interface TreeProviderValue {
 }
 
 export interface AddNodeData
-  extends Omit<DefaultNodeData, "node" | "parentId"> {}
+  extends Omit<DefaultNodeData, "node" | "parentId" | "absolutePathname"> {}

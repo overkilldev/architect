@@ -7,6 +7,7 @@ export interface NodeDrawerProps
   extends Omit<DrawerProps, "children" | "isOpen" | "onClose"> {}
 
 export interface NewNodeFormValues {
-  label: string;
+  pathname: string;
+  alias: string;
   enhancedTemplate: string;
 }

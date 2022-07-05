@@ -21,11 +21,11 @@ const NodeDrawer: React.FC<Props> = props => {
   const updateNote = useTreeStore(state => state.updateNote);
   const setSelectedNode = useTreeStore(state => state.setSelectedNode);
   const { id, data } = selectedNode ?? {};
-  const { label } = data ?? {};
+  const { absolutePathname, pathname, alias } = data ?? {};
   const formMethods = useForm<NewNodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(newNodeFormSchema),
-    defaultValues: formMode === "EDIT" ? { label } : undefined
+    defaultValues: formMode === "EDIT" ? { pathname, alias } : undefined
   });
   const { handleSubmit, register, formState, reset } = formMethods;
   const { errors } = formState;
@@ -37,17 +37,19 @@ const NodeDrawer: React.FC<Props> = props => {
   };
 
   const submitHandler: SubmitHandler<NewNodeFormValues> = values => {
-    const { label } = values;
+    const { pathname } = values;
     if (!selectedNode) throw new Error("There must be a selected node now");
     if (formMode === "CREATE") {
-      addNode({ label }, selectedNode);
+      addNode({ pathname }, selectedNode);
     } else if (formMode === "EDIT") {
-      updateNote(selectedNode, { label });
+      updateNote(selectedNode, values);
     } else {
       throw new Error(`Unhandled mode: ${formMode}`);
     }
     closeHandler();
   };
+
+  const itemClasses = "pb-2 text-sm font-medium text-gray-400";
 
   return (
     <Drawer
@@ -59,15 +61,24 @@ const NodeDrawer: React.FC<Props> = props => {
     >
       <h2 className="font-bold text-xl uppercase py-3">Create your account</h2>
       <form onSubmit={handleSubmit(submitHandler)}>
-        <p className="pb-2 text-md font-medium">ID: {id}</p>
         <Input
-          placeholder="Node label"
-          label="Label"
+          label="Pathname"
+          placeholder="Node pathname"
           autoFocus
-          errorMessage={errors.label?.message}
-          {...register("label")}
+          errorMessage={errors.pathname?.message}
+          {...register("pathname")}
+        />
+        <Input
+          label="Alias"
+          placeholder="Node alias name"
+          errorMessage={errors.alias?.message}
+          {...register("alias")}
         />
         <EnhancedTemplateAutocomplete />
+        <p className={itemClasses}>ID: {id}</p>
+        {absolutePathname ? (
+          <p className={itemClasses}>Absolute pathname: {absolutePathname}</p>
+        ) : null}
         <Button type="submit">Save</Button>
       </form>
     </Drawer>

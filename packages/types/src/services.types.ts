@@ -1,7 +1,7 @@
 export interface Response<T = unknown> {
   data: T;
   status: StatusCode;
-  pathname: string;
+  filename: string;
   method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
   isArray: boolean; // Whether the data object is an array (useful for JS users)
   duration: number; // Time in milliseconds taken from when the endpoint is received at the server and ending when the transformer finishes

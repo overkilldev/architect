@@ -19,7 +19,7 @@ const NodeContextMenu: React.FC<Props> = props => {
   const deleteNode = useTreeStore(state => state.deleteNode);
 
   return (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-flex text-left">
       <Menu.Button>
         <div className="px-2 py-1">
           <DotsSVG />

@@ -56,10 +56,10 @@ const BaseNode: FC<Props> = props => {
         </div>
 
         <button
-          className="BaseNode__add left-1/2 absolute bottom-0 px-4 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
+          className="BaseNode__add left-1/2 absolute bottom-0 px-3 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
           onClick={actionHandler}
         >
-          <AddIcon w={2} h={2} />
+          <AddIcon w={1.5} h={1.5} />
         </button>
         {handlesType === "default" || handlesType === "input" ? (
           <Handle

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactFlow from "react-flow-renderer";
-import { MiniMap } from "react-flow-renderer";
+// import { MiniMap } from "react-flow-renderer";
 import { Controls } from "react-flow-renderer";
 
 import "./Tree.css";
@@ -30,7 +30,7 @@ const Tree: React.FC<Props> = props => {
       snapToGrid
     >
       <Controls />
-      <MiniMap className="TreePage__minimap" maskColor="rgb(63 63 70)" />
+      {/* <MiniMap className="TreePage__minimap" maskColor="rgb(63 63 70)" /> */}
     </ReactFlow>
   );
 };

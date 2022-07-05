@@ -12,7 +12,9 @@ export interface BaseNodeProps<T extends BaseNodeData = BaseNodeData>
   extends NodeProps<T> {}
 
 export interface BaseNodeData<T extends BaseNode = BaseNode> {
-  label: string;
+  pathname: string;
+  absolutePathname: string | undefined;
+  alias?: string | undefined;
   node: T;
   parentId: BaseNode["id"] | undefined;
 }
