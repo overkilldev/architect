@@ -39,6 +39,10 @@ export const messageReceivedHandler = async (message: Messages) => {
       console.log(message);
       break;
     }
+    case "open": {
+      console.log(message);
+      break;
+    }
     case "generate": {
       const { data: nodes } = message;
       if (!directoryPath) {
@@ -47,7 +51,6 @@ export const messageReceivedHandler = async (message: Messages) => {
 
       nodes?.map(node => {
         const { name, path: nodePath } = node;
-        console.log(nodePath);
         const newPath = path.join(directoryPath, nodePath);
         fs.outputFile(newPath, name);
       });
