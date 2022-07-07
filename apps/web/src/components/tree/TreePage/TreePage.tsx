@@ -12,7 +12,9 @@ const { TABS_HEIGHT } = CONSTANTS.GENERAL;
 const TreePage = () => {
   const [active, setActive] = useState("0");
   const trees = useTreeStore(state => state.trees);
-  const getSelectedNode = useTreeStore(state => state.selectedNode);
+  const selectedNodeId = useTreeStore(state =>
+    state.selectedNode.get(active)
+  )?.id;
 
   const dimensionsClasses = "flex flex-col flex-1 w-full";
   const dimensionsStyles = { height: `calc(100% - ${TABS_HEIGHT}px)` };
@@ -36,7 +38,6 @@ const TreePage = () => {
       </div>
       <div style={dimensionsStyles} className={dimensionsClasses}>
         {trees.map(treeId => {
-          const selectedNodeId = getSelectedNode.get(treeId)?.id;
           return (
             <div
               style={dimensionsStyles}
@@ -48,14 +49,12 @@ const TreePage = () => {
               <ReactFlowProvider>
                 <Tree id={treeId} />
               </ReactFlowProvider>
-              {treeId === active ? (
-                <NodeDrawer key={selectedNodeId} treeId={treeId} />
-              ) : null}
-              <TreeFAB changeActiveTree={setActive} />
             </div>
           );
         })}
       </div>
+      <NodeDrawer key={`${active}|${selectedNodeId}`} treeId={active} />
+      <TreeFAB changeActiveTree={setActive} />
     </div>
   );
 };

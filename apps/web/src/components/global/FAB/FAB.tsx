@@ -15,7 +15,7 @@ const FAB: IFAB = props => {
   };
 
   return (
-    <div className={`FAB absolute bottom-8 right-8 z-10  ${className}`}>
+    <div className={`FAB absolute bottom-8 right-8 z-50  ${className}`}>
       <Button
         onClick={toggleHandler}
         className="flex items-center justify-center w-16 h-16 ring-2 hover:ring-4 active:ring-1 rounded-full"

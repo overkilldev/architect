@@ -24,11 +24,12 @@ const NodeDrawer: React.FC<Props> = props => {
   const updateNote = useTreeStore(state => state.updateNote(treeId));
   const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const { id, data } = selectedNode ?? {};
-  const { absolutePathname, pathname, alias } = data ?? {};
+  const { absolutePathname, pathname, alias, description } = data ?? {};
   const formMethods = useForm<NodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(nodeFormSchema),
-    defaultValues: formMode === "EDIT" ? { pathname, alias } : undefined
+    defaultValues:
+      formMode === "EDIT" ? { pathname, alias, description } : undefined
   });
   const { handleSubmit, register, formState, reset } = formMethods;
   const { errors } = formState;
