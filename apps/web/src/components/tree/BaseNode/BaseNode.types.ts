@@ -18,6 +18,7 @@ export interface BaseNodeData<T extends BaseNode = BaseNode> {
   description?: string;
   node: T;
   parentId: BaseNode["id"] | undefined;
+  treeId: string;
 }
 
 export type BaseNode = Node<BaseNodeData>;

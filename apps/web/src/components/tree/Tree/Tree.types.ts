@@ -2,5 +2,5 @@
 
 // Component Props
 export interface TreeProps {
-  bg?: string;
+  id: string;
 }

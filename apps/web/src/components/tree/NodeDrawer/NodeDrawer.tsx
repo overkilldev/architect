@@ -15,12 +15,14 @@ import useTreeStore from "contexts/tree/tree.context";
 import { nodeFormSchema } from "utils/forms.utils";
 
 const NodeDrawer: React.FC<Props> = props => {
+  const { treeId } = props;
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { formMode, onClose, isOpen } = nodeDrawer;
-  const selectedNode = useTreeStore(state => state.selectedNode);
-  const addNode = useTreeStore(state => state.addNode);
-  const updateNote = useTreeStore(state => state.updateNote);
-  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+
+  const selectedNode = useTreeStore(state => state.selectedNode.get(treeId));
+  const addNode = useTreeStore(state => state.addNode(treeId));
+  const updateNote = useTreeStore(state => state.updateNote(treeId));
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const { id, data } = selectedNode ?? {};
   const { absolutePathname, pathname, alias } = data ?? {};
   const formMethods = useForm<NodeFormValues>({
@@ -38,10 +40,9 @@ const NodeDrawer: React.FC<Props> = props => {
   };
 
   const submitHandler: SubmitHandler<NodeFormValues> = values => {
-    const { pathname } = values;
     if (!selectedNode) throw new Error("There must be a selected node now");
     if (formMode === "CREATE") {
-      addNode({ pathname }, selectedNode);
+      addNode({ ...values, treeId }, selectedNode);
     } else if (formMode === "EDIT") {
       updateNote(selectedNode, values);
     } else {

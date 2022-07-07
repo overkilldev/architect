@@ -42,7 +42,8 @@ const CONSTANTS = {
   // General settings
   GENERAL: {
     NODE_WIDTH: 192,
-    NODE_HEIGHT: 30
+    NODE_HEIGHT: 30,
+    TABS_HEIGHT: 56
   }
   // OTHERS\
 };

@@ -9,9 +9,9 @@ import useTreeAPI from "hooks/tree.hooks";
 
 const DefaultNode: FC<DefaultNodeProps> = props => {
   const { data, xPos, yPos } = props;
-  const { pathname, node, parentId, alias } = data;
-  const { centerOnNode } = useTreeAPI();
-  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+  const { pathname, node, parentId, alias, treeId } = data;
+  const { centerOnNode } = useTreeAPI(treeId);
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { setFormMode, onOpen } = nodeDrawer;
 
@@ -46,7 +46,11 @@ const DefaultNode: FC<DefaultNodeProps> = props => {
         </p>
         {node ? (
           <div className="flex items-center" onClick={clickHandler}>
-            <NodeContextMenu onEdit={actionHandler} node={node} />
+            <NodeContextMenu
+              onEdit={actionHandler}
+              node={node}
+              treeId={treeId}
+            />
           </div>
         ) : null}
       </BaseNode>

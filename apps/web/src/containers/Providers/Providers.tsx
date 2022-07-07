@@ -1,6 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
 import React from "react";
-import { ReactFlowProvider } from "react-flow-renderer";
 import { QueryClientProvider } from "react-query";
 // import { ReactQueryDevtools } from "react-query/devtools";
 import { MemoryRouter, BrowserRouter } from "react-router-dom";
@@ -14,11 +13,9 @@ const Providers: React.FC<Props> = props => {
   return (
     <QueryClientProvider client={queryClient}>
       {/* {process.env.NODE_ENV === "development" ? <ReactQueryDevtools /> : null} */}
-      <ReactFlowProvider>
-        <ChakraProvider>
-          <Router>{props.children}</Router>
-        </ChakraProvider>
-      </ReactFlowProvider>
+      <ChakraProvider>
+        <Router>{props.children}</Router>
+      </ChakraProvider>
     </QueryClientProvider>
   );
 };

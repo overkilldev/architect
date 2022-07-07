@@ -15,8 +15,8 @@ import useTreeStore from "contexts/tree/tree.context";
 import { ReactComponent as DotsSVG } from "/public/dots.svg";
 
 const NodeContextMenu: React.FC<Props> = props => {
-  const { node, onEdit } = props;
-  const deleteNode = useTreeStore(state => state.deleteNode);
+  const { node, onEdit, treeId } = props;
+  const deleteNode = useTreeStore(state => state.deleteNode(treeId));
 
   return (
     <Menu as="div" className="relative inline-flex text-left">
