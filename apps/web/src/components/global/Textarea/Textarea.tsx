@@ -1,8 +1,8 @@
 import React, { forwardRef, memo } from "react";
 
-import { InputProps as Props } from "./Input.types";
+import { TextareaProps as Props } from "./Textarea.types";
 
-const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
+const Textarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
   const { label, errorMessage, ...rest } = props;
 
   const Wrapper = () => {
@@ -12,13 +12,11 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
   };
 
   return (
-    <div className="Input pb-4">
+    <div className="Textarea pb-4">
       <Wrapper />
-      <input
+      <textarea
         ref={ref}
-        autoCapitalize="off"
-        autoCorrect="off"
-        autoComplete="off"
+        rows={4}
         {...rest}
         className="
         w-full p-2 rounded-md bg-black text-white
@@ -27,7 +25,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
         "
       />
       {errorMessage ? (
-        <span className="Input__error text-red-500 text-sm">
+        <span className="Textarea__error text-red-500 text-sm">
           {errorMessage}
         </span>
       ) : null}
@@ -35,6 +33,6 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref) => {
   );
 });
 
-Input.defaultProps = {};
+Textarea.defaultProps = {};
 
-export default memo(Input);
+export default memo(Textarea);

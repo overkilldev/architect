@@ -28,6 +28,15 @@ const Tree: React.FC<Props> = props => {
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       snapToGrid
+      proOptions={
+        // TODO: probablemente debemos pagar para que no nos molesten con esto, toca ver que dice su licencia
+        import.meta.env.DEV
+          ? {
+              account: "paid-pro",
+              hideAttribution: true
+            }
+          : undefined
+      }
     >
       <Controls />
       {/* <MiniMap className="TreePage__minimap" maskColor="rgb(63 63 70)" /> */}

@@ -1,7 +1,7 @@
 // Forms utility functions
 import * as yup from "yup";
 
-import { NewNodeFormValues } from "components/tree/NodeDrawer/NodeDrawer.types";
+import { NodeFormValues } from "components/tree/NodeDrawer/NodeDrawer.types";
 import type * as types from "types/forms.types";
 
 export const isString = (options: types.IsStringOptions = {}) => {
@@ -20,15 +20,16 @@ export const isString = (options: types.IsStringOptions = {}) => {
 };
 
 export const isPathname = (options: types.IsPathnameOptions = {}) => {
-  return isString({ ...options, min: 3 }).matches(
+  return isString({ ...options }).matches(
     /^[^/]+$/g,
     "Do not include / in the pathname"
   );
 };
 
-export const newNodeFormSchema = yup
+export const nodeFormSchema = yup
   .object()
-  .shape<types.FormShape<NewNodeFormValues>>({
+  .shape<types.FormShape<NodeFormValues>>({
     pathname: isPathname({ required: true }),
-    alias: isString()
+    alias: isString(),
+    description: isString({ max: 500 })
   });

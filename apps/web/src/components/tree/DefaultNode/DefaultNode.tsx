@@ -42,7 +42,7 @@ const DefaultNode: FC<DefaultNodeProps> = props => {
           {alias ? (
             <span className="font-bold text-white pr-2">{alias}</span>
           ) : null}
-          {pathname}
+          /{pathname}
         </p>
         {node ? (
           <div className="flex items-center" onClick={clickHandler}>
