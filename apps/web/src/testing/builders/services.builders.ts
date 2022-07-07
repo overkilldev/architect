@@ -13,7 +13,7 @@ export const buildResponse = <T>(
     duration: faker.datatype.number({ min: 100, max: 1000 }),
     isArray: false,
     method: "GET",
-    pathname: "",
+    filename: "",
     status: 200,
     ...overrides
   };

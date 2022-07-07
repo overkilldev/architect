@@ -9,8 +9,17 @@ const Router: React.FC<Props> = props => {
   return (
     <Routes>
       <Route path="/" element={<TreePage />} />
-      <Route path="new">
-        <Route path="enhanced-template" element={<EnhancedTemplatePage />} />
+      <Route path="enhancedTemplates" element={<EnhancedTemplatePage />}>
+        <Route path=":id" element={<EnhancedTemplatePage />} />
+      </Route>
+      <Route path="enhancers">
+        <Route path=":id" element={<EnhancedTemplatePage />} />
+      </Route>
+      <Route path="templates">
+        <Route path=":id" element={<EnhancedTemplatePage />} />
+      </Route>
+      <Route path="trees">
+        <Route path=":id" element={<EnhancedTemplatePage />} />
       </Route>
     </Routes>
   );
