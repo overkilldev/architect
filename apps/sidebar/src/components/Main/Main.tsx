@@ -1,3 +1,4 @@
+import { FileTypes } from "@architect/types";
 import React, { useEffect } from "react";
 
 import Tab from "components/Tab/Tab";
@@ -18,6 +19,17 @@ const Main = () => {
     });
   }, [vscode]);
 
+  const clickOptionHandler = (fileId: string, type: FileTypes) => {
+    if (!vscode) return;
+    vscode.postMessage({
+      command: "open",
+      source: "sidebar",
+      forwardTo: "web",
+      type,
+      fileId
+    });
+  };
+
   return (
     <div className="flex flex-col flex-1">
       <button
@@ -34,22 +46,44 @@ const Main = () => {
       </button>
       <Tab title="Templates">
         {templates?.map(template => (
-          <p>{template.name}</p>
+          <p
+            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            onClick={() => clickOptionHandler(template.id, "templates")}
+          >
+            {template.name}
+          </p>
         ))}
       </Tab>
       <Tab title="Enhancers">
         {enhancers?.map(enhancer => (
-          <p>{enhancer.name}</p>
+          <p
+            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            onClick={() => clickOptionHandler(enhancer.id, "enhancers")}
+          >
+            {enhancer.name}
+          </p>
         ))}
       </Tab>
       <Tab title="EnhancedTemplates">
         {enhancedTemplates?.map(enhancedTemplate => (
-          <p>{enhancedTemplate.name}</p>
+          <p
+            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            onClick={() =>
+              clickOptionHandler(enhancedTemplate.id, "enhancedTemplates")
+            }
+          >
+            {enhancedTemplate.name}
+          </p>
         ))}
       </Tab>
       <Tab title="Tree">
         {trees?.map(tree => (
-          <p>{tree.name}</p>
+          <p
+            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            onClick={() => clickOptionHandler(tree.id, "trees")}
+          >
+            {tree.name}
+          </p>
         ))}
       </Tab>
     </div>

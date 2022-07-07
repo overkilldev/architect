@@ -3,6 +3,12 @@ import { Node } from "./trees.types";
 
 export type MessageTargets = "web" | "sidebar" | "all" | "none";
 
+export type FileTypes =
+  | "enhancers"
+  | "enhancedTemplates"
+  | "templates"
+  | "trees";
+
 export interface BaseMessage {
   command: string;
   source: "web" | "sidebar";
@@ -33,9 +39,16 @@ export interface GenerateMessage extends BaseMessage {
   data: Node[];
 }
 
+export interface OpenMessage extends BaseMessage {
+  command: "open";
+  type: FileTypes;
+  fileId: string;
+}
+
 export type Messages =
   | InitMessage
   | AlertMessage
   | LogMessage
   | SyncMessage
-  | GenerateMessage;
+  | GenerateMessage
+  | OpenMessage;

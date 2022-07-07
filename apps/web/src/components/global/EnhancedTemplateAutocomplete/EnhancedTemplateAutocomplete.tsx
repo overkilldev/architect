@@ -13,8 +13,8 @@ const EnhancedTemplateAutocomplete: React.FC<Props> = props => {
     <Autocomplete
       options={enhancedTemplates.map(template => template.name)}
       lastOption={
-        <Link to="/new/enhanced-template">
-          <p onClick={() => console.log("creating")}>Crear</p>
+        <Link to="/enhancedTemplates/">
+          <div onClick={() => console.log("creating")}>Crear</div>
         </Link>
       }
       label="Enhanced template"
