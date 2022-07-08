@@ -4,4 +4,5 @@ import { Dispatch, SetStateAction } from "react";
 // Component Props
 export interface TreeFABProps {
   changeActiveTree: Dispatch<SetStateAction<string>>;
+  treeId: string;
 }

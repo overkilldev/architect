@@ -54,7 +54,7 @@ const TreePage = () => {
         })}
       </div>
       <NodeDrawer key={`${active}|${selectedNodeId}`} treeId={active} />
-      <TreeFAB changeActiveTree={setActive} />
+      <TreeFAB changeActiveTree={setActive} treeId={active} />
     </div>
   );
 };

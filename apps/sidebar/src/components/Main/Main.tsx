@@ -11,8 +11,8 @@ const Main = () => {
 
   // Init web view
   useEffect(() => {
-    console.log("fire sidebar");
     if (!vscode) return;
+    console.log("fire sidebar");
     vscode.postMessage({
       command: "init",
       source: "sidebar"
@@ -30,24 +30,14 @@ const Main = () => {
     });
   };
 
+  const itemClasses = "py-1 px-3 cursor-pointer hover:bg-white/10";
+
   return (
-    <div className="flex flex-col flex-1">
-      <button
-        onClick={() => {
-          vscode?.postMessage({
-            command: "log",
-            source: "sidebar",
-            data: 1,
-            forwardTo: "all"
-          });
-        }}
-      >
-        send message
-      </button>
+    <div className="flex flex-col flex-1 border-r border-r-gray-600">
       <Tab title="Templates">
         {templates?.map(template => (
           <p
-            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            className={itemClasses}
             onClick={() => clickOptionHandler(template.id, "templates")}
           >
             {template.name}
@@ -57,7 +47,7 @@ const Main = () => {
       <Tab title="Enhancers">
         {enhancers?.map(enhancer => (
           <p
-            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            className={itemClasses}
             onClick={() => clickOptionHandler(enhancer.id, "enhancers")}
           >
             {enhancer.name}
@@ -67,7 +57,7 @@ const Main = () => {
       <Tab title="EnhancedTemplates">
         {enhancedTemplates?.map(enhancedTemplate => (
           <p
-            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            className={itemClasses}
             onClick={() =>
               clickOptionHandler(enhancedTemplate.id, "enhancedTemplates")
             }
@@ -79,7 +69,7 @@ const Main = () => {
       <Tab title="Tree">
         {trees?.map(tree => (
           <p
-            className="p-1 cursor-pointer hover:bg-white/[0.1]"
+            className={itemClasses}
             onClick={() => clickOptionHandler(tree.id, "trees")}
           >
             {tree.name}

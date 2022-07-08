@@ -17,6 +17,7 @@ const createNode = (
   data: Partial<DefaultNodeData> = {},
   type = "defaultNode"
 ) => {
+  const date = new Date().toISOString();
   const newNode: IDefaultNode = {
     id: uuidv4(),
     type,
@@ -24,6 +25,9 @@ const createNode = (
       label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
+      createdAt: date,
+      updatedAt: date,
+      deletedAt: null,
       ...data
     },
     position: { x: 0, y: 0 }
@@ -139,7 +143,10 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       .nodes.get(treeId)!
       .map(item => {
         if (item.id === node.id) {
-          return { ...item, data: { ...item.data, ...data } };
+          return {
+            ...item,
+            data: { ...item.data, ...data, updatedAt: new Date().toISOString() }
+          };
         }
         return item;
       });

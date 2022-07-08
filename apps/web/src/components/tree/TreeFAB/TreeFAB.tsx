@@ -7,18 +7,22 @@ import useTreeStore from "contexts/tree/tree.context";
 import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const TreeFAB: React.FC<Props> = props => {
-  const { changeActiveTree } = props;
+  const { changeActiveTree, treeId } = props;
   const vscode = useGlobalsStore(state => state.vscode);
   const addTree = useTreeStore(state => state.addTree);
-  const { data: accountResponse } = useFetchAccount();
-  const { data: account } = accountResponse ?? {};
+  const nodes = useTreeStore(state => state.nodes.get(treeId)!);
+  useFetchAccount();
 
   const generateClickHandler = () => {
     console.log("generating...");
     vscode?.postMessage({
       command: "generate",
       source: "web",
-      data: account?.trees[0].nodes ?? []
+      data: nodes.map(n => {
+        // @ts-ignore must be delete to avoid issues with circular dependencies
+        delete n.data.node;
+        return n;
+      })
     });
   };
 

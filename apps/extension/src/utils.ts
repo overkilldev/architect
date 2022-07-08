@@ -16,11 +16,6 @@ export const getNonce = () => {
 };
 
 export const messageReceivedHandler = async (message: Messages) => {
-  let directoryPath = vscode.workspace.rootPath ?? "";
-
-  if (!(await fs.stat(directoryPath)).isDirectory()) {
-    directoryPath = path.dirname(directoryPath);
-  }
   switch (message.command) {
     case "init": {
       vscode.commands.executeCommand("architect-extension.start");
@@ -45,21 +40,21 @@ export const messageReceivedHandler = async (message: Messages) => {
     }
     case "generate": {
       const { data: nodes } = message;
+      let directoryPath = vscode.workspace.workspaceFolders?.[0].uri.path ?? "";
+      if (!(await fs.stat(directoryPath)).isDirectory()) {
+        directoryPath = path.dirname(directoryPath);
+      }
       if (!directoryPath) {
         vscode.window.showErrorMessage("There is no directory created yet");
       }
 
       nodes?.map(node => {
-        const { name, path: nodePath } = node;
-        const newPath = path.join(directoryPath, nodePath);
-        fs.outputFile(newPath, name);
+        const { absolutePathname, alias } = node.data;
+        const newPath = path.join(directoryPath, absolutePathname ?? "");
+        fs.outputFile(newPath, alias);
       });
       break;
     }
-    // case "open": {
-    //   console.log(message);
-    //   break;
-    // }
     default:
       console.error("Message not supported", message);
   }
