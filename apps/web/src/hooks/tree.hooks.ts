@@ -6,9 +6,9 @@ import useTreeStore from "contexts/tree/tree.context";
 
 const { NODE_WIDTH, NODE_HEIGHT } = CONSTANTS.GENERAL;
 
-const useTreeAPI = () => {
+const useTreeAPI = (treeId: string) => {
   const { setCenter } = useReactFlow();
-  const onNodesChangeStore = useTreeStore(state => state.onNodesChange);
+  const onNodesChangeStore = useTreeStore(state => state.onNodesChange(treeId));
 
   const centerOnNode = useCallback(
     (x: number, y: number) => {

@@ -17,6 +17,7 @@ const createNode = (
   data: Partial<DefaultNodeData> = {},
   type = "defaultNode"
 ) => {
+  const date = new Date().toISOString();
   const newNode: IDefaultNode = {
     id: uuidv4(),
     type,
@@ -24,6 +25,9 @@ const createNode = (
       label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
+      createdAt: date,
+      updatedAt: date,
+      deletedAt: null,
       ...data
     },
     position: { x: 0, y: 0 }
@@ -32,48 +36,86 @@ const createNode = (
   return newNode;
 };
 
+const defaultTreeId = "0";
+
+const createDefaultNode = (treeId: string) => {
+  return createNode(
+    { pathname: "./", absolutePathname: ".", treeId },
+    "rootNode"
+  );
+};
+
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
-  nodes: [createNode({ pathname: "./", absolutePathname: "." }, "rootNode")],
-  setNodes: nodes => set({ nodes }),
-  edges: [],
-  setEdges: edges => set({ edges }),
-  selectedNode: null,
-  setSelectedNode: selectedNode => set({ selectedNode }),
-  onInit: async reactFlowInstance => {
+  trees: [defaultTreeId],
+  addTree: () => {
+    const newTreeId = get().trees.length.toString();
+    set({ trees: [...get().trees, newTreeId] });
+    set({ nodes: get().nodes.set(newTreeId, [createDefaultNode(newTreeId)]) });
+    set({ edges: get().edges.set(newTreeId, []) });
+    set({ selectedNode: get().selectedNode.set(newTreeId, null) });
+    return newTreeId;
+  },
+  nodes: new Map().set(defaultTreeId, [createDefaultNode(defaultTreeId)]),
+  setNodes: treeId => nodes => set({ nodes: get().nodes.set(treeId, nodes) }),
+  edges: new Map().set(defaultTreeId, []),
+  setEdges: treeId => edges => set({ edges: get().edges.set(treeId, edges) }),
+  selectedNode: new Map().set(defaultTreeId, null),
+  setSelectedNode: treeId => selectedNode => {
+    set({ selectedNode: get().selectedNode.set(treeId, selectedNode) });
+  },
+  onInit: treeId => async reactFlowInstance => {
     try {
       const nodes = await createGraphLayout(
         reactFlowInstance.getNodes(),
         reactFlowInstance.getEdges()
       );
-      get().setNodes(nodes);
+      get().setNodes(treeId)(nodes);
       reactFlowInstance.fitView();
     } catch (error) {
       console.error(error);
     }
   },
-  onNodesChange: async changes => {
+  onNodesChange: treeId => async changes => {
     // TODO: seguro aquí o en onConnect ? inclusive en otro lado
     if (changes[0].type === "dimensions") {
-      const newNodes = await createGraphLayout(get().nodes, get().edges);
-      get().setNodes(applyNodeChanges(changes, newNodes));
+      const newNodes = await createGraphLayout(
+        get().nodes.get(treeId)!,
+        get().edges.get(treeId)!
+      );
+      get().setNodes(treeId)(applyNodeChanges(changes, newNodes));
       return newNodes;
     } else {
-      get().setNodes(applyNodeChanges(changes, get().nodes));
-      return get().nodes;
+      get().setNodes(treeId)(
+        applyNodeChanges(changes, get().nodes.get(treeId)!)
+      );
+      return get().nodes.get(treeId)!;
     }
   },
-  onEdgesChange: changes => {
-    get().setEdges(applyEdgeChanges(changes, get().edges));
+  onEdgesChange: treeId => changes => {
+    get().setEdges(treeId)(applyEdgeChanges(changes, get().edges.get(treeId)!));
   },
-  onConnect: params => {
-    get().setEdges(addEdge({ ...params }, get().edges));
+  onConnect: treeId => params => {
+    get().setEdges(treeId)(addEdge({ ...params }, get().edges.get(treeId)!));
   },
   nodeTypes,
-  getParentNode: node => getIncomers(node, get().nodes, get().edges)[0],
-  getChildren: node => getOutgoers(node, get().nodes, get().edges),
-  getConnectedEdges: node => getConnectedEdges([node], get().edges),
+  getParentNode: treeId => node => {
+    return getIncomers(
+      node,
+      get().nodes.get(treeId)!,
+      get().edges.get(treeId)!
+    )[0];
+  },
+  getChildren: treeId => node => {
+    return getOutgoers(
+      node,
+      get().nodes.get(treeId)!,
+      get().edges.get(treeId)!
+    );
+  },
+  getConnectedEdges: treeId => node =>
+    getConnectedEdges([node], get().edges.get(treeId)!),
   createNode,
-  addNode: (data, parentNode) => {
+  addNode: treeId => (data, parentNode) => {
     const { id: parentId, data: parentData } = parentNode;
     const { pathname, absolutePathname = pathname } = parentData;
     const childAbsolutePathname = `${absolutePathname}/${data.pathname}`;
@@ -91,26 +133,31 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
         sourceHandle: "a",
         targetHandle: "b"
       },
-      get().edges
+      get().edges.get(treeId)!
     );
-    get().setEdges(newEdges);
-    get().setNodes([...get().nodes, newNode]);
+    get().setEdges(treeId)(newEdges);
+    get().setNodes(treeId)([...get().nodes.get(treeId)!, newNode]);
   },
-  updateNote: (node, data) => {
-    const newNodes = get().nodes.map(item => {
-      if (item.id === node.id) {
-        return { ...item, data: { ...item.data, ...data } };
-      }
-      return item;
-    });
-    get().setNodes(newNodes);
+  updateNote: treeId => (node, data) => {
+    const newNodes = get()
+      .nodes.get(treeId)!
+      .map(item => {
+        if (item.id === node.id) {
+          return {
+            ...item,
+            data: { ...item.data, ...data, updatedAt: new Date().toISOString() }
+          };
+        }
+        return item;
+      });
+    get().setNodes(treeId)(newNodes);
   },
-  deleteNode: node => {
-    const filteredNodes = get().nodes.filter(
-      item => item.id !== node?.data.node?.id
-    );
+  deleteNode: treeId => node => {
+    const filteredNodes = get()
+      .nodes.get(treeId)!
+      .filter(item => item.id !== node?.data.node?.id);
     const childrenIds = get()
-      .getChildren(node)
+      .getChildren(treeId)(node)
       .map(child => child.id);
     const newNodes = filteredNodes.map(node => {
       if (childrenIds.includes(node.id)) {
@@ -123,13 +170,15 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       return node;
     });
     const edgesIds = get()
-      .getConnectedEdges(node)
+      .getConnectedEdges(treeId)(node)
       .map(edge => edge.id);
-    const filteredEdges = get().edges.filter(item => {
-      return !edgesIds.includes(item.id);
-    });
-    set({ edges: filteredEdges });
-    set({ nodes: newNodes });
+    const filteredEdges = get()
+      .edges.get(treeId)!
+      .filter(item => {
+        return !edgesIds.includes(item.id);
+      });
+    get().setEdges(treeId)(filteredEdges);
+    get().setNodes(treeId)(newNodes);
   }
 }));
 

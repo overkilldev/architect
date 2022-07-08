@@ -4,11 +4,13 @@ import { DrawerProps } from "components/global/Drawer/Drawer.types";
 
 // Component Props
 export interface NodeDrawerProps
-  extends Omit<DrawerProps, "children" | "isOpen" | "onClose"> {}
+  extends Omit<DrawerProps, "children" | "isOpen" | "onClose"> {
+  treeId: string;
+}
 
 export interface NodeFormValues {
   pathname: string;
   alias: string;
-  enhancedTemplate: string;
+  enhancedTemplateId: string;
   description: string;
 }

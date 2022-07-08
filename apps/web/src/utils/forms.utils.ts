@@ -20,10 +20,9 @@ export const isString = (options: types.IsStringOptions = {}) => {
 };
 
 export const isPathname = (options: types.IsPathnameOptions = {}) => {
-  return isString({ ...options }).matches(
-    /^[^/]+$/g,
-    "Do not include / in the pathname"
-  );
+  return isString({ ...options })
+    .matches(/^[^/]+$/g, "Do not include / in the pathname")
+    .matches(/^[^\s]+$/g, "Do not include whitespace in the pathname");
 };
 
 export const nodeFormSchema = yup

@@ -11,8 +11,9 @@ import useTreeAPI from "hooks/tree.hooks";
 const BaseNode: FC<Props> = props => {
   const { children, handlesType } = props;
   const { isConnectable, selected, xPos, yPos, data } = props;
-  const { centerOnNode } = useTreeAPI();
-  const setSelectedNode = useTreeStore(state => state.setSelectedNode);
+  const { treeId } = data;
+  const { centerOnNode } = useTreeAPI(treeId);
+  const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { setFormMode, onOpen } = nodeDrawer;
 

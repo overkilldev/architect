@@ -3,24 +3,32 @@ import React from "react";
 import { TreeFABProps as Props } from "./TreeFAB.types";
 import FAB from "components/global/FAB/FAB";
 import useGlobalsStore from "contexts/globals/globals.context";
+import useTreeStore from "contexts/tree/tree.context";
 import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const TreeFAB: React.FC<Props> = props => {
+  const { changeActiveTree, treeId } = props;
   const vscode = useGlobalsStore(state => state.vscode);
-  const { data: accountResponse } = useFetchAccount();
-  const { data: account } = accountResponse ?? {};
+  const addTree = useTreeStore(state => state.addTree);
+  const nodes = useTreeStore(state => state.nodes.get(treeId)!);
+  useFetchAccount();
 
   const generateClickHandler = () => {
     console.log("generating...");
     vscode?.postMessage({
       command: "generate",
       source: "web",
-      data: account?.trees[0].nodes ?? []
+      data: nodes.map(n => {
+        // @ts-ignore must be delete to avoid issues with circular dependencies
+        delete n.data.node;
+        return n;
+      })
     });
   };
 
   const newTreeHandler = () => {
-    console.log("New tree");
+    const newTreeId = addTree();
+    changeActiveTree(newTreeId);
   };
 
   const itemClasses = "mb-4 mr-4";

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import ReactFlow from "react-flow-renderer";
 // import { MiniMap } from "react-flow-renderer";
 import { Controls } from "react-flow-renderer";
@@ -9,17 +9,18 @@ import useTreeStore from "contexts/tree/tree.context";
 import useTreeAPI from "hooks/tree.hooks";
 
 const Tree: React.FC<Props> = props => {
-  const nodes = useTreeStore(state => state.nodes);
-  const edges = useTreeStore(state => state.edges);
+  const { id } = props;
+  const nodes = useTreeStore(state => state.nodes.get(id));
+  const edges = useTreeStore(state => state.edges.get(id));
   const nodeTypes = useTreeStore(state => state.nodeTypes);
-  const onInit = useTreeStore(state => state.onInit);
-  const onEdgesChange = useTreeStore(state => state.onEdgesChange);
-  const onConnect = useTreeStore(state => state.onConnect);
-  const { onNodesChange } = useTreeAPI();
+  const onInit = useTreeStore(state => state.onInit(id));
+  const onEdgesChange = useTreeStore(state => state.onEdgesChange(id));
+  const onConnect = useTreeStore(state => state.onConnect(id));
+  const { onNodesChange } = useTreeAPI(id);
 
   return (
     <ReactFlow
-      className="h-auto flex-1"
+      className="h-auto flex-1 bg-black"
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
@@ -46,4 +47,4 @@ const Tree: React.FC<Props> = props => {
 
 Tree.defaultProps = {};
 
-export default Tree;
+export default memo(Tree);

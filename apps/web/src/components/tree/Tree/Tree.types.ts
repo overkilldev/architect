@@ -1,4 +1,6 @@
 // Interfaces and types from component Tree
 
 // Component Props
-export interface TreeProps {}
+export interface TreeProps {
+  id: string;
+}

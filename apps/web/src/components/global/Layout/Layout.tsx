@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import { LayoutProps as Props } from "./Layout.types";
 import { useListenMessages } from "hooks/messages.hooks";
-import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const Layout: React.FC<Props> = props => {
   const { children } = props;
-  useFetchAccount();
   const navigate = useNavigate();
   const message = useListenMessages();
 

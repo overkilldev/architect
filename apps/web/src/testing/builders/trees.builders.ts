@@ -1,20 +1,33 @@
-import { Node, Tree } from "@architect/types";
+import { BaseNode, BaseNodeData, Tree } from "@architect/types";
 import faker from "faker";
 
-export const buildNode = (overrides: Partial<Node> = {}): Node => {
-  return {
+export const buildNode = (
+  dataOverrides: Partial<BaseNodeData> = {},
+  overrides: Partial<BaseNode> = {}
+): BaseNode => {
+  const partialNode = {
     id: faker.datatype.uuid(),
-    name: faker.random.word(),
-    enhancedTemplateId: faker.random.word(),
-    path: "/",
-    createdAt: faker.date.past().toISOString(),
-    updatedAt: faker.date.past().toISOString(),
-    deletedAt: null,
+    position: { x: 0, y: 0 },
+    data: {
+      alias: faker.random.word(),
+      enhancedTemplateId: faker.random.word(),
+      pathname: "/",
+      absolutePathname: "/",
+      parentId: undefined,
+      treeId: "0",
+      node: null as any,
+      createdAt: faker.date.past().toISOString(),
+      updatedAt: faker.date.past().toISOString(),
+      deletedAt: null,
+      ...dataOverrides
+    },
     ...overrides
   };
+  partialNode.data.node = partialNode;
+  return partialNode;
 };
 
-export const genNodes = (quantity?: number): Node[] => {
+export const genNodes = (quantity?: number): BaseNode[] => {
   const num = quantity ?? Math.floor(Math.random() * 9) + 1;
 
   const nodes = [];
@@ -25,9 +38,11 @@ export const genNodes = (quantity?: number): Node[] => {
   return nodes;
 };
 
-const nodeOne = buildNode({ path: "src/containers/App.tsx" });
-const nodeTwo = buildNode({ path: "src/types/product.types.ts" });
-const nodeThree = buildNode({ path: "src/component/global/ProductCard.tsx" });
+const nodeOne = buildNode({ absolutePathname: "src/containers/App.tsx" });
+const nodeTwo = buildNode({ absolutePathname: "src/types/product.types.ts" });
+const nodeThree = buildNode({
+  absolutePathname: "src/component/global/ProductCard.tsx"
+});
 
 const nodes = [nodeOne, nodeTwo, nodeThree];
 

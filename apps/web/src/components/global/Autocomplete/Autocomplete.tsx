@@ -30,7 +30,7 @@ const Autocomplete: React.FC<Props> = props => {
           active ? "bg-violet-500" : "bg-black"
         } ${selected ? "bg-violet-500" : "bg-black"}`}
       >
-        <p className="text-white">{option}</p>
+        <div className="text-white">{option}</div>
       </div>
     );
   };

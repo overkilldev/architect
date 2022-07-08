@@ -5,6 +5,6 @@ import { render } from "setupTests";
 
 describe("TreeFAB", () => {
   it("renders with default props", () => {
-    render(<TreeFAB />);
+    render(<TreeFAB changeActiveTree={() => {}} treeId="1" />);
   });
 });
