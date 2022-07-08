@@ -12,10 +12,27 @@ export const useFetchAccount = () => {
     enabled: !!token,
     onSuccess: accountResponse => {
       const { data } = accountResponse;
+      const { trees } = data;
+      const treesModified = trees.map(tree => {
+        const nodesModified = tree.nodes.map(n => {
+          // @ts-ignore must be delete to avoid issues with circular dependencies
+          delete n.data.node;
+          return n;
+        });
+        return {
+          ...tree,
+          nodes: nodesModified
+        };
+      });
+
+      const enhancedData = {
+        ...data,
+        trees: treesModified
+      };
       vscode?.postMessage({
         command: "sync",
         source: "web",
-        data,
+        data: enhancedData,
         forwardTo: "sidebar"
       });
     }
