@@ -54,11 +54,16 @@ const createDefaultNode = (treeId: string) => {
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
   trees: [defaultTreeId],
-  addTree: () => {
-    const newTreeId = get().trees.length.toString();
+  addTree: tree => {
+    const { id, nodes: treeNodes, edges: treeEdges } = tree ?? {};
+    const nodes = id && treeNodes ? new Map([[id, treeNodes]]) : undefined;
+    const edges = id && treeEdges ? new Map([[id, treeEdges]]) : undefined;
+    const newTreeId = id ?? get().trees.length.toString();
     set({ trees: [...get().trees, newTreeId] });
-    set({ nodes: get().nodes.set(newTreeId, [createDefaultNode(newTreeId)]) });
-    set({ edges: get().edges.set(newTreeId, []) });
+    set({
+      nodes: nodes ?? get().nodes.set(newTreeId, [createDefaultNode(newTreeId)])
+    });
+    set({ edges: edges ?? get().edges.set(newTreeId, []) });
     set({ selectedNode: get().selectedNode.set(newTreeId, null) });
     return newTreeId;
   },

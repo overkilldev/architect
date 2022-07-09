@@ -10,8 +10,7 @@ export const useFetchAccount = () => {
 
   return useQuery(["account", token], () => fetchAccount(token), {
     enabled: !!token,
-    onSuccess: accountResponse => {
-      const { data } = accountResponse;
+    onSuccess: data => {
       const { trees } = data;
       const treesModified = trees.map(tree => {
         const nodesModified = tree.nodes.map(n => {
