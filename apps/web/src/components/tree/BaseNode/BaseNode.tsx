@@ -9,7 +9,7 @@ import useTreeStore from "contexts/tree/tree.context";
 import useTreeAPI from "hooks/tree.hooks";
 
 const BaseNode: FC<Props> = props => {
-  const { children, handlesType } = props;
+  const { children, handlesType, className, onDoubleClick } = props;
   const { isConnectable, selected, xPos, yPos, data } = props;
   const { treeId } = data;
   const { centerOnNode } = useTreeAPI(treeId);
@@ -39,8 +39,9 @@ const BaseNode: FC<Props> = props => {
 
   return (
     <div
-      className="BaseNode bg-stone-900 shadow-2xl rounded-lg w-48"
+      className={`BaseNode bg-stone-900 shadow-2xl rounded-lg w-48 ${className}`}
       onClick={clickHandler}
+      onDoubleClick={onDoubleClick}
     >
       <div className={nodeClasses} style={selected ? nodeStyles : undefined}>
         {handlesType === "default" || handlesType === "output" ? (
@@ -55,21 +56,22 @@ const BaseNode: FC<Props> = props => {
         <div className="BaseNode__content flex flex-1 items-center">
           {children}
         </div>
-
-        <button
-          className="BaseNode__add left-1/2 absolute bottom-0 px-3 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
-          onClick={actionHandler}
-        >
-          <AddIcon w={1.5} h={1.5} />
-        </button>
         {handlesType === "default" || handlesType === "input" ? (
-          <Handle
-            type="source"
-            position={Position.Bottom}
-            id="b"
-            className="BaseNode__dot"
-            isConnectable={isConnectable}
-          />
+          <>
+            <button
+              className="BaseNode__add left-1/2 absolute bottom-0 px-3 py-2 bg-green-400 rounded-full shadow-md flex justify-center"
+              onClick={actionHandler}
+            >
+              <AddIcon w={1.5} h={1.5} />
+            </button>
+            <Handle
+              type="source"
+              position={Position.Bottom}
+              id="b"
+              className="BaseNode__dot"
+              isConnectable={isConnectable}
+            />
+          </>
         ) : null}
       </div>
     </div>
@@ -77,6 +79,7 @@ const BaseNode: FC<Props> = props => {
 };
 
 BaseNode.defaultProps = {
+  className: "",
   handlesType: "default"
 };
 

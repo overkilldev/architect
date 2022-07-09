@@ -8,13 +8,11 @@ const RootNode: React.FC<Props> = props => {
   const { pathname } = data;
 
   return (
-    <div className="RootNode">
-      <BaseNode {...props} handlesType="input">
-        <p className="CustomNode__text flex-1 text-xs capitalize text-white text-center font-bold ">
-          {pathname}
-        </p>
-      </BaseNode>
-    </div>
+    <BaseNode {...props} className="RootNode" handlesType="input">
+      <p className="CustomNode__text flex-1 text-xs capitalize text-white text-center font-bold ">
+        {pathname}
+      </p>
+    </BaseNode>
   );
 };
 

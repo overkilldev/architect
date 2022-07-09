@@ -1,9 +1,10 @@
 import { BaseNodeData } from "@architect/types";
 import { Node } from "react-flow-renderer";
 
-import { BaseNodeProps } from "../BaseNode/BaseNode.types";
+import { BaseNodeComponentProps } from "../BaseNode/BaseNode.types";
 
-export interface DefaultNodeProps extends BaseNodeProps<DefaultNodeData> {}
+export interface DefaultNodeProps
+  extends Omit<BaseNodeComponentProps<DefaultNodeData>, "children"> {}
 
 export interface DefaultNodeData extends BaseNodeData<DefaultNode> {}
 

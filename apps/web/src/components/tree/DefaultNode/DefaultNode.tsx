@@ -29,32 +29,26 @@ const DefaultNode: FC<DefaultNodeProps> = props => {
   const validClass = parentId ? "bg-lime-300" : "bg-red-500";
 
   return (
-    <div className="DefaultNode" onDoubleClick={actionHandler}>
-      <BaseNode {...props}>
-        <span
-          className={`DefaultNode__status flex w-1 h-1 ${validClass} rounded-full mx-2`}
-        />
-        <p
-          className={`DefaultNode__text flex-1 text-xs ${
-            alias ? "" : "text-center"
-          } text-gray-400`}
-        >
-          {alias ? (
-            <span className="font-bold text-white pr-2">{alias}</span>
-          ) : null}
-          /{pathname}
-        </p>
-        {node ? (
-          <div className="flex items-center" onClick={clickHandler}>
-            <NodeContextMenu
-              onEdit={actionHandler}
-              node={node}
-              treeId={treeId}
-            />
-          </div>
+    <BaseNode {...props} className="DefaultNode" onDoubleClick={actionHandler}>
+      <span
+        className={`DefaultNode__status flex w-1 h-1 ${validClass} rounded-full mx-2`}
+      />
+      <p
+        className={`DefaultNode__text flex-1 text-xs ${
+          alias ? "" : "text-center"
+        } text-gray-400`}
+      >
+        {alias ? (
+          <span className="font-bold text-white pr-2">{alias}</span>
         ) : null}
-      </BaseNode>
-    </div>
+        /{pathname}
+      </p>
+      {node ? (
+        <div className="flex items-center" onClick={clickHandler}>
+          <NodeContextMenu onEdit={actionHandler} node={node} treeId={treeId} />
+        </div>
+      ) : null}
+    </BaseNode>
   );
 };
 
