@@ -1,5 +1,5 @@
 // Interfaces and types from context Tree
-import { BaseNode } from "@architect/types";
+import { BaseNode, Tree } from "@architect/types";
 import { Edge, NodeChange, OnInit } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
@@ -14,7 +14,7 @@ export interface TreeProviderProps {
 // Provider value
 export interface TreeProviderValue {
   trees: string[];
-  addTree: () => string;
+  addTree: (tree?: Tree) => string;
   nodes: Map<string, BaseNode[]>;
   setNodes: (treeId: string) => (nodes: BaseNode[]) => void;
   edges: Map<string, Edge[]>;

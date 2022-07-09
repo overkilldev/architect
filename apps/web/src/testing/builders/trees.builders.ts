@@ -1,5 +1,6 @@
 import { BaseNode, BaseNodeData, Tree } from "@architect/types";
 import faker from "faker";
+import { Edge } from "react-flow-renderer";
 
 export const buildNode = (
   dataOverrides: Partial<BaseNodeData> = {},
@@ -21,6 +22,7 @@ export const buildNode = (
       deletedAt: null,
       ...dataOverrides
     },
+    type: "defaultNode",
     ...overrides
   };
   partialNode.data.node = partialNode;
@@ -38,6 +40,26 @@ export const genNodes = (quantity?: number): BaseNode[] => {
   return nodes;
 };
 
+export const buildEdge = (overrides: Partial<Edge> = {}): Edge => {
+  return {
+    id: faker.datatype.uuid(),
+    source: "",
+    target: "",
+    ...overrides
+  };
+};
+
+export const genEdges = (quantity?: number): Edge[] => {
+  const num = quantity ?? Math.floor(Math.random() * 9) + 1;
+
+  const edges = [];
+  for (let i = 0; i < num; i++) {
+    const edge = buildEdge();
+    edges.push(edge);
+  }
+  return edges;
+};
+
 const nodeOne = buildNode({ absolutePathname: "src/containers/App.tsx" });
 const nodeTwo = buildNode({ absolutePathname: "src/types/product.types.ts" });
 const nodeThree = buildNode({
@@ -51,6 +73,7 @@ export const buildTree = (overrides: Partial<Tree> = {}): Tree => {
     id: faker.datatype.uuid(),
     name: faker.random.word(),
     nodes,
+    edges: [],
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
