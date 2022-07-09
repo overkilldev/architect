@@ -158,6 +158,7 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
             updatedAt: new Date().toISOString()
           };
           if (type) item.type = type;
+          item.data.node = item;
         }
         return item;
       });

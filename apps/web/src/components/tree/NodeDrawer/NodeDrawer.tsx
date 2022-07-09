@@ -18,7 +18,6 @@ const NodeDrawer: React.FC<Props> = props => {
   const { treeId } = props;
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { formMode, onClose, isOpen } = nodeDrawer;
-
   const selectedNode = useTreeStore(state => state.selectedNode.get(treeId));
   const addNode = useTreeStore(state => state.addNode(treeId));
   const updateNode = useTreeStore(state => state.updateNode(treeId));
@@ -46,7 +45,6 @@ const NodeDrawer: React.FC<Props> = props => {
     if (formMode === "CREATE") {
       addNode({ ...values, treeId }, selectedNode, type);
       if (selectedNode.type !== "rootNode") {
-        // TODO: check why the type is not being updated
         updateNode(selectedNode, {}, "folderNode");
       }
     } else if (formMode === "EDIT") {
