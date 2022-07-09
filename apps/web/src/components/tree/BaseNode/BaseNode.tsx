@@ -9,7 +9,7 @@ import useTreeStore from "contexts/tree/tree.context";
 import useTreeAPI from "hooks/tree.hooks";
 
 const BaseNode: FC<Props> = props => {
-  const { children, handlesType, className } = props;
+  const { children, handlesType, className, onDoubleClick } = props;
   const { isConnectable, selected, xPos, yPos, data } = props;
   const { treeId } = data;
   const { centerOnNode } = useTreeAPI(treeId);
@@ -41,6 +41,7 @@ const BaseNode: FC<Props> = props => {
     <div
       className={`BaseNode bg-stone-900 shadow-2xl rounded-lg w-48 ${className}`}
       onClick={clickHandler}
+      onDoubleClick={onDoubleClick}
     >
       <div className={nodeClasses} style={selected ? nodeStyles : undefined}>
         {handlesType === "default" || handlesType === "output" ? (
