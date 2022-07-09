@@ -1,8 +1,8 @@
 // Interfaces and types from context Tree
-import { BaseNode } from "@architect/types";
 import { Edge, NodeChange, OnInit } from "react-flow-renderer";
 import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
 
+import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
 import { DefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
 import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
 

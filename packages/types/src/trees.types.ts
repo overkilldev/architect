@@ -1,28 +1,27 @@
-import { Node } from "react-flow-renderer";
-
-import { EnhancedTemplate } from "./enhancedTemplates.types";
+import { Edge, Node as RFNode } from "react-flow-renderer";
 
 export interface Tree {
   id: string;
   name: string;
   nodes: Node[];
+  edges: Edge[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
 }
 
-export interface BaseNodeData<T extends BaseNode = BaseNode> {
+export interface NodeData {
   pathname: string;
   absolutePathname: string | undefined;
   alias?: string | undefined;
   description?: string;
-  enhancedTemplateId: EnhancedTemplate["id"] | null;
-  node: T;
-  parentId: BaseNode["id"] | undefined;
+  content?: string;
+  rawContent?: string;
+  parentId: Node["id"] | undefined;
   treeId: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
 }
 
-export type BaseNode = Node<BaseNodeData>;
+export interface Node<T extends NodeData = NodeData> extends RFNode<T> {}

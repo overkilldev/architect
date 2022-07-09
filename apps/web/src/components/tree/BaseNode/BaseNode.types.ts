@@ -1,9 +1,10 @@
 // Interfaces and types from component BaseNode
-import { BaseNodeData } from "@architect/types";
+import { NodeData, Node } from "@architect/types";
 import { ReactNode } from "react";
 import { NodeProps } from "react-flow-renderer";
 
-export interface BaseNodeComponentProps extends BaseNodeProps {
+export interface BaseNodeComponentProps<T extends BaseNodeData = BaseNodeData>
+  extends BaseNodeProps<T> {
   children: ReactNode;
   handlesType?: "default" | "input" | "output" | "group";
 }
@@ -11,3 +12,10 @@ export interface BaseNodeComponentProps extends BaseNodeProps {
 // Component Props
 export interface BaseNodeProps<T extends BaseNodeData = BaseNodeData>
   extends NodeProps<T> {}
+
+export interface BaseNode<T extends BaseNodeData = BaseNodeData>
+  extends Node<T> {}
+
+export interface BaseNodeData extends NodeData {
+  node: BaseNode;
+}

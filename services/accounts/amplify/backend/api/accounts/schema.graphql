@@ -1,0 +1,108 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type Blog @model {
+  id: ID!
+  name: String!
+  posts: [Post] @hasMany
+}
+
+type Post @model {
+  id: ID!
+  title: String!
+  blog: Blog @belongsTo
+  comments: [Comment] @hasMany
+}
+
+type Comment @model {
+  id: ID!
+  post: Post @belongsTo
+  content: String!
+}
+
+type Account @model {
+  id: ID!
+  name: String!
+  lastName: String!
+  email: String!
+  name: String!
+}
+
+type Enhancer @model {
+  id: ID!
+  name: String
+}
+
+type Snippet @model {
+  id: ID!
+  name: String!
+  content: String!
+}
+
+type Template @model {
+  id: ID!
+  name: String!
+  content: String!
+}
+
+
+type EnhancedTemplate @model {
+  id: ID!
+  name: String!
+  content: String!
+  enhancersIds: [ID]!;
+  templateId: ID!
+}
+
+type Tree @model {
+  id: ID!
+  name: String!
+}
+
+export interface Tree {
+  id: string;
+  name: string;
+  nodes: Node[];
+  edges: Edge[];
+}
+
+export interface Account {
+  id: string;
+  name: string;
+  lastName: string;
+  email: string;
+  enhancers: Enhancer[];
+  templates: Template[];
+  enhancedTemplates: EnhancedTemplate[];
+  trees: Tree[];
+}
+
+export interface Enhancer {
+  id: string;
+  name: string;
+  snippets: Snippet[];
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+}
+
+export interface Snippet {
+  id: string;
+  name: string;
+  content: string;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  content: string;
+}
+
+export interface EnhancedTemplate {
+  id: string;
+  name: string;
+  content: string;
+  enhancersIds: Enhancer["id"][];
+  templateId: Template["id"];
+}
