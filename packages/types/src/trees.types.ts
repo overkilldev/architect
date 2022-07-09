@@ -1,7 +1,5 @@
 import { Node } from "react-flow-renderer";
 
-import { EnhancedTemplate } from "./enhancedTemplates.types";
-
 export interface Tree {
   id: string;
   name: string;
@@ -16,7 +14,8 @@ export interface BaseNodeData<T extends BaseNode = BaseNode> {
   absolutePathname: string | undefined;
   alias?: string | undefined;
   description?: string;
-  enhancedTemplateId: EnhancedTemplate["id"] | null;
+  rawContent?: string;
+  content?: string;
   node: T;
   parentId: BaseNode["id"] | undefined;
   treeId: string;
