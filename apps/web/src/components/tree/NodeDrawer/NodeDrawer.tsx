@@ -21,7 +21,7 @@ const NodeDrawer: React.FC<Props> = props => {
 
   const selectedNode = useTreeStore(state => state.selectedNode.get(treeId));
   const addNode = useTreeStore(state => state.addNode(treeId));
-  const updateNote = useTreeStore(state => state.updateNote(treeId));
+  const updateNode = useTreeStore(state => state.updateNode(treeId));
   const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const { id, data } = selectedNode ?? {};
   const { absolutePathname, pathname, alias, description } = data ?? {};
@@ -42,10 +42,15 @@ const NodeDrawer: React.FC<Props> = props => {
 
   const submitHandler: SubmitHandler<NodeFormValues> = values => {
     if (!selectedNode) throw new Error("There must be a selected node now");
+    const type = values.alias ? "fileNode" : undefined;
     if (formMode === "CREATE") {
-      addNode({ ...values, treeId }, selectedNode);
+      addNode({ ...values, treeId }, selectedNode, type);
+      if (selectedNode.type !== "rootNode") {
+        // TODO: check why the type is not being updated
+        updateNode(selectedNode, {}, "folderNode");
+      }
     } else if (formMode === "EDIT") {
-      updateNote(selectedNode, values);
+      updateNode(selectedNode, values, type);
     } else {
       throw new Error(`Unhandled mode: ${formMode}`);
     }

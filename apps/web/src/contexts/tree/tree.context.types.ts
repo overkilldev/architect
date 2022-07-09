@@ -30,17 +30,25 @@ export interface TreeProviderValue {
   onConnect: (treeId: string) => OnConnect;
   createNode: (
     data?: Partial<DefaultNodeData>,
-    type?: "defaultNode" | "rootNode"
+    type?: NodeTypeName
   ) => BaseNode;
   getParentNode: (treeId: string) => (node: BaseNode) => BaseNode | undefined;
   getChildren: (treeId: string) => (node: BaseNode) => BaseNode[];
   getConnectedEdges: (treeId: string) => (node: BaseNode) => Edge[];
   addNode: (
     treeId: string
-  ) => (nodeData: AddNodeData, parentNode: BaseNode) => void;
-  updateNote: (
+  ) => (
+    nodeData: AddNodeData,
+    parentNode: BaseNode,
+    type?: NodeTypeName
+  ) => void;
+  updateNode: (
     treeId: string
-  ) => (node: BaseNode, data: Partial<DefaultNodeData>) => void;
+  ) => (
+    node: BaseNode,
+    data: Partial<DefaultNodeData>,
+    type?: NodeTypeName
+  ) => void;
   deleteNode: (treeId: string) => (node: DefaultNode) => void;
 }
 
@@ -54,3 +62,10 @@ export interface AddNodeData
     | "updatedAt"
     | "deletedAt"
   > {}
+
+export type NodeTypeName =
+  | "defaultNode"
+  | "rootNode"
+  | "folderNode"
+  | "fileNode"
+  | "groupNode";
