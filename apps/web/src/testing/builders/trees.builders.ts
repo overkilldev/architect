@@ -25,6 +25,7 @@ export const buildNode = (
       deletedAt: null,
       ...dataOverrides
     },
+    type: "defaultNode",
     ...overrides
   };
   partialNode.data.node = partialNode;
@@ -55,6 +56,7 @@ export const buildTree = (overrides: Partial<Tree> = {}): Tree => {
     id: faker.datatype.uuid(),
     name: faker.random.word(),
     nodes,
+    edges: [],
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,

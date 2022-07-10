@@ -8,15 +8,23 @@ import { TreeProviderValue } from "./tree.context.types";
 import DefaultNode from "components/tree/DefaultNode/DefaultNode";
 import { DefaultNode as IDefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
 import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
+import FileNode from "components/tree/FileNode/FileNode";
+import FolderNode from "components/tree/FolderNode/FolderNode";
 import RootNode from "components/tree/RootNode/RootNode";
 import { createGraphLayout } from "utils/elk.utils";
+import { transformNodesToBaseNodes } from 'utils/tree.utils';
 
-const nodeTypes: NodeTypes = { rootNode: RootNode, defaultNode: DefaultNode };
+const nodeTypes: NodeTypes = {
+  rootNode: RootNode,
+  defaultNode: DefaultNode,
+  folderNode: FolderNode,
+  fileNode: FileNode
+};
 
 const createNode = (
   data: Partial<DefaultNodeData> = {},
   type = "defaultNode"
-) => {
+): IDefaultNode => {
   const newNode: IDefaultNode = {
     id: uuidv4(),
     type,
@@ -42,11 +50,17 @@ const createDefaultNode = (treeId: string) => {
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
   trees: [defaultTreeId],
-  addTree: () => {
-    const newTreeId = get().trees.length.toString();
+  addTree: tree => {
+    const { id, nodes: treeNodes, edges: treeEdges } = tree ?? {};
+    const baseNodes = transformNodesToBaseNodes(treeNodes);
+    const nodes = id && baseNodes ? new Map([[id, baseNodes]]) : undefined;
+    const edges = id && treeEdges ? new Map([[id, treeEdges]]) : undefined;
+    const newTreeId = id ?? get().trees.length.toString();
     set({ trees: [...get().trees, newTreeId] });
-    set({ nodes: get().nodes.set(newTreeId, [createDefaultNode(newTreeId)]) });
-    set({ edges: get().edges.set(newTreeId, []) });
+    set({
+      nodes: nodes ?? get().nodes.set(newTreeId, [createDefaultNode(newTreeId)])
+    });
+    set({ edges: edges ?? get().edges.set(newTreeId, []) });
     set({ selectedNode: get().selectedNode.set(newTreeId, null) });
     return newTreeId;
   },
@@ -110,38 +124,39 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   getConnectedEdges: treeId => node =>
     getConnectedEdges([node], get().edges.get(treeId)!),
   createNode,
-  addNode: treeId => (data, parentNode) => {
-    const { id: parentId, data: parentData } = parentNode;
-    const { pathname, absolutePathname = pathname } = parentData;
-    const childAbsolutePathname = `${absolutePathname}/${data.pathname}`;
-    const childData = {
-      ...data,
-      parentId,
-      absolutePathname: childAbsolutePathname
-    };
-    const newNode = get().createNode(childData);
-    const newEdges = addEdge(
-      {
-        id: `${parentId}-${newNode.id}`,
-        source: parentId,
-        target: newNode.id,
-        sourceHandle: "a",
-        targetHandle: "b"
-      },
-      get().edges.get(treeId)!
-    );
-    get().setEdges(treeId)(newEdges);
-    get().setNodes(treeId)([...get().nodes.get(treeId)!, newNode]);
-  },
-  updateNote: treeId => (node, data) => {
+  addNode:
+    treeId =>
+    (data, parentNode, type = "defaultNode") => {
+      const { id: parentId, data: parentData } = parentNode;
+      const { pathname, absolutePathname = pathname } = parentData;
+      const childAbsolutePathname = `${absolutePathname}/${data.pathname}`;
+      const childData = {
+        ...data,
+        parentId,
+        absolutePathname: childAbsolutePathname
+      };
+      const newNode = get().createNode(childData, type);
+      const newEdges = addEdge(
+        {
+          id: `${parentId}-${newNode.id}`,
+          source: parentId,
+          target: newNode.id,
+          sourceHandle: "a",
+          targetHandle: "b"
+        },
+        get().edges.get(treeId)!
+      );
+      get().setEdges(treeId)(newEdges);
+      get().setNodes(treeId)([...get().nodes.get(treeId)!, newNode]);
+    },
+  updateNode: treeId => (node, data, type) => {
     const newNodes = get()
       .nodes.get(treeId)!
       .map(item => {
         if (item.id === node.id) {
-          return {
-            ...item,
-            data: { ...item.data, ...data }
-          };
+          item.data = { ...item.data, ...data };
+          if (type) item.type = type;
+          item.data.node = item;
         }
         return item;
       });
