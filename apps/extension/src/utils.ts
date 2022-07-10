@@ -49,9 +49,13 @@ export const messageReceivedHandler = async (message: Messages) => {
       }
 
       nodes?.map(node => {
-        const { absolutePathname, alias } = node.data;
+        const { absolutePathname, content } = node.data;
         const newPath = path.join(directoryPath, absolutePathname ?? "");
-        fs.outputFile(newPath, alias);
+        if (content) {
+          fs.outputFile(newPath, content);
+        } else {
+          fs.ensureDir(newPath);
+        }
       });
       break;
     }

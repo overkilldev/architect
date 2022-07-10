@@ -24,7 +24,8 @@ const component = buildNode(
     pathname: "component.tsx",
     absolutePathname: "./component.tsx",
     treeId: defaultTree.id,
-    alias: "// Component",
+    content: "// Component",
+    alias: "Markup",
     parentId: folder.id
   },
   {
@@ -37,7 +38,7 @@ const test = buildNode(
     pathname: "component.test.ts",
     absolutePathname: "./component.test.ts",
     treeId: defaultTree.id,
-    alias: "// Component test",
+    content: "// Component test",
     parentId: folder.id
   },
   {
@@ -50,7 +51,7 @@ const types = buildNode(
     pathname: "component.types.ts",
     absolutePathname: "./component.types.ts",
     treeId: defaultTree.id,
-    alias: "// Component types",
+    content: "// Component types",
     parentId: folder.id
   },
   {
@@ -63,7 +64,7 @@ const styles = buildNode(
     pathname: "component.css",
     absolutePathname: "./component.css",
     treeId: defaultTree.id,
-    alias: "/* Component styles */",
+    content: "/* Component styles */",
     parentId: folder.id
   },
   {

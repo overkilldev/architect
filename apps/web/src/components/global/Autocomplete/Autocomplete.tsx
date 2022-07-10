@@ -1,36 +1,74 @@
 import { Combobox } from "@headlessui/react";
 import React, { ReactNode, useState } from "react";
 
-import { AutocompleteProps as Props } from "./Autocomplete.types";
+import { AutocompleteProps as Props, OptionGroup } from "./Autocomplete.types";
 
 const Autocomplete: React.FC<Props> = props => {
   const { label, options, lastOption: LastOption, inputProps, ...rest } = props;
-  const { optionsProps, ...rest2 } = rest;
+  const { optionsProps, optionGroups, ...rest2 } = rest;
   const [selectedOption, setSelectedOption] = useState("");
   const [query, setQuery] = useState("");
   const { height = 200 } = optionsProps ?? {};
   const optionClasses =
     "Autocomplete__option border-b border-stone-900 last:border-none";
 
-  const filteredOptions =
-    query === ""
-      ? options
-      : options.filter(option => {
-          return option.toLowerCase().includes(query.toLowerCase());
-        });
+  const chosenOptions = optionGroups ?? options ?? [];
+  const flattenedOptions = chosenOptions.flatMap(item => {
+    if (typeof item === "string") return item;
+    return item.options;
+  });
 
-  const renderOption = (
-    option: ReactNode,
-    active: boolean,
-    selected: boolean
-  ) => {
+  const getFilteredOptions = () => {
+    if (query === "") return chosenOptions;
+    if (!chosenOptions.length) return [];
+    if (typeof chosenOptions[0] === "string") {
+      return (chosenOptions as string[]).filter(option => {
+        return option.toLowerCase().includes(query.toLowerCase());
+      });
+    }
+    return (chosenOptions as OptionGroup[]).reduce((acc, group) => {
+      return [
+        ...acc,
+        {
+          ...group,
+          options: group.options.filter(option => {
+            return option.toLowerCase().includes(query.toLowerCase());
+          })
+        }
+      ].filter(group => group.options.length);
+    }, [] as OptionGroup[]);
+  };
+
+  const renderOption = (option: ReactNode, key: number, value?: string) => {
     return (
-      <div
-        className={`py-3 px-2 hover:bg-violet-500/30 ${
-          active ? "bg-violet-500" : "bg-black"
-        } ${selected ? "bg-violet-500" : "bg-black"}`}
+      <Combobox.Option
+        className={optionClasses}
+        key={key}
+        value={value ?? option}
       >
-        <div className="text-white">{option}</div>
+        {({ active, selected }) => (
+          <div
+            className={`py-3 px-2 hover:bg-violet-500/30 ${
+              active ? "bg-violet-500" : "bg-black"
+            } ${selected ? "bg-violet-500" : "bg-black"}`}
+          >
+            <div className="text-white">{option}</div>
+          </div>
+        )}
+      </Combobox.Option>
+    );
+  };
+
+  const renderOptionGroup = (optionGroup: OptionGroup, key: number) => {
+    const { label, options } = optionGroup;
+    return (
+      <div key={key}>
+        <p className="text-violet-400 capitalize px-2 py-1">{label}</p>
+        <div className="px-2">
+          {options.map((option, index) => {
+            return renderOption(option, index);
+          })}
+        </div>
       </div>
     );
   };
@@ -54,26 +92,16 @@ const Autocomplete: React.FC<Props> = props => {
           className="Autocomplete__options absolute top-20 bg-black w-full shadow-md overflow-y-auto rounded-lg"
           style={{ maxHeight: height }}
         >
-          {filteredOptions.map((option, index) => (
-            <Combobox.Option
-              className={optionClasses}
-              key={index}
-              value={option}
-            >
-              {({ active, selected }) => renderOption(option, active, selected)}
-            </Combobox.Option>
-          ))}
-          {LastOption ? (
-            <Combobox.Option
-              key={options.length}
-              className={optionClasses}
-              value=""
-            >
-              {({ active, selected }) =>
-                renderOption(LastOption, active, selected)
-              }
-            </Combobox.Option>
-          ) : null}
+          {getFilteredOptions().map((option, index) => {
+            if (typeof option === "string") {
+              return renderOption(option, index);
+            }
+            return renderOptionGroup(option, index);
+          })}
+
+          {LastOption
+            ? renderOption(LastOption, flattenedOptions.length, "")
+            : null}
         </Combobox.Options>
       </div>
     </Combobox>

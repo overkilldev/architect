@@ -6,8 +6,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
 import { NodeFormValues } from "./NodeDrawer.types";
 import Button from "components/global/Button/Button";
+import ContentAutocomplete from "components/global/ContentAutocomplete/ContentAutocomplete";
 import Drawer from "components/global/Drawer/Drawer";
-import EnhancedTemplateAutocomplete from "components/global/EnhancedTemplateAutocomplete/EnhancedTemplateAutocomplete";
 import Input from "components/global/Input/Input";
 import Textarea from "components/global/Textarea/Textarea";
 import useGlobalsStore from "contexts/globals/globals.context";
@@ -80,7 +80,7 @@ const NodeDrawer: React.FC<Props> = props => {
           errorMessage={errors.alias?.message}
           {...register("alias")}
         />
-        <EnhancedTemplateAutocomplete />
+        <ContentAutocomplete />
         <Textarea
           label="Description"
           placeholder="Describe what makes this node special"
