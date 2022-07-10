@@ -12,6 +12,7 @@ import FileNode from "components/tree/FileNode/FileNode";
 import FolderNode from "components/tree/FolderNode/FolderNode";
 import RootNode from "components/tree/RootNode/RootNode";
 import { createGraphLayout } from "utils/elk.utils";
+import { transformNodesToBaseNodes } from "utils/tree.utils";
 
 const nodeTypes: NodeTypes = {
   rootNode: RootNode,
@@ -23,18 +24,13 @@ const nodeTypes: NodeTypes = {
 const createNode = (
   data: Partial<DefaultNodeData> = {},
   type = "defaultNode"
-) => {
-  const date = new Date().toISOString();
+): IDefaultNode => {
   const newNode: IDefaultNode = {
     id: uuidv4(),
     type,
     data: {
-      label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
-      createdAt: date,
-      updatedAt: date,
-      deletedAt: null,
       ...data
     },
     position: { x: 0, y: 0 }
@@ -56,7 +52,8 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   trees: [defaultTreeId],
   addTree: tree => {
     const { id, nodes: treeNodes, edges: treeEdges } = tree ?? {};
-    const nodes = id && treeNodes ? new Map([[id, treeNodes]]) : undefined;
+    const baseNodes = transformNodesToBaseNodes(treeNodes);
+    const nodes = id && baseNodes ? new Map([[id, baseNodes]]) : undefined;
     const edges = id && treeEdges ? new Map([[id, treeEdges]]) : undefined;
     const newTreeId = id ?? get().trees.length.toString();
     set({ trees: [...get().trees, newTreeId] });
@@ -157,11 +154,7 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       .nodes.get(treeId)!
       .map(item => {
         if (item.id === node.id) {
-          item.data = {
-            ...item.data,
-            ...data,
-            updatedAt: new Date().toISOString()
-          };
+          item.data = { ...item.data, ...data };
           if (type) item.type = type;
           item.data.node = item;
         }
@@ -172,7 +165,7 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   deleteNode: treeId => node => {
     const filteredNodes = get()
       .nodes.get(treeId)!
-      .filter(item => item.id !== node?.data.node?.id);
+      .filter(item => item.id !== node?.id);
     const childrenIds = get()
       .getChildren(treeId)(node)
       .map(child => child.id);

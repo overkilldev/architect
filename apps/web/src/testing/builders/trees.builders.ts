@@ -1,6 +1,9 @@
-import { BaseNode, BaseNodeData, Tree } from "@architect/types";
+import { Tree } from "@architect/types";
 import faker from "faker";
 import { Edge } from "react-flow-renderer";
+
+import { BaseNodeData } from "components/tree/BaseNode/BaseNode.types";
+import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
 
 export const buildNode = (
   dataOverrides: Partial<BaseNodeData> = {},
@@ -40,26 +43,6 @@ export const genNodes = (quantity?: number): BaseNode[] => {
   return nodes;
 };
 
-export const buildEdge = (overrides: Partial<Edge> = {}): Edge => {
-  return {
-    id: faker.datatype.uuid(),
-    source: "",
-    target: "",
-    ...overrides
-  };
-};
-
-export const genEdges = (quantity?: number): Edge[] => {
-  const num = quantity ?? Math.floor(Math.random() * 9) + 1;
-
-  const edges = [];
-  for (let i = 0; i < num; i++) {
-    const edge = buildEdge();
-    edges.push(edge);
-  }
-  return edges;
-};
-
 const nodeOne = buildNode({ absolutePathname: "src/containers/App.tsx" });
 const nodeTwo = buildNode({ absolutePathname: "src/types/product.types.ts" });
 const nodeThree = buildNode({
@@ -90,4 +73,24 @@ export const genTrees = (quantity?: number): Tree[] => {
     trees.push(tree);
   }
   return trees;
+};
+
+export const buildEdge = (overrides: Partial<Edge> = {}): Edge => {
+  return {
+    id: faker.datatype.uuid(),
+    source: "",
+    target: "",
+    ...overrides
+  };
+};
+
+export const genEdges = (quantity?: number): Edge[] => {
+  const num = quantity ?? Math.floor(Math.random() * 9) + 1;
+
+  const edges = [];
+  for (let i = 0; i < num; i++) {
+    const edge = buildEdge();
+    edges.push(edge);
+  }
+  return edges;
 };
