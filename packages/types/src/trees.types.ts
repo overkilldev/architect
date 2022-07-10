@@ -1,9 +1,10 @@
-import { Node } from "react-flow-renderer";
+import { Edge, Node } from "react-flow-renderer";
 
 export interface Tree {
   id: string;
   name: string;
   nodes: Node[];
+  edges: Edge[];
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;

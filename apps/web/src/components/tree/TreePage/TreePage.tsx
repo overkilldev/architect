@@ -12,9 +12,8 @@ const { TABS_HEIGHT } = CONSTANTS.GENERAL;
 const TreePage = () => {
   const [active, setActive] = useState("0");
   const trees = useTreeStore(state => state.trees);
-  const selectedNodeId = useTreeStore(state =>
-    state.selectedNode.get(active)
-  )?.id;
+  const selectedNode = useTreeStore(state => state.selectedNode.get(active));
+  const { id: selectedNodeId } = selectedNode ?? {};
 
   const dimensionsClasses = "flex flex-col flex-1 w-full";
   const dimensionsStyles = { height: `calc(100% - ${TABS_HEIGHT}px)` };
