@@ -12,7 +12,7 @@ import FileNode from "components/tree/FileNode/FileNode";
 import FolderNode from "components/tree/FolderNode/FolderNode";
 import RootNode from "components/tree/RootNode/RootNode";
 import { createGraphLayout } from "utils/elk.utils";
-import { transformNodesToBaseNodes } from 'utils/tree.utils';
+import { transformNodesToBaseNodes } from "utils/tree.utils";
 
 const nodeTypes: NodeTypes = {
   rootNode: RootNode,
