@@ -1,13 +1,14 @@
 // Interfaces and types from component FileNode
-import { BaseNodeData } from "@architect/types";
 import { Node } from "react-flow-renderer";
 
-import { BaseNodeProps } from "../BaseNode/BaseNode.types";
+import { BaseNodeData, BaseNodeProps } from "../BaseNode/BaseNode.types";
 
 // Component Props
 export interface FileNodeProps
-  extends Omit<BaseNodeProps<FileNodeData>, "handlesType"> {}
+  extends Omit<BaseNodeProps<FileNodeData>, "handlesTypes"> {}
 
-export interface FileNodeData extends BaseNodeData<FileNode> {}
+export interface FileNodeData extends BaseNodeData {
+  parentId: undefined;
+}
 
-export type FileNode = Node<FileNodeData>;
+export type RootNode = Node<FileNodeData>;

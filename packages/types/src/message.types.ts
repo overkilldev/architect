@@ -1,5 +1,5 @@
 import { Account } from "./accounts.types";
-import { BaseNode } from "./trees.types";
+import { Node } from "./trees.types";
 
 export type MessageTargets = "web" | "sidebar" | "all" | "none";
 
@@ -36,7 +36,7 @@ export interface SyncMessage extends BaseMessage {
 
 export interface GenerateMessage extends BaseMessage {
   command: "generate";
-  data: BaseNode[];
+  data: Node[];
 }
 
 export interface OpenMessage extends BaseMessage {

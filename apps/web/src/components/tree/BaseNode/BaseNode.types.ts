@@ -1,6 +1,7 @@
 // Interfaces and types from component BaseNode
-import { BaseNodeData } from "@architect/types";
-import { HTMLAttributes, ReactNode } from "react";
+import { NodeData, Node } from "@architect/types";
+import { ReactNode } from "react";
+import { HTMLAttributes } from "react";
 import { NodeProps } from "react-flow-renderer";
 
 export interface BaseNodeComponentProps<T extends BaseNodeData = BaseNodeData>
@@ -14,3 +15,10 @@ export interface BaseNodeComponentProps<T extends BaseNodeData = BaseNodeData>
 export interface BaseNodeProps<T extends BaseNodeData = BaseNodeData>
   extends NodeProps<T>,
     Omit<HTMLAttributes<HTMLDivElement>, "id"> {}
+
+export interface BaseNode<T extends BaseNodeData = BaseNodeData>
+  extends Node<T> {}
+
+export interface BaseNodeData extends NodeData {
+  node: BaseNode;
+}
