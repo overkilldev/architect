@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ReactFlowProvider } from "react-flow-renderer";
 
 import Tree from "../Tree/Tree";
@@ -10,9 +9,12 @@ import useTreeStore from "contexts/tree/tree.context";
 const { TABS_HEIGHT } = CONSTANTS.GENERAL;
 
 const TreePage = () => {
-  const [active, setActive] = useState("0");
-  const trees = useTreeStore(state => state.trees);
-  const selectedNode = useTreeStore(state => state.selectedNode.get(active));
+  const activeTreeId = useTreeStore(state => state.activeTreeId);
+  const setActiveTreeId = useTreeStore(state => state.setActiveTreeId);
+  const treesIds = useTreeStore(state => state.treesIds);
+  const selectedNode = useTreeStore(state =>
+    state.selectedNode.get(activeTreeId)
+  );
   const { id: selectedNodeId } = selectedNode ?? {};
 
   const dimensionsClasses = "flex flex-col flex-1 w-full";
@@ -21,27 +23,27 @@ const TreePage = () => {
   return (
     <div className={dimensionsClasses}>
       <div className="flex h-[56px]">
-        {trees.map(treeId => {
+        {treesIds.map((treeId, index) => {
           return (
             <p
               key={treeId}
-              onClick={() => setActive(treeId)}
+              onClick={() => setActiveTreeId(treeId)}
               className={`p-4 cursor-pointer ${
-                treeId === active ? "text-violet-500" : ""
+                treeId === activeTreeId ? "text-violet-500" : ""
               }`}
             >
-              {parseInt(treeId) + 1}
+              {index + 1}
             </p>
           );
         })}
       </div>
       <div style={dimensionsStyles} className={dimensionsClasses}>
-        {trees.map(treeId => {
+        {treesIds.map(treeId => {
           return (
             <div
               style={dimensionsStyles}
               className={`absolute ${dimensionsClasses} ${
-                treeId === active ? "z-20 visible" : "z-10 invisible"
+                treeId === activeTreeId ? "z-20 visible" : "z-10 invisible"
               }`}
               key={treeId}
             >
@@ -52,8 +54,11 @@ const TreePage = () => {
           );
         })}
       </div>
-      <NodeDrawer key={`${active}|${selectedNodeId}`} treeId={active} />
-      <TreeFAB changeActiveTree={setActive} treeId={active} />
+      <NodeDrawer
+        key={`${activeTreeId}|${selectedNodeId}`}
+        treeId={activeTreeId}
+      />
+      <TreeFAB />
     </div>
   );
 };

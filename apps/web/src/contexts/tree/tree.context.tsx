@@ -29,7 +29,6 @@ const createNode = (
     id: uuidv4(),
     type,
     data: {
-      label: `Node`,
       // @ts-ignore node is later assigned to itself
       node: null,
       createdAt: date,
@@ -43,7 +42,7 @@ const createNode = (
   return newNode;
 };
 
-const defaultTreeId = "0";
+const defaultTreeId = uuidv4();
 
 const createDefaultNode = (treeId: string) => {
   return createNode(
@@ -53,13 +52,15 @@ const createDefaultNode = (treeId: string) => {
 };
 
 const useTreeStore = create<TreeProviderValue>((set, get) => ({
-  trees: [defaultTreeId],
+  activeTreeId: defaultTreeId,
+  setActiveTreeId: treeId => set({ activeTreeId: treeId }),
+  treesIds: [defaultTreeId],
   addTree: tree => {
     const { id, nodes: treeNodes, edges: treeEdges } = tree ?? {};
     const nodes = id && treeNodes ? new Map([[id, treeNodes]]) : undefined;
     const edges = id && treeEdges ? new Map([[id, treeEdges]]) : undefined;
-    const newTreeId = id ?? get().trees.length.toString();
-    set({ trees: [...get().trees, newTreeId] });
+    const newTreeId = id ?? uuidv4();
+    set({ treesIds: [...get().treesIds, newTreeId] });
     set({
       nodes: nodes ?? get().nodes.set(newTreeId, [createDefaultNode(newTreeId)])
     });

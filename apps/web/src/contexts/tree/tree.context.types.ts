@@ -13,43 +13,49 @@ export interface TreeProviderProps {
 
 // Provider value
 export interface TreeProviderValue {
-  trees: string[];
-  addTree: (tree?: Tree) => string;
+  activeTreeId: Tree["id"];
+  setActiveTreeId: (treeId: Tree["id"]) => void;
+  treesIds: Tree["id"][];
+  addTree: (tree?: Tree) => Tree["id"];
   nodes: Map<string, BaseNode[]>;
-  setNodes: (treeId: string) => (nodes: BaseNode[]) => void;
+  setNodes: (treeId: Tree["id"]) => (nodes: BaseNode[]) => void;
   edges: Map<string, Edge[]>;
-  setEdges: (treeId: string) => (edges: Edge[]) => void;
+  setEdges: (treeId: Tree["id"]) => (edges: Edge[]) => void;
   selectedNode: Map<string, BaseNode | null>;
-  setSelectedNode: (treeId: string) => (selectedNode: BaseNode | null) => void;
+  setSelectedNode: (
+    treeId: Tree["id"]
+  ) => (selectedNode: BaseNode | null) => void;
   nodeTypes: NodeTypes;
-  onInit: (treeId: string) => OnInit;
+  onInit: (treeId: Tree["id"]) => OnInit;
   onNodesChange: (
-    treeId: string
+    treeId: Tree["id"]
   ) => (nodes: NodeChange[]) => Promise<BaseNode[]>;
-  onEdgesChange: (treeId: string) => OnEdgesChange;
-  onConnect: (treeId: string) => OnConnect;
+  onEdgesChange: (treeId: Tree["id"]) => OnEdgesChange;
+  onConnect: (treeId: Tree["id"]) => OnConnect;
   createNode: (
     data?: Partial<DefaultNodeData>,
     type?: NodeTypeName
   ) => BaseNode;
-  getParentNode: (treeId: string) => (node: BaseNode) => BaseNode | undefined;
-  getChildren: (treeId: string) => (node: BaseNode) => BaseNode[];
-  getConnectedEdges: (treeId: string) => (node: BaseNode) => Edge[];
+  getParentNode: (
+    treeId: Tree["id"]
+  ) => (node: BaseNode) => BaseNode | undefined;
+  getChildren: (treeId: Tree["id"]) => (node: BaseNode) => BaseNode[];
+  getConnectedEdges: (treeId: Tree["id"]) => (node: BaseNode) => Edge[];
   addNode: (
-    treeId: string
+    treeId: Tree["id"]
   ) => (
     nodeData: AddNodeData,
     parentNode: BaseNode,
     type?: NodeTypeName
   ) => void;
   updateNode: (
-    treeId: string
+    treeId: Tree["id"]
   ) => (
     node: BaseNode,
     data: Partial<DefaultNodeData>,
     type?: NodeTypeName
   ) => void;
-  deleteNode: (treeId: string) => (node: DefaultNode) => void;
+  deleteNode: (treeId: Tree["id"]) => (node: DefaultNode) => void;
 }
 
 export interface AddNodeData
