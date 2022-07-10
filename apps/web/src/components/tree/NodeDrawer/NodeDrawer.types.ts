@@ -11,6 +11,5 @@ export interface NodeDrawerProps
 export interface NodeFormValues {
   pathname: string;
   alias: string;
-  enhancedTemplateId: string;
   description: string;
 }

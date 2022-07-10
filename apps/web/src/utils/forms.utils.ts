@@ -31,4 +31,5 @@ export const nodeFormSchema = yup
     pathname: isPathname({ required: true }),
     alias: isString({ max: 20 }),
     description: isString({ max: 500 })
+    // content: isString({ max: 999999 })
   });
