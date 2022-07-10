@@ -12,6 +12,8 @@ const Layout: React.FC<Props> = props => {
   const navigate = useNavigate();
   const message = useListenMessages();
   const addTree = useTreeStore(state => state.addTree);
+  const treesIds = useTreeStore(state => state.treesIds);
+  const setActiveTreeId = useTreeStore(state => state.setActiveTreeId);
   const vscode = useGlobalsStore(state => state.vscode);
   const { data: account } = useFetchAccount();
 
@@ -23,9 +25,14 @@ const Layout: React.FC<Props> = props => {
     if (type === "trees") {
       const tree = account.trees.find(tree => tree.id === fileId);
       if (!tree) throw new Error("Tree not found");
-      addTree(tree);
+      if (treesIds.includes(tree.id)) {
+        setActiveTreeId(tree.id);
+      } else {
+        const newTreeId = addTree(tree);
+        setActiveTreeId(newTreeId);
+      }
     } else navigate(`/${type}/${fileId}`);
-  }, [message, navigate, addTree, account]);
+  }, [message, navigate, addTree, account, setActiveTreeId, treesIds]);
 
   useEffect(() => {
     if (!account) return;

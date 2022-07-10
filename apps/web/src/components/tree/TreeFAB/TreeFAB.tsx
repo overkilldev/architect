@@ -7,10 +7,11 @@ import useTreeStore from "contexts/tree/tree.context";
 import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const TreeFAB: React.FC<Props> = props => {
-  const { changeActiveTree, treeId } = props;
   const vscode = useGlobalsStore(state => state.vscode);
   const addTree = useTreeStore(state => state.addTree);
-  const nodes = useTreeStore(state => state.nodes.get(treeId)!);
+  const activeTreeId = useTreeStore(state => state.activeTreeId);
+  const setActiveTreeId = useTreeStore(state => state.setActiveTreeId);
+  const nodes = useTreeStore(state => state.nodes.get(activeTreeId)!);
   useFetchAccount();
 
   const generateClickHandler = () => {
@@ -28,7 +29,7 @@ const TreeFAB: React.FC<Props> = props => {
 
   const newTreeHandler = () => {
     const newTreeId = addTree();
-    changeActiveTree(newTreeId);
+    setActiveTreeId(newTreeId);
   };
 
   const itemClasses = "mb-4 mr-4";

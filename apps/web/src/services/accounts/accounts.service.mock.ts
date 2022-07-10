@@ -6,7 +6,7 @@ import { buildResponse } from "testing/builders/services.builders";
 import { buildEdge, buildNode } from "testing/builders/trees.builders";
 import { buildTree } from "testing/builders/trees.builders";
 
-const defaultTree = buildTree();
+const defaultTree = buildTree({ name: "Component" });
 
 const folder = buildNode(
   {
@@ -24,7 +24,8 @@ const component = buildNode(
     pathname: "component.tsx",
     absolutePathname: "./component.tsx",
     treeId: defaultTree.id,
-    alias: "// Component"
+    alias: "// Component",
+    parentId: folder.id
   },
   {
     type: "fileNode"
@@ -36,7 +37,8 @@ const test = buildNode(
     pathname: "component.test.ts",
     absolutePathname: "./component.test.ts",
     treeId: defaultTree.id,
-    alias: "// Component test"
+    alias: "// Component test",
+    parentId: folder.id
   },
   {
     type: "fileNode"
@@ -48,7 +50,8 @@ const types = buildNode(
     pathname: "component.types.ts",
     absolutePathname: "./component.types.ts",
     treeId: defaultTree.id,
-    alias: "// Component types"
+    alias: "// Component types",
+    parentId: folder.id
   },
   {
     type: "fileNode"
@@ -60,7 +63,8 @@ const styles = buildNode(
     pathname: "component.css",
     absolutePathname: "./component.css",
     treeId: defaultTree.id,
-    alias: "/* Component styles */"
+    alias: "/* Component styles */",
+    parentId: folder.id
   },
   {
     type: "fileNode"
