@@ -1,7 +1,6 @@
 import { Account } from "@architect/types";
 import faker from "faker";
 
-import { genEnhancedTemplates } from "./enhancedTemplates.builders";
 import { genEnhancers } from "./enhancers.builders";
 import { genTemplates } from "./templates.builders";
 import { genTrees } from "./trees.builders";
@@ -14,7 +13,6 @@ export const buildAccount = (overrides: Partial<Account> = {}): Account => {
     email: faker.internet.email(),
     templates: genTemplates(),
     enhancers: genEnhancers(),
-    enhancedTemplates: genEnhancedTemplates(),
     trees: genTrees(),
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),

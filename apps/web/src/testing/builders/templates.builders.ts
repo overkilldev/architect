@@ -9,6 +9,7 @@ export const buildTemplate = (overrides: Partial<Template> = {}): Template => {
     createdAt: faker.date.past().toISOString(),
     updatedAt: faker.date.past().toISOString(),
     deletedAt: null,
+    enhancersIds: [],
     ...overrides
   };
 };

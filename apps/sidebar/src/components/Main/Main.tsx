@@ -7,7 +7,7 @@ import useGlobalsStore from "contexts/globals/globals.context";
 const Main = () => {
   const vscode = useGlobalsStore(state => state.vscode);
   const account = useGlobalsStore(state => state.account);
-  const { trees, templates, enhancedTemplates, enhancers } = account ?? {};
+  const { trees, templates, enhancers } = account ?? {};
 
   // Init web view
   useEffect(() => {
@@ -51,18 +51,6 @@ const Main = () => {
             onClick={() => clickOptionHandler(enhancer.id, "enhancers")}
           >
             {enhancer.name}
-          </p>
-        ))}
-      </Tab>
-      <Tab title="EnhancedTemplates">
-        {enhancedTemplates?.map(enhancedTemplate => (
-          <p
-            className={itemClasses}
-            onClick={() =>
-              clickOptionHandler(enhancedTemplate.id, "enhancedTemplates")
-            }
-          >
-            {enhancedTemplate.name}
           </p>
         ))}
       </Tab>

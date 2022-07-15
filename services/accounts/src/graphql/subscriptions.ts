@@ -25,22 +25,10 @@ export const onCreateAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -84,22 +72,10 @@ export const onUpdateAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -143,22 +119,10 @@ export const onDeleteAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -196,9 +160,6 @@ export const onCreateEnhancer = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -226,9 +187,6 @@ export const onUpdateEnhancer = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
@@ -260,9 +218,6 @@ export const onDeleteEnhancer = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -292,15 +247,13 @@ export const onCreateTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
@@ -324,15 +277,13 @@ export const onUpdateTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
@@ -356,120 +307,16 @@ export const onDeleteTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
-    }
-  }
-`;
-export const onCreateEnhancedTemplate = /* GraphQL */ `
-  subscription OnCreateEnhancedTemplate {
-    onCreateEnhancedTemplate {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
-    }
-  }
-`;
-export const onUpdateEnhancedTemplate = /* GraphQL */ `
-  subscription OnUpdateEnhancedTemplate {
-    onUpdateEnhancedTemplate {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
-    }
-  }
-`;
-export const onDeleteEnhancedTemplate = /* GraphQL */ `
-  subscription OnDeleteEnhancedTemplate {
-    onDeleteEnhancedTemplate {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
     }
   }
 `;
@@ -489,9 +336,6 @@ export const onCreateTree = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
@@ -524,9 +368,6 @@ export const onUpdateTree = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -555,9 +396,6 @@ export const onDeleteTree = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {

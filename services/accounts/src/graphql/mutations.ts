@@ -28,22 +28,10 @@ export const createAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -90,22 +78,10 @@ export const updateAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -152,22 +128,10 @@ export const deleteAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -208,9 +172,6 @@ export const createEnhancer = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -241,9 +202,6 @@ export const updateEnhancer = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
@@ -278,9 +236,6 @@ export const deleteEnhancer = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -313,15 +268,13 @@ export const createTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
@@ -348,15 +301,13 @@ export const updateTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
@@ -383,129 +334,16 @@ export const deleteTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
-    }
-  }
-`;
-export const createEnhancedTemplate = /* GraphQL */ `
-  mutation CreateEnhancedTemplate(
-    $input: CreateEnhancedTemplateInput!
-    $condition: ModelEnhancedTemplateConditionInput
-  ) {
-    createEnhancedTemplate(input: $input, condition: $condition) {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
-    }
-  }
-`;
-export const updateEnhancedTemplate = /* GraphQL */ `
-  mutation UpdateEnhancedTemplate(
-    $input: UpdateEnhancedTemplateInput!
-    $condition: ModelEnhancedTemplateConditionInput
-  ) {
-    updateEnhancedTemplate(input: $input, condition: $condition) {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
-    }
-  }
-`;
-export const deleteEnhancedTemplate = /* GraphQL */ `
-  mutation DeleteEnhancedTemplate(
-    $input: DeleteEnhancedTemplateInput!
-    $condition: ModelEnhancedTemplateConditionInput
-  ) {
-    deleteEnhancedTemplate(input: $input, condition: $condition) {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
     }
   }
 `;
@@ -528,9 +366,6 @@ export const createTree = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
@@ -566,9 +401,6 @@ export const updateTree = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -600,9 +432,6 @@ export const deleteTree = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
