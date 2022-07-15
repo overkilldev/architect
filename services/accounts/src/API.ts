@@ -66,7 +66,6 @@ export type Account = {
   email: string,
   enhancers?: ModelEnhancerConnection | null,
   templates?: ModelTemplateConnection | null,
-  enhancedTemplates?: ModelEnhancedTemplateConnection | null,
   trees?: ModelTreeConnection | null,
   createdAt: string,
   updatedAt: string,
@@ -101,28 +100,10 @@ export type Template = {
   name: string,
   content: string,
   account?: Account | null,
+  enhancersIds: Array< string | null >,
   createdAt: string,
   updatedAt: string,
   accountTemplatesId: string,
-};
-
-export type ModelEnhancedTemplateConnection = {
-  __typename: "ModelEnhancedTemplateConnection",
-  items:  Array<EnhancedTemplate | null >,
-  nextToken?: string | null,
-};
-
-export type EnhancedTemplate = {
-  __typename: "EnhancedTemplate",
-  id: string,
-  name: string,
-  content: string,
-  enhancersIds: Array< string | null >,
-  templateId: string,
-  account?: Account | null,
-  createdAt: string,
-  updatedAt: string,
-  accountEnhancedTemplatesId: string,
 };
 
 export type ModelTreeConnection = {
@@ -201,12 +182,14 @@ export type CreateTemplateInput = {
   id?: string | null,
   name: string,
   content: string,
+  enhancersIds: Array< string | null >,
   accountTemplatesId: string,
 };
 
 export type ModelTemplateConditionInput = {
   name?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  enhancersIds?: ModelIDInput | null,
   and?: Array< ModelTemplateConditionInput | null > | null,
   or?: Array< ModelTemplateConditionInput | null > | null,
   not?: ModelTemplateConditionInput | null,
@@ -217,43 +200,11 @@ export type UpdateTemplateInput = {
   id: string,
   name?: string | null,
   content?: string | null,
+  enhancersIds?: Array< string | null > | null,
   accountTemplatesId?: string | null,
 };
 
 export type DeleteTemplateInput = {
-  id: string,
-};
-
-export type CreateEnhancedTemplateInput = {
-  id?: string | null,
-  name: string,
-  content: string,
-  enhancersIds: Array< string | null >,
-  templateId: string,
-  accountEnhancedTemplatesId: string,
-};
-
-export type ModelEnhancedTemplateConditionInput = {
-  name?: ModelStringInput | null,
-  content?: ModelStringInput | null,
-  enhancersIds?: ModelIDInput | null,
-  templateId?: ModelIDInput | null,
-  and?: Array< ModelEnhancedTemplateConditionInput | null > | null,
-  or?: Array< ModelEnhancedTemplateConditionInput | null > | null,
-  not?: ModelEnhancedTemplateConditionInput | null,
-  accountEnhancedTemplatesId?: ModelIDInput | null,
-};
-
-export type UpdateEnhancedTemplateInput = {
-  id: string,
-  name?: string | null,
-  content?: string | null,
-  enhancersIds?: Array< string | null > | null,
-  templateId?: string | null,
-  accountEnhancedTemplatesId?: string | null,
-};
-
-export type DeleteEnhancedTemplateInput = {
   id: string,
 };
 
@@ -317,22 +268,11 @@ export type ModelTemplateFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   content?: ModelStringInput | null,
+  enhancersIds?: ModelIDInput | null,
   and?: Array< ModelTemplateFilterInput | null > | null,
   or?: Array< ModelTemplateFilterInput | null > | null,
   not?: ModelTemplateFilterInput | null,
   accountTemplatesId?: ModelIDInput | null,
-};
-
-export type ModelEnhancedTemplateFilterInput = {
-  id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  content?: ModelStringInput | null,
-  enhancersIds?: ModelIDInput | null,
-  templateId?: ModelIDInput | null,
-  and?: Array< ModelEnhancedTemplateFilterInput | null > | null,
-  or?: Array< ModelEnhancedTemplateFilterInput | null > | null,
-  not?: ModelEnhancedTemplateFilterInput | null,
-  accountEnhancedTemplatesId?: ModelIDInput | null,
 };
 
 export type ModelTreeFilterInput = {
@@ -378,24 +318,10 @@ export type CreateAccountMutation = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -450,24 +376,10 @@ export type UpdateAccountMutation = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -522,24 +434,10 @@ export type DeleteAccountMutation = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -587,10 +485,6 @@ export type CreateEnhancerMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -627,10 +521,6 @@ export type UpdateEnhancerMutation = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -671,10 +561,6 @@ export type DeleteEnhancerMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -713,10 +599,6 @@ export type CreateTemplateMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -724,6 +606,7 @@ export type CreateTemplateMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
@@ -755,10 +638,6 @@ export type UpdateTemplateMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -766,6 +645,7 @@ export type UpdateTemplateMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
@@ -797,10 +677,6 @@ export type DeleteTemplateMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -808,141 +684,10 @@ export type DeleteTemplateMutation = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
-  } | null,
-};
-
-export type CreateEnhancedTemplateMutationVariables = {
-  input: CreateEnhancedTemplateInput,
-  condition?: ModelEnhancedTemplateConditionInput | null,
-};
-
-export type CreateEnhancedTemplateMutation = {
-  createEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
-  } | null,
-};
-
-export type UpdateEnhancedTemplateMutationVariables = {
-  input: UpdateEnhancedTemplateInput,
-  condition?: ModelEnhancedTemplateConditionInput | null,
-};
-
-export type UpdateEnhancedTemplateMutation = {
-  updateEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
-  } | null,
-};
-
-export type DeleteEnhancedTemplateMutationVariables = {
-  input: DeleteEnhancedTemplateInput,
-  condition?: ModelEnhancedTemplateConditionInput | null,
-};
-
-export type DeleteEnhancedTemplateMutation = {
-  deleteEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
   } | null,
 };
 
@@ -970,10 +715,6 @@ export type CreateTreeMutation = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -1015,10 +756,6 @@ export type UpdateTreeMutation = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1056,10 +793,6 @@ export type DeleteTreeMutation = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -1106,24 +839,10 @@ export type GetAccountQuery = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1169,10 +888,6 @@ export type ListAccountsQuery = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1206,10 +921,6 @@ export type GetEnhancerQuery = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -1280,10 +991,6 @@ export type GetTemplateQuery = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1291,6 +998,7 @@ export type GetTemplateQuery = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
@@ -1320,85 +1028,10 @@ export type ListTemplatesQuery = {
         createdAt: string,
         updatedAt: string,
       } | null,
+      enhancersIds: Array< string | null >,
       createdAt: string,
       updatedAt: string,
       accountTemplatesId: string,
-    } | null >,
-    nextToken?: string | null,
-  } | null,
-};
-
-export type GetEnhancedTemplateQueryVariables = {
-  id: string,
-};
-
-export type GetEnhancedTemplateQuery = {
-  getEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
-  } | null,
-};
-
-export type ListEnhancedTemplatesQueryVariables = {
-  filter?: ModelEnhancedTemplateFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListEnhancedTemplatesQuery = {
-  listEnhancedTemplates?:  {
-    __typename: "ModelEnhancedTemplateConnection",
-    items:  Array< {
-      __typename: "EnhancedTemplate",
-      id: string,
-      name: string,
-      content: string,
-      enhancersIds: Array< string | null >,
-      templateId: string,
-      account?:  {
-        __typename: "Account",
-        id: string,
-        name: string,
-        lastName: string,
-        email: string,
-        createdAt: string,
-        updatedAt: string,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-      accountEnhancedTemplatesId: string,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1427,10 +1060,6 @@ export type GetTreeQuery = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -1505,24 +1134,10 @@ export type OnCreateAccountSubscription = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1572,24 +1187,10 @@ export type OnUpdateAccountSubscription = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1639,24 +1240,10 @@ export type OnDeleteAccountSubscription = {
         id: string,
         name: string,
         content: string,
+        enhancersIds: Array< string | null >,
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
-      } | null >,
-      nextToken?: string | null,
-    } | null,
-    enhancedTemplates?:  {
-      __typename: "ModelEnhancedTemplateConnection",
-      items:  Array< {
-        __typename: "EnhancedTemplate",
-        id: string,
-        name: string,
-        content: string,
-        enhancersIds: Array< string | null >,
-        templateId: string,
-        createdAt: string,
-        updatedAt: string,
-        accountEnhancedTemplatesId: string,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1699,10 +1286,6 @@ export type OnCreateEnhancerSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1734,10 +1317,6 @@ export type OnUpdateEnhancerSubscription = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -1773,10 +1352,6 @@ export type OnDeleteEnhancerSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1810,10 +1385,6 @@ export type OnCreateTemplateSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1821,6 +1392,7 @@ export type OnCreateTemplateSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
@@ -1847,10 +1419,6 @@ export type OnUpdateTemplateSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1858,6 +1426,7 @@ export type OnUpdateTemplateSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
@@ -1884,10 +1453,6 @@ export type OnDeleteTemplateSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -1895,126 +1460,10 @@ export type OnDeleteTemplateSubscription = {
       createdAt: string,
       updatedAt: string,
     } | null,
+    enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
-  } | null,
-};
-
-export type OnCreateEnhancedTemplateSubscription = {
-  onCreateEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
-  } | null,
-};
-
-export type OnUpdateEnhancedTemplateSubscription = {
-  onUpdateEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
-  } | null,
-};
-
-export type OnDeleteEnhancedTemplateSubscription = {
-  onDeleteEnhancedTemplate?:  {
-    __typename: "EnhancedTemplate",
-    id: string,
-    name: string,
-    content: string,
-    enhancersIds: Array< string | null >,
-    templateId: string,
-    account?:  {
-      __typename: "Account",
-      id: string,
-      name: string,
-      lastName: string,
-      email: string,
-      enhancers?:  {
-        __typename: "ModelEnhancerConnection",
-        nextToken?: string | null,
-      } | null,
-      templates?:  {
-        __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      trees?:  {
-        __typename: "ModelTreeConnection",
-        nextToken?: string | null,
-      } | null,
-      createdAt: string,
-      updatedAt: string,
-    } | null,
-    createdAt: string,
-    updatedAt: string,
-    accountEnhancedTemplatesId: string,
   } | null,
 };
 
@@ -2037,10 +1486,6 @@ export type OnCreateTreeSubscription = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
@@ -2077,10 +1522,6 @@ export type OnUpdateTreeSubscription = {
         __typename: "ModelTemplateConnection",
         nextToken?: string | null,
       } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
-        nextToken?: string | null,
-      } | null,
       trees?:  {
         __typename: "ModelTreeConnection",
         nextToken?: string | null,
@@ -2113,10 +1554,6 @@ export type OnDeleteTreeSubscription = {
       } | null,
       templates?:  {
         __typename: "ModelTemplateConnection",
-        nextToken?: string | null,
-      } | null,
-      enhancedTemplates?:  {
-        __typename: "ModelEnhancedTemplateConnection",
         nextToken?: string | null,
       } | null,
       trees?:  {
