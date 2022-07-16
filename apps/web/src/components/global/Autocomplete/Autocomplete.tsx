@@ -110,7 +110,10 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
           focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-violet-500
           "
           onChange={event => setQuery(event.target.value)}
-          displayValue={(option: Option) => option?.label}
+          displayValue={(option: Option) => {
+            console.log(option);
+            return option?.label;
+          }}
           {...inputProps}
           ref={ref}
         />

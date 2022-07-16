@@ -13,25 +13,26 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
     const { data: account } = useFetchAccount();
     const { setValue, watch } = useFormContext();
     const { templates = [], trees = [] } = account ?? {};
-    const starterId = watch(props.name);
+    const starterId: string | undefined = watch(props.name);
 
     const optionChangeHandler = useCallback(
       (option: ContentOption) => {
         if (!templates) return;
-
-        if (option.type === "templates") {
-          const template = templates.find(
-            item => item.id === option.value
-          )?.content;
-          setValue("content", template);
-          setValue("contentRaw", template);
+        switch (option.type) {
+          case "templates": {
+            const template = templates.find(
+              item => item.id === option.value
+            )?.content;
+            setValue("content", template);
+            setValue("contentRaw", template);
+            break;
+          }
+          case "trees":
+            // TODO: maybe nothing and later create a node type container
+            break;
+          default:
+            throw new Error(`type ${option.type} is not handled`);
         }
-
-        if (option.type === "trees") {
-          // TODO: maybe nothing and later create a node type container
-        }
-
-        throw new Error(`type ${option.type} is not handled`);
       },
       [setValue, templates]
     );
