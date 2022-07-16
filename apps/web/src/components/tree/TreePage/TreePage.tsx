@@ -18,7 +18,10 @@ const TreePage = () => {
   const { id: selectedNodeId } = selectedNode ?? {};
 
   const dimensionsClasses = "flex flex-col flex-1 w-full";
-  const dimensionsStyles = { height: `calc(100% - ${TABS_HEIGHT}px)` };
+  const dimensionsStyles = {
+    height: `calc(100% - ${TABS_HEIGHT}px)`,
+    width: "calc(100% - var(--sidebar-width))"
+  };
 
   return (
     <div className={dimensionsClasses}>
