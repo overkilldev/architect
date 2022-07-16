@@ -25,22 +25,10 @@ export const getAccount = /* GraphQL */ `
           id
           name
           content
+          enhancersIds
           createdAt
           updatedAt
           accountTemplatesId
-        }
-        nextToken
-      }
-      enhancedTemplates {
-        items {
-          id
-          name
-          content
-          enhancersIds
-          templateId
-          createdAt
-          updatedAt
-          accountEnhancedTemplatesId
         }
         nextToken
       }
@@ -79,9 +67,6 @@ export const listAccounts = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
@@ -107,9 +92,6 @@ export const getEnhancer = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {
@@ -168,15 +150,13 @@ export const getTemplate = /* GraphQL */ `
         templates {
           nextToken
         }
-        enhancedTemplates {
-          nextToken
-        }
         trees {
           nextToken
         }
         createdAt
         updatedAt
       }
+      enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
@@ -202,76 +182,10 @@ export const listTemplates = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        enhancersIds
         createdAt
         updatedAt
         accountTemplatesId
-      }
-      nextToken
-    }
-  }
-`;
-export const getEnhancedTemplate = /* GraphQL */ `
-  query GetEnhancedTemplate($id: ID!) {
-    getEnhancedTemplate(id: $id) {
-      id
-      name
-      content
-      enhancersIds
-      templateId
-      account {
-        id
-        name
-        lastName
-        email
-        enhancers {
-          nextToken
-        }
-        templates {
-          nextToken
-        }
-        enhancedTemplates {
-          nextToken
-        }
-        trees {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      accountEnhancedTemplatesId
-    }
-  }
-`;
-export const listEnhancedTemplates = /* GraphQL */ `
-  query ListEnhancedTemplates(
-    $filter: ModelEnhancedTemplateFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listEnhancedTemplates(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        name
-        content
-        enhancersIds
-        templateId
-        account {
-          id
-          name
-          lastName
-          email
-          createdAt
-          updatedAt
-        }
-        createdAt
-        updatedAt
-        accountEnhancedTemplatesId
       }
       nextToken
     }
@@ -293,9 +207,6 @@ export const getTree = /* GraphQL */ `
           nextToken
         }
         templates {
-          nextToken
-        }
-        enhancedTemplates {
           nextToken
         }
         trees {

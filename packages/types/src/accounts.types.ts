@@ -1,4 +1,3 @@
-import { EnhancedTemplate } from "./enhancedTemplates.types";
 import { Enhancer } from "./enhancers.types";
 import { Template } from "./templates.types";
 import { Tree } from "./trees.types";
@@ -10,7 +9,6 @@ export interface Account {
   email: string;
   enhancers: Enhancer[];
   templates: Template[];
-  enhancedTemplates: EnhancedTemplate[];
   trees: Tree[];
   createdAt: string;
   updatedAt: string;
