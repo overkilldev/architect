@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    --sidebar-width: 64px;
   }
 
   body {
