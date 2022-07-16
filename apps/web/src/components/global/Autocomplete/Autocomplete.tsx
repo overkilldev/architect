@@ -1,12 +1,14 @@
 import { Combobox } from "@headlessui/react";
 import React, { useState, Fragment, forwardRef } from "react";
+import { useFormContext } from "react-hook-form";
 
 import { AutocompleteProps as Props, OptionGroup } from "./Autocomplete.types";
 import { Option } from "./Autocomplete.types";
 
 const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
   const { label, options, lastOption: LastOption, inputProps, ...rest } = props;
-  const { optionsProps, optionGroups, ...rest2 } = rest;
+  const { optionsProps, optionGroups, name, onOptionChange, ...rest2 } = rest;
+  const { setValue } = useFormContext();
   const [selectedOption, setSelectedOption] = useState<Option>();
   const [query, setQuery] = useState("");
   const { height = 200 } = optionsProps ?? {};
@@ -18,6 +20,16 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
     if ("value" in item) return item;
     return item.options;
   });
+
+  const changeHandler = (option: Option) => {
+    setValue(name, option.value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true
+    });
+    onOptionChange?.(option);
+    setSelectedOption(option);
+  };
 
   const getFilteredOptions = () => {
     if (query === "") return chosenOptions;
@@ -86,11 +98,7 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
   };
 
   return (
-    <Combobox
-      {...rest2}
-      value={rest2.value ?? selectedOption}
-      onChange={rest2.onChange ?? setSelectedOption}
-    >
+    <Combobox {...rest2} value={selectedOption} onChange={changeHandler}>
       <div className="pb-4 relative">
         <Combobox.Label className="inline-flex text-white pb-1">
           {label}
@@ -98,8 +106,8 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
         <Combobox.Input
           className="
           w-full p-2 rounded-md bg-black text-white
-          focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border focus:border-violet-500
-          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:border focus-visible:border-violet-500
+          focus:ring-2 focus:ring-violet-500/50 focus:outline outline-offset-[-1px] focus:outline-1 focus:outline-violet-500
+          focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-violet-500
           "
           onChange={event => setQuery(event.target.value)}
           displayValue={(option: Option) => option?.label}

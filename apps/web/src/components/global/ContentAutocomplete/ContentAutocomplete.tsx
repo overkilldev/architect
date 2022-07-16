@@ -1,7 +1,8 @@
-import React, { forwardRef, useCallback, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { forwardRef, useCallback } from "react";
+import { useFormContext } from "react-hook-form";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
+import Button from "../Button/Button";
 import Link from "../Link/Link";
 import { ContentAutocompleteProps as Props } from "./ContentAutocomplete.types";
 import { ContentOption } from "./ContentAutocomplete.types";
@@ -9,27 +10,37 @@ import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
   (props, ref) => {
-    const [selectedOption, setSelectedOption] = useState<ContentOption>();
     const { data: account } = useFetchAccount();
-    const navigate = useNavigate();
+    const { setValue, watch } = useFormContext();
+    const { templates = [], trees = [] } = account ?? {};
+    const starterId = watch(props.name);
 
-    const navigateHandler = useCallback(
-      (type: ContentOption["type"], id: string) => {
-        navigate(`/${type}/${id}`, { state: { id, type } });
+    const optionChangeHandler = useCallback(
+      (option: ContentOption) => {
+        if (!templates) return;
+
+        if (option.type === "templates") {
+          const template = templates.find(
+            item => item.id === option.value
+          )?.content;
+          setValue("content", template);
+          setValue("contentRaw", template);
+        }
+
+        if (option.type === "trees") {
+          // TODO: maybe nothing and later create a node type container
+        }
+
+        throw new Error(`type ${option.type} is not handled`);
       },
-      [navigate]
+      [setValue, templates]
     );
 
-    useEffect(() => {
-      const { type, value } = selectedOption ?? {};
-      if (!type || typeof value !== "string") return;
-      if (type === "trees") return;
-      navigateHandler(type, value);
-    }, [navigateHandler, selectedOption]);
+    const editContentHandler = () => {
+      // TODO: navigate to editor
+    };
 
     if (!account) return null;
-
-    const { templates, enhancedTemplates, trees } = account ?? {};
 
     const optionsGroups = [
       {
@@ -38,14 +49,6 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
           label: template.name,
           value: template.id,
           type: "templates"
-        }))
-      },
-      {
-        label: "Enhanced templates",
-        options: enhancedTemplates.map(template => ({
-          label: template.name,
-          value: template.id,
-          type: "enhancedTemplates"
         }))
       },
       {
@@ -69,20 +72,29 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
     };
 
     return (
-      <Autocomplete
-        optionGroups={optionsGroups}
-        lastOption={lastOption}
-        label="Content"
-        optionsProps={{ height: 500 }}
-        onChange={setSelectedOption}
-        value={selectedOption}
-        {...props}
-        inputProps={{
-          placeholder: "Choose or create a template",
-          ...props.inputProps
-        }}
-        ref={ref}
-      />
+      <div className="relative">
+        <Autocomplete
+          optionGroups={optionsGroups}
+          lastOption={lastOption}
+          label="Template"
+          optionsProps={{ height: 500 }}
+          onOptionChange={optionChangeHandler}
+          {...props}
+          inputProps={{
+            placeholder: "Choose or create a template",
+            ...props.inputProps
+          }}
+          ref={ref}
+        />
+        {starterId ? (
+          <Button
+            onClick={editContentHandler}
+            className="absolute bottom-0 right-0 mb-4 rounded-l-sm"
+          >
+            Edit
+          </Button>
+        ) : null}
+      </div>
     );
   }
 );

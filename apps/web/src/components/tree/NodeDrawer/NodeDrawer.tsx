@@ -1,7 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import React from "react";
 import { memo } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, FormProvider } from "react-hook-form";
 
 import { NodeDrawerProps as Props } from "./NodeDrawer.types";
 import { NodeFormValues } from "./NodeDrawer.types";
@@ -65,34 +65,36 @@ const NodeDrawer: React.FC<Props> = props => {
       isOpen={isOpen}
       {...props}
     >
-      <h2 className="font-bold text-xl uppercase py-3">Create your account</h2>
-      <form onSubmit={handleSubmit(submitHandler)}>
-        <Input
-          label="Pathname"
-          placeholder="Node pathname"
-          autoFocus
-          errorMessage={errors.pathname?.message}
-          {...register("pathname")}
-        />
-        <Input
-          label="Alias"
-          placeholder="Node alias name"
-          errorMessage={errors.alias?.message}
-          {...register("alias")}
-        />
-        <ContentAutocomplete />
-        <Textarea
-          label="Description"
-          placeholder="Describe what makes this node special"
-          errorMessage={errors.alias?.message}
-          {...register("description")}
-        />
-        <p className={itemClasses}>ID: {id}</p>
-        {absolutePathname ? (
-          <p className={itemClasses}>Absolute pathname: {absolutePathname}</p>
-        ) : null}
-        <Button type="submit">Save</Button>
-      </form>
+      <h2 className="font-bold text-xl uppercase py-3">Create Node</h2>
+      <FormProvider {...formMethods}>
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <Input
+            label="Pathname"
+            placeholder="Node pathname"
+            autoFocus
+            errorMessage={errors.pathname?.message}
+            {...register("pathname")}
+          />
+          <ContentAutocomplete {...register("starterId")} />
+          <Input
+            label="Alias"
+            placeholder="Node alias name"
+            errorMessage={errors.alias?.message}
+            {...register("alias")}
+          />
+          <Textarea
+            label="Description"
+            placeholder="Describe what makes this node special"
+            errorMessage={errors.alias?.message}
+            {...register("description")}
+          />
+          <p className={itemClasses}>ID: {id}</p>
+          {absolutePathname ? (
+            <p className={itemClasses}>Absolute pathname: {absolutePathname}</p>
+          ) : null}
+          <Button type="submit">Save</Button>
+        </form>
+      </FormProvider>
     </Drawer>
   );
 };

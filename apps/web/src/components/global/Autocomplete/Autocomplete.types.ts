@@ -9,12 +9,11 @@ export interface AutocompleteProps {
   lastOption?: Option;
   inputProps?: InputHTMLAttributes<HTMLInputElement>;
   disabled?: boolean | undefined;
-  name?: string | undefined;
+  name: string;
   nullable?: boolean | undefined;
   multiple?: boolean | undefined;
   optionsProps?: OptionsProps;
-  value?: Option;
-  onChange?: (value: Option) => void;
+  onOptionChange?: (option: Option) => void;
 }
 
 export interface Option {

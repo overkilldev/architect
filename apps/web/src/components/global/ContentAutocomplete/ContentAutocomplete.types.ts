@@ -7,5 +7,5 @@ import { Option } from "../Autocomplete/Autocomplete.types";
 export interface ContentAutocompleteProps extends AutocompleteProps {}
 
 export interface ContentOption extends Option {
-  type?: "templates" | "enhancedTemplates" | "trees";
+  type?: "templates" | "trees";
 }

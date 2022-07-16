@@ -20,8 +20,8 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
         {...rest}
         className="
         w-full p-2 rounded-md bg-black text-white
-        focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border focus:border-violet-500
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:border focus-visible:border-violet-500
+        focus:ring-2 focus:ring-violet-500/50 focus:outline outline-offset-[-1px] focus:outline-1 focus:outline-violet-500
+        focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-violet-500
         "
       />
       {errorMessage ? (

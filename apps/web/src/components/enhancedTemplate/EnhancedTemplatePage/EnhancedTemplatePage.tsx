@@ -16,10 +16,6 @@ const EnhancedTemplatePage: React.FC<Props> = props => {
     if (state.type === "templates") {
       return account.templates.find(item => item.id === state.id)?.content;
     }
-    if (state.type === "enhancedTemplates") {
-      return account.enhancedTemplates.find(item => item.id === state.id)
-        ?.content;
-    }
     throw new Error(`type ${state.type} is not handled`);
   }, [state, account]);
 

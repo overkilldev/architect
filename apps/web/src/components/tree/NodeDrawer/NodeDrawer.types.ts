@@ -1,4 +1,5 @@
 // Interfaces and types from component NodeDrawer
+import { Template, Tree } from "@architect/types";
 
 import { DrawerProps } from "components/global/Drawer/Drawer.types";
 
@@ -12,4 +13,7 @@ export interface NodeFormValues {
   pathname: string;
   alias: string;
   description: string;
+  starterId: Template["id"] | Tree["id"];
+  contentRaw: string;
+  content: string;
 }
