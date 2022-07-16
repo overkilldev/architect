@@ -16,10 +16,9 @@ import { CodeEditorProps as Props } from "./CodeEditor.types";
 //     const html = Prism.highlight(code, Prism.languages.haml, 'haml');
 //   `;
 
-const initialCode = "";
-
 const CodeEditor: React.FC<Props> = props => {
-  const [code, setCode] = useState(initialCode);
+  const { initialState } = props;
+  const [code, setCode] = useState(initialState ?? "");
 
   const html = useMemo(
     () => Prism.highlight(code, Prism.languages.javascript, "javascript"),

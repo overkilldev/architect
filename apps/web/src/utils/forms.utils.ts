@@ -29,6 +29,9 @@ export const nodeFormSchema = yup
   .object()
   .shape<types.FormShape<NodeFormValues>>({
     pathname: isPathname({ required: true }),
-    alias: isString(),
-    description: isString({ max: 500 })
+    alias: isString({ max: 20 }),
+    description: isString({ max: 500 }),
+    contentRaw: isString({ max: 999999 }),
+    content: isString({ max: 999999 }),
+    starterId: isString()
   });

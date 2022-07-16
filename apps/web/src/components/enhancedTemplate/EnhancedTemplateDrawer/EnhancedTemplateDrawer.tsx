@@ -37,13 +37,15 @@ const EnhancedTemplateDrawer: React.FC<Props> = props => {
         />
         <Autocomplete
           label="Template"
-          options={["Prism"]}
+          name="template"
+          options={[]}
           inputProps={{
             placeholder: "Choose a template"
           }}
         />
         <Autocomplete
           label="Enhancers"
+          name="enhancers"
           options={[]}
           inputProps={{
             placeholder: "Choose enhancers"
