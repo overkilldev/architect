@@ -1,5 +1,5 @@
 import { Combobox } from "@headlessui/react";
-import React, { useState, Fragment, forwardRef } from "react";
+import React, { useState, Fragment, forwardRef, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { AutocompleteProps as Props, OptionGroup } from "./Autocomplete.types";
@@ -8,8 +8,8 @@ import { Option } from "./Autocomplete.types";
 const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
   const { label, options, lastOption: LastOption, inputProps, ...rest } = props;
   const { optionsProps, optionGroups, name, onOptionChange, ...rest2 } = rest;
-  const { setValue } = useFormContext();
-  const [selectedOption, setSelectedOption] = useState<Option>();
+  const { setValue, getValues } = useFormContext();
+  const initialValue = getValues()[name] as string | undefined;
   const [query, setQuery] = useState("");
   const { height = 200 } = optionsProps ?? {};
   const optionClasses =
@@ -20,6 +20,9 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
     if ("value" in item) return item;
     return item.options;
   });
+  const [selectedOption, setSelectedOption] = useState<Option | undefined>(() =>
+    flattenedOptions.find(item => item.value === initialValue)
+  );
 
   const changeHandler = (option: Option) => {
     setValue(name, option.value, {
@@ -27,7 +30,6 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
       shouldDirty: true,
       shouldTouch: true
     });
-    onOptionChange?.(option);
     setSelectedOption(option);
   };
 
@@ -51,6 +53,11 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
       ].filter(group => group.options.length);
     }, [] as OptionGroup[]);
   };
+
+  useEffect(() => {
+    if (!selectedOption) return;
+    onOptionChange?.(selectedOption);
+  }, [onOptionChange, selectedOption]);
 
   const renderOption = (option: Option, key: number) => {
     const { item, label } = option;
@@ -89,10 +96,7 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
 
   const renderOptions = () => {
     return getFilteredOptions().map((option, index) => {
-      if ("value" in option) {
-        console.log(option);
-        return renderOption(option, index);
-      }
+      if ("value" in option) return renderOption(option, index);
       return renderOptionGroup(option, index);
     });
   };
@@ -108,12 +112,10 @@ const Autocomplete = forwardRef<HTMLInputElement, Props>((props, ref) => {
           w-full p-2 rounded-md bg-black text-white
           focus:ring-2 focus:ring-violet-500/50 focus:outline outline-offset-[-1px] focus:outline-1 focus:outline-violet-500
           focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-violet-500
+          disabled:ring-0 disabled:bg-gray-600 disabled:cursor-not-allowed
           "
           onChange={event => setQuery(event.target.value)}
-          displayValue={(option: Option) => {
-            console.log(option);
-            return option?.label;
-          }}
+          displayValue={(option: Option) => option?.label}
           {...inputProps}
           ref={ref}
         />

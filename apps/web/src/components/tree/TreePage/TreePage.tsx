@@ -1,4 +1,5 @@
 import { ReactFlowProvider } from "react-flow-renderer";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Tree from "../Tree/Tree";
 import TreeFAB from "../TreeFAB/TreeFAB";
@@ -9,6 +10,7 @@ import useTreeStore from "contexts/tree/tree.context";
 const { TABS_HEIGHT } = CONSTANTS.GENERAL;
 
 const TreePage = () => {
+  const { pathname } = useLocation();
   const activeTreeId = useTreeStore(state => state.activeTreeId);
   const setActiveTreeId = useTreeStore(state => state.setActiveTreeId);
   const treesIds = useTreeStore(state => state.treesIds);
@@ -23,23 +25,27 @@ const TreePage = () => {
     width: "calc(100% - var(--sidebar-width))"
   };
 
+  const tabs = (
+    <div className="flex h-[56px]">
+      {treesIds.map((treeId, index) => {
+        return (
+          <p
+            key={treeId}
+            onClick={() => setActiveTreeId(treeId)}
+            className={`p-4 cursor-pointer ${
+              treeId === activeTreeId ? "text-violet-500" : ""
+            }`}
+          >
+            {index + 1}
+          </p>
+        );
+      })}
+    </div>
+  );
+
   return (
     <div className={dimensionsClasses}>
-      <div className="flex h-[56px]">
-        {treesIds.map((treeId, index) => {
-          return (
-            <p
-              key={treeId}
-              onClick={() => setActiveTreeId(treeId)}
-              className={`p-4 cursor-pointer ${
-                treeId === activeTreeId ? "text-violet-500" : ""
-              }`}
-            >
-              {index + 1}
-            </p>
-          );
-        })}
-      </div>
+      {pathname === "/workspace" ? tabs : null}
       <div style={dimensionsStyles} className={dimensionsClasses}>
         {treesIds.map(treeId => {
           return (
@@ -57,6 +63,7 @@ const TreePage = () => {
           );
         })}
       </div>
+      <Outlet />
       <NodeDrawer
         key={`${activeTreeId}|${selectedNodeId}`}
         treeId={activeTreeId}

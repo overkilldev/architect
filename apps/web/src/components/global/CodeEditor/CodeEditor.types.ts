@@ -3,4 +3,5 @@
 // Component Props
 export interface CodeEditorProps {
   initialState?: string;
+  extension?: string;
 }
