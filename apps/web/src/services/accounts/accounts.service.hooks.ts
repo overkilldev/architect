@@ -1,6 +1,7 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
-import { fetchAccount } from "./accounts.service";
+import { fetchAccount, postTemplate } from "./accounts.service";
+import { TemplatePayload } from "./accounts.service.types";
 import useGlobalsStore from "contexts/globals/globals.context";
 
 export const useFetchAccount = () => {
@@ -36,4 +37,19 @@ export const useFetchAccount = () => {
       });
     }
   });
+};
+
+export const usePostTemplate = () => {
+  const queryClient = useQueryClient();
+  // TODO: get user token from auth context
+  const token = "my-github-auth-token";
+
+  return useMutation(
+    (template: TemplatePayload) => postTemplate(token, template),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["account", token]);
+      }
+    }
+  );
 };

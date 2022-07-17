@@ -2032,10 +2032,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.5.tgz#db5a11bf66bdab39569719555b0f76e138d7bd64"
   integrity sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==
 
-"@remix-run/router@0.2.0-pre.3":
-  version "0.2.0-pre.3"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-0.2.0-pre.3.tgz#2864cf275433ec39d2370a1aec28a5957060f47a"
-  integrity sha512-/1vRiMh8j31PBgLgB2lqcwDDEBEwsnucOouZ8GvJTRNHULkPOU3kvQ1ZUpt9IPd1lS5AVC93I9pVLnFhlNA4Mw==
+"@remix-run/router@0.2.0-pre.4":
+  version "0.2.0-pre.4"
+  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-0.2.0-pre.4.tgz#4ff52cde4ee8855cc96b0b4af6ed838c9b78917f"
+  integrity sha512-JWekNjixua6FwkhEFuVVlaDhcpKYx7YKe2x+cCDFPLfojUH6kgEdrVVbkjL6taO80h+8UEGbb/fi9pvbJ4bD9Q==
 
 "@rollup/plugin-commonjs@^22.0.1":
   version "22.0.1"
@@ -2851,6 +2851,11 @@ babel-plugin-polyfill-regenerator@^0.3.0:
   integrity sha512-Y2B06tvgHYt1x0yz17jGkGeeMr5FeKUu+ASJ+N6nB5lQ8Dapfg42i0OVrf8PNGJ3zKL4A23snMi1IRwrqqND7A==
   dependencies:
     "@babel/helper-define-polyfill-provider" "^0.3.1"
+
+babel-plugin-prismjs@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/babel-plugin-prismjs/-/babel-plugin-prismjs-2.1.0.tgz#ade627896106326ad04d6d77fba92877618de571"
+  integrity sha512-ehzSKYfeAz4U78zi/sfwsjDPlq0LvDKxNefcZTJ/iKBu+plsHsLqZhUeGf1+82LAcA35UZGbU6ksEx2Utphc/g==
 
 babel-plugin-transform-react-remove-prop-types@^0.4.24:
   version "0.4.24"
@@ -6044,19 +6049,19 @@ react-remove-scroll@^2.5.4:
     use-callback-ref "^1.3.0"
     use-sidecar "^1.1.2"
 
-react-router-dom@^6.4.0-pre.7:
-  version "6.4.0-pre.8"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.0-pre.8.tgz#1f784fa09719801250070431703dd02c5fdcde6e"
-  integrity sha512-5hxQdiPOG98YOANbJ8IBUKbRgU6k4/TSX4VyO6jRWoG6KY0K2EG5wjEZgZ0tlAN9fXFgnHsro/HKi/r+HxugAg==
+react-router-dom@^6.4.0-pre.9:
+  version "6.4.0-pre.9"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.4.0-pre.9.tgz#29b29b106822c24a3b0b0ac74408f7dfd7a78850"
+  integrity sha512-6zl6BBo3QaAwiJyFyn+8oGE37cvMzcjVMHGqQFbF24+lGkzGzqIAKJRPkof9BBXMM6CigqKrdkf/LasZz1XLXw==
   dependencies:
-    react-router "6.4.0-pre.8"
+    react-router "6.4.0-pre.9"
 
-react-router@6.4.0-pre.8:
-  version "6.4.0-pre.8"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.0-pre.8.tgz#90ce4cc590b453fc26ad2d131f51d908783c9091"
-  integrity sha512-xwt2s9jW5NaakymlSRG0hZoGda6E/Skfgmj/4vlwvRX/kqoO8jU0g+Vi3sHDCatH/V+GjDyTQkdMEDm8qGsBsQ==
+react-router@6.4.0-pre.9:
+  version "6.4.0-pre.9"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.4.0-pre.9.tgz#13063f59221457925b6232cd717da535db73e155"
+  integrity sha512-ijnskI4Kw8Y1UnTOk9rrtxBK4jJOGViyUAkgV3Je4eHICGZ5pDFxggrZbEFoasGCJYCHgYrqjS5cc4g/v26B5Q==
   dependencies:
-    "@remix-run/router" "0.2.0-pre.3"
+    "@remix-run/router" "0.2.0-pre.4"
 
 react-style-singleton@^2.2.1:
   version "2.2.1"
@@ -7089,6 +7094,14 @@ validate-npm-package-license@^3.0.1:
   dependencies:
     spdx-correct "^3.0.0"
     spdx-expression-parse "^3.0.0"
+
+vite-plugin-prismjs@^0.0.8:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/vite-plugin-prismjs/-/vite-plugin-prismjs-0.0.8.tgz#124cd857333d3160b49b23480ade3c3ed2c4d53f"
+  integrity sha512-mBPPMS/hwVUArdqCtp/oajZT7iq1qwJDDCciNZ3R5+Q5tQUuUHXtDKuZHYnklPLElNbENf2FyuOtC4FrgxQRAA==
+  dependencies:
+    "@babel/core" "^7.15.5"
+    babel-plugin-prismjs "^2.1.0"
 
 vite-plugin-svgr@^2.1.0:
   version "2.2.0"

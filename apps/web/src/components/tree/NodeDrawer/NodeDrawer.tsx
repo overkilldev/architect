@@ -24,13 +24,14 @@ const NodeDrawer: React.FC<Props> = props => {
   const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const { id, data } = selectedNode ?? {};
   const { absolutePathname, pathname, alias, description } = data ?? {};
+  const { starterId } = data ?? {};
+  const defaultValues = { pathname, alias, description, starterId };
   const formMethods = useForm<NodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(nodeFormSchema),
-    defaultValues:
-      formMode === "EDIT" ? { pathname, alias, description } : undefined
+    defaultValues: formMode === "EDIT" ? defaultValues : undefined
   });
-  const { handleSubmit, register, formState, reset } = formMethods;
+  const { handleSubmit, register, formState, reset, getValues } = formMethods;
   const { errors } = formState;
 
   const closeHandler = () => {
@@ -75,7 +76,10 @@ const NodeDrawer: React.FC<Props> = props => {
             errorMessage={errors.pathname?.message}
             {...register("pathname")}
           />
-          <ContentAutocomplete {...register("starterId")} />
+          <ContentAutocomplete
+            {...register("starterId")}
+            disabled={formMode === "EDIT" && !!getValues()["starterId"]}
+          />
           <Input
             label="Alias"
             placeholder="Node alias name"

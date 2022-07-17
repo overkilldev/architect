@@ -31,7 +31,7 @@ const Layout: React.FC<Props> = props => {
         const newTreeId = addTree(tree);
         setActiveTreeId(newTreeId);
       }
-    } else navigate(`/${type}/${fileId}`);
+    } else navigate(`/workspace/editor`, { state: { type, id: fileId } });
   }, [message, navigate, addTree, account, setActiveTreeId, treesIds]);
 
   useEffect(() => {
