@@ -14,6 +14,8 @@ const CodeEditor: React.FC<Props> = props => {
     getLineNumber(initialState ?? "")
   );
 
+  const codeStyles = { lineHeight: "24px" };
+
   const changeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setCode(value);
@@ -64,15 +66,17 @@ const CodeEditor: React.FC<Props> = props => {
             })}
         </ul>
       </aside>
-      <pre className="relative w-full h-full m-0">
+      <pre className="relative w-full h-full m-0" style={{ margin: 0 }}>
         <textarea
           onChange={changeHandler}
           value={code}
+          style={codeStyles}
           className="bg-black w-full h-full absolute z-0 top-0 left-0 focus:border-none focus:outline-none px-6 leading-6"
           onKeyDown={keyDownHandler}
         />
         <code
           ref={ref}
+          style={codeStyles}
           className={`w-full h-full absolute z-1 top-0 left-0 pointer-events-none px-6 font-mono leading-6 language-${extension}`}
         >
           {code}

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
 import Button from "../Button/Button";
-import Link from "../Link/Link";
 import { ContentAutocompleteProps as Props } from "./ContentAutocomplete.types";
 import { ContentOption } from "./ContentAutocomplete.types";
 import useGlobalsStore from "contexts/globals/globals.context";
@@ -79,11 +78,8 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
     const lastOption = {
       label: "Crear",
       value: "",
-      item: (
-        <Link to="/enhancedTemplates/">
-          <div onClick={() => console.log("creating")}>Crear</div>
-        </Link>
-      )
+      item: <div onClick={editContentHandler}>Crear</div>,
+      type: "templates"
     };
 
     return (
@@ -105,7 +101,6 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
           <Button
             onClick={editContentHandler}
             className="absolute bottom-0 right-0 mb-4 rounded-l-sm"
-            disabled={props.disabled}
           >
             Edit
           </Button>
