@@ -7,7 +7,7 @@ import { getLineNumber } from "./CodeEditor.helpers";
 import { CodeEditorProps as Props } from "./CodeEditor.types";
 
 const CodeEditor: React.FC<Props> = props => {
-  const { initialState, extension } = props;
+  const { initialState, extension, onChange } = props;
   const ref = useRef<HTMLElement>(null);
   const [code, setCode] = useState(initialState ?? "");
   const [lineNumber, setLineNumber] = useState(() =>
@@ -17,6 +17,7 @@ const CodeEditor: React.FC<Props> = props => {
   const changeHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setCode(value);
+    onChange?.(e);
     setLineNumber(getLineNumber(value));
   };
 
@@ -36,6 +37,8 @@ const CodeEditor: React.FC<Props> = props => {
     e.target.selectionStart = e.target.selectionEnd = start + 1;
     // @ts-ignore
     setCode(e.target.value);
+    // @ts-ignore
+    onChange?.(e);
   };
 
   useLayoutEffect(() => {
