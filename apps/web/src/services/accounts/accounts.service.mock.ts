@@ -39,6 +39,7 @@ const test = buildNode(
     absolutePathname: "./component.test.ts",
     treeId: defaultTree.id,
     content: "// Component test",
+    alias: "Tests",
     parentId: folder.id
   },
   {
@@ -52,6 +53,7 @@ const types = buildNode(
     absolutePathname: "./component.types.ts",
     treeId: defaultTree.id,
     content: "// Component types",
+    alias: "Types",
     parentId: folder.id
   },
   {
@@ -65,6 +67,7 @@ const styles = buildNode(
     absolutePathname: "./component.css",
     treeId: defaultTree.id,
     content: "/* Component styles */",
+    alias: "Styles",
     parentId: folder.id
   },
   {

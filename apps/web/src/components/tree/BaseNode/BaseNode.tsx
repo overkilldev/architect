@@ -16,6 +16,10 @@ const BaseNode: FC<Props> = props => {
   const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { setFormMode, onOpen } = nodeDrawer;
+  const isDefault = handlesType === "default";
+  const isOutput = handlesType === "output";
+  const isGroup = handlesType === "group";
+  const canHasParent = isDefault || isOutput || isGroup;
 
   const clickHandler = () => {
     centerOnNode(xPos, yPos);
@@ -39,12 +43,12 @@ const BaseNode: FC<Props> = props => {
 
   return (
     <div
-      className={`BaseNode bg-stone-900 shadow-2xl rounded-lg w-48 ${className}`}
+      className={`BaseNode bg-stone-900 shadow-2xl rounded-lg min-w-[192px] ${className}`}
       onClick={clickHandler}
       onDoubleClick={onDoubleClick}
     >
       <div className={nodeClasses} style={selected ? nodeStyles : undefined}>
-        {handlesType === "default" || handlesType === "output" ? (
+        {canHasParent ? (
           <Handle
             type="target"
             position={Position.Top}

@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { memo } from "react";
 import { SubmitHandler, useForm, FormProvider } from "react-hook-form";
 
@@ -7,21 +7,26 @@ import { NodeDrawerProps as Props } from "./NodeDrawer.types";
 import { NodeFormValues } from "./NodeDrawer.types";
 import Button from "components/global/Button/Button";
 import ContentAutocomplete from "components/global/ContentAutocomplete/ContentAutocomplete";
+import { ContentOption } from "components/global/ContentAutocomplete/ContentAutocomplete.types";
 import Drawer from "components/global/Drawer/Drawer";
 import Input from "components/global/Input/Input";
 import Textarea from "components/global/Textarea/Textarea";
 import useGlobalsStore from "contexts/globals/globals.context";
 import useTreeStore from "contexts/tree/tree.context";
+import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 import { nodeFormSchema } from "utils/forms.utils";
 
 const NodeDrawer: React.FC<Props> = props => {
   const { treeId } = props;
+  const { data: account } = useFetchAccount();
   const nodeDrawer = useGlobalsStore(state => state.nodeDrawer);
   const { formMode, onClose, isOpen } = nodeDrawer;
   const selectedNode = useTreeStore(state => state.selectedNode.get(treeId));
   const addNode = useTreeStore(state => state.addNode(treeId));
   const updateNode = useTreeStore(state => state.updateNode(treeId));
   const setSelectedNode = useTreeStore(state => state.setSelectedNode(treeId));
+  const addSubTree = useTreeStore(state => state.addSubTree(treeId));
+  const [starter, setStarter] = useState<ContentOption>();
   const { id, data } = selectedNode ?? {};
   const { absolutePathname, pathname, alias, description } = data ?? {};
   const formMethods = useForm<NodeFormValues>({
@@ -41,6 +46,13 @@ const NodeDrawer: React.FC<Props> = props => {
 
   const submitHandler: SubmitHandler<NodeFormValues> = values => {
     if (!selectedNode) throw new Error("There must be a selected node now");
+    const trees = starter?.type === "trees" ? account?.trees : undefined;
+    const tree = trees?.find(tree => tree.id === starter?.value);
+    if (tree) {
+      addSubTree(tree, selectedNode, { ...values, treeId });
+      closeHandler();
+      return;
+    }
     const type = values.alias ? "fileNode" : undefined;
     if (formMode === "CREATE") {
       addNode({ ...values, treeId }, selectedNode, type);
@@ -54,6 +66,10 @@ const NodeDrawer: React.FC<Props> = props => {
     }
     closeHandler();
   };
+
+  const optionChangeHandler = useCallback((option: ContentOption) => {
+    setStarter(option);
+  }, []);
 
   const itemClasses = "pb-2 text-sm font-medium text-gray-400";
 
@@ -75,7 +91,10 @@ const NodeDrawer: React.FC<Props> = props => {
             errorMessage={errors.pathname?.message}
             {...register("pathname")}
           />
-          <ContentAutocomplete {...register("starterId")} />
+          <ContentAutocomplete
+            {...register("starterId")}
+            onOptionChange={optionChangeHandler}
+          />
           <Input
             label="Alias"
             placeholder="Node alias name"

@@ -29,7 +29,7 @@ const DefaultNode: FC<DefaultNodeProps> = props => {
   const validClass = parentId ? "bg-lime-300" : "bg-red-500";
 
   return (
-    <BaseNode {...props} className="DefaultNode" onDoubleClick={actionHandler}>
+    <BaseNode className="DefaultNode" {...props} onDoubleClick={actionHandler}>
       <span
         className={`DefaultNode__status flex w-1 h-1 ${validClass} rounded-full mx-2`}
       />

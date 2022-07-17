@@ -12,4 +12,4 @@ export interface FolderNodeData extends BaseNodeData {
   parentId: undefined;
 }
 
-export type RootNode = Node<FolderNodeData>;
+export type FolderNode = Node<FolderNodeData>;

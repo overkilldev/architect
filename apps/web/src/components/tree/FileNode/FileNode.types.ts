@@ -11,4 +11,4 @@ export interface FileNodeData extends BaseNodeData {
   parentId: undefined;
 }
 
-export type RootNode = Node<FileNodeData>;
+export type FileNode = Node<FileNodeData>;

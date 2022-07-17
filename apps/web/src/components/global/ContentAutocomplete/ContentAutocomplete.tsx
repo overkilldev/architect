@@ -1,5 +1,5 @@
-import React, { forwardRef, useCallback } from "react";
-import { useFormContext } from "react-hook-form";
+import { forwardRef, useCallback } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
 import Button from "../Button/Button";
@@ -10,10 +10,11 @@ import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
   (props, ref) => {
+    const { onOptionChange, ...rest } = props;
     const { data: account } = useFetchAccount();
-    const { setValue, watch } = useFormContext();
+    const { setValue, control } = useFormContext();
     const { templates = [], trees = [] } = account ?? {};
-    const starterId: string | undefined = watch(props.name);
+    const starterId = useWatch({ name: props.name, control });
 
     const optionChangeHandler = useCallback(
       (option: ContentOption) => {
@@ -33,8 +34,9 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
           default:
             throw new Error(`type ${option.type} is not handled`);
         }
+        onOptionChange?.(option);
       },
-      [setValue, templates]
+      [onOptionChange, setValue, templates]
     );
 
     const editContentHandler = () => {
@@ -80,10 +82,10 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
           label="Template"
           optionsProps={{ height: 500 }}
           onOptionChange={optionChangeHandler}
-          {...props}
+          {...rest}
           inputProps={{
             placeholder: "Choose or create a template",
-            ...props.inputProps
+            ...rest.inputProps
           }}
           ref={ref}
         />

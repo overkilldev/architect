@@ -1,15 +1,19 @@
-import { NodeTypes, addEdge, getIncomers } from "react-flow-renderer";
+import { addEdge, getIncomers } from "react-flow-renderer";
 import { getOutgoers, getConnectedEdges } from "react-flow-renderer";
 import { applyEdgeChanges, applyNodeChanges } from "react-flow-renderer";
 import { v4 as uuidv4 } from "uuid";
 import create from "zustand";
 
+import { NodeTypeName, NodeTypes } from "./tree.context.types";
 import { TreeProviderValue } from "./tree.context.types";
+import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
+import { BaseNodeData } from "components/tree/BaseNode/BaseNode.types";
 import DefaultNode from "components/tree/DefaultNode/DefaultNode";
 import { DefaultNode as IDefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
 import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
 import FileNode from "components/tree/FileNode/FileNode";
 import FolderNode from "components/tree/FolderNode/FolderNode";
+import GroupNode from "components/tree/GroupNode/GroupNode";
 import RootNode from "components/tree/RootNode/RootNode";
 import { createGraphLayout } from "utils/elk.utils";
 import { transformNodesToBaseNodes } from "utils/tree.utils";
@@ -18,12 +22,13 @@ const nodeTypes: NodeTypes = {
   rootNode: RootNode,
   defaultNode: DefaultNode,
   folderNode: FolderNode,
-  fileNode: FileNode
+  fileNode: FileNode,
+  groupNode: GroupNode
 };
 
 const createNode = (
   data: Partial<DefaultNodeData> = {},
-  type = "defaultNode"
+  type: NodeTypeName = "defaultNode"
 ): IDefaultNode => {
   const newNode: IDefaultNode = {
     id: uuidv4(),
@@ -150,6 +155,7 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       );
       get().setEdges(treeId)(newEdges);
       get().setNodes(treeId)([...get().nodes.get(treeId)!, newNode]);
+      return newNode;
     },
   updateNode: treeId => (node, data, type) => {
     const newNodes = get()
@@ -191,6 +197,46 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
       });
     get().setEdges(treeId)(filteredEdges);
     get().setNodes(treeId)(newNodes);
+  },
+  addSubTree: treeId => (subTree, parentNode, data) => {
+    const { nodes: treeNodes, edges: treeEdges } = subTree;
+    // Get the new group node
+    const groupNode = get().addNode(treeId)(data, parentNode, "groupNode");
+    // Get current nodes and edges
+    const nodes = get().nodes.get(treeId);
+    const edges = get().edges.get(treeId);
+    // Clone tree edges
+    const newEdges = treeEdges.map(edge => ({ ...edge }));
+    get().setNodes(treeId)([
+      ...nodes!,
+      ...(treeNodes.map(node => {
+        // Create new id for each upcoming tree node
+        const newNodeId = uuidv4();
+        // For each node we edit all related edges
+        newEdges.forEach(edge => {
+          // Since the edge id is constructed with the union of the parent node
+          // id and the node id, here it replaces the corresponding id value
+          if (edge.id.includes(node.id)) {
+            edge.id = edge.id.replace(node.id, newNodeId);
+          }
+          // The source id is changed for the node's one if are equal
+          if (edge.source === node.id) edge.source = newNodeId;
+          // The target id is changed for the node's one if are equal
+          if (edge.target === node.id) edge.target = newNodeId;
+        });
+        const newNode = {
+          ...node,
+          id: newNodeId,
+          parentNode: groupNode.id,
+          extent: "parent"
+        };
+        // @ts-ignore FIXME: fix types
+        newNode.data.node = newNode;
+        return newNode;
+      }) as BaseNode<BaseNodeData>[])
+    ]);
+    get().setEdges(treeId)([...edges!, ...newEdges]);
+    console.log({ subTree, groupNode, newEdges });
   }
 }));
 

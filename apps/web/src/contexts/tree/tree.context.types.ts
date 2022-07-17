@@ -1,7 +1,8 @@
 // Interfaces and types from context Tree
 import { Tree } from "@architect/types";
-import { Edge, NodeChange, OnInit } from "react-flow-renderer";
-import { NodeTypes, OnConnect, OnEdgesChange } from "react-flow-renderer";
+import { FC } from "react";
+import { Edge, NodeChange, NodeProps, OnInit } from "react-flow-renderer";
+import { OnConnect, OnEdgesChange } from "react-flow-renderer";
 
 import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
 import { DefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
@@ -48,7 +49,7 @@ export interface TreeProviderValue {
     nodeData: AddNodeData,
     parentNode: BaseNode,
     type?: NodeTypeName
-  ) => void;
+  ) => BaseNode;
   updateNode: (
     treeId: Tree["id"]
   ) => (
@@ -57,6 +58,9 @@ export interface TreeProviderValue {
     type?: NodeTypeName
   ) => void;
   deleteNode: (treeId: Tree["id"]) => (node: DefaultNode) => void;
+  addSubTree: (
+    treeId: Tree["id"]
+  ) => (subTreeId: Tree, parentNode: BaseNode, nodeData: AddNodeData) => void;
 }
 
 export interface AddNodeData
@@ -76,3 +80,5 @@ export type NodeTypeName =
   | "folderNode"
   | "fileNode"
   | "groupNode";
+
+export type NodeTypes = Record<NodeTypeName, FC<NodeProps>>;
