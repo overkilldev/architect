@@ -7,6 +7,20 @@
     "defaultAuthType": {
       "mode": "API_KEY",
       "expirationTime": 7
-    }
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authaccounts68933643"
+      },
+      {
+        "mode": "OPENID_CONNECT",
+        "openIDProviderName": "Github",
+        "openIDIssuerURL": "https://1day88if8a.execute-api.us-east-2.amazonaws.com/develop/",
+        "openIDClientID": "dda911c33da5507a6ba7",
+        "openIDAuthTTL": "3600000",
+        "openIDIatTTL": "3600000"
+      }
+    ]
   }
 }

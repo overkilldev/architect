@@ -69,6 +69,7 @@ export type Account = {
   trees?: ModelTreeConnection | null,
   createdAt: string,
   updatedAt: string,
+  owner?: string | null,
 };
 
 export type ModelEnhancerConnection = {
@@ -86,6 +87,7 @@ export type Enhancer = {
   createdAt: string,
   updatedAt: string,
   accountEnhancersId: string,
+  owner?: string | null,
 };
 
 export type ModelTemplateConnection = {
@@ -104,6 +106,7 @@ export type Template = {
   createdAt: string,
   updatedAt: string,
   accountTemplatesId: string,
+  owner?: string | null,
 };
 
 export type ModelTreeConnection = {
@@ -122,6 +125,7 @@ export type Tree = {
   createdAt: string,
   updatedAt: string,
   accountTreesId: string,
+  owner?: string | null,
 };
 
 export type UpdateAccountInput = {
@@ -171,7 +175,7 @@ export type UpdateEnhancerInput = {
   id: string,
   name?: string | null,
   snippets?: string | null,
-  accountEnhancersId?: string | null,
+  accountEnhancersId: string,
 };
 
 export type DeleteEnhancerInput = {
@@ -201,7 +205,7 @@ export type UpdateTemplateInput = {
   name?: string | null,
   content?: string | null,
   enhancersIds?: Array< string | null > | null,
-  accountTemplatesId?: string | null,
+  accountTemplatesId: string,
 };
 
 export type DeleteTemplateInput = {
@@ -231,7 +235,7 @@ export type UpdateTreeInput = {
   name?: string | null,
   nodes?: string | null,
   edges?: string | null,
-  accountTreesId?: string | null,
+  accountTreesId: string,
 };
 
 export type DeleteTreeInput = {
@@ -308,6 +312,7 @@ export type CreateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -322,6 +327,7 @@ export type CreateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -336,11 +342,13 @@ export type CreateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -366,6 +374,7 @@ export type UpdateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -380,6 +389,7 @@ export type UpdateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -394,11 +404,13 @@ export type UpdateAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -424,6 +436,7 @@ export type DeleteAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -438,6 +451,7 @@ export type DeleteAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -452,11 +466,13 @@ export type DeleteAccountMutation = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -491,10 +507,12 @@ export type CreateEnhancerMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -529,10 +547,12 @@ export type UpdateEnhancerMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -567,10 +587,12 @@ export type DeleteEnhancerMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -605,11 +627,13 @@ export type CreateTemplateMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -644,11 +668,13 @@ export type UpdateTemplateMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -683,11 +709,13 @@ export type DeleteTemplateMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -723,10 +751,12 @@ export type CreateTreeMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -762,10 +792,12 @@ export type UpdateTreeMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -801,10 +833,12 @@ export type DeleteTreeMutation = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -829,6 +863,7 @@ export type GetAccountQuery = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -843,6 +878,7 @@ export type GetAccountQuery = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -857,11 +893,13 @@ export type GetAccountQuery = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -894,6 +932,7 @@ export type ListAccountsQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -929,10 +968,12 @@ export type GetEnhancerQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -958,10 +999,12 @@ export type ListEnhancersQuery = {
         email: string,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       createdAt: string,
       updatedAt: string,
       accountEnhancersId: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -997,11 +1040,13 @@ export type GetTemplateQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1027,11 +1072,13 @@ export type ListTemplatesQuery = {
         email: string,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       enhancersIds: Array< string | null >,
       createdAt: string,
       updatedAt: string,
       accountTemplatesId: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -1068,10 +1115,12 @@ export type GetTreeQuery = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
 };
 
@@ -1098,13 +1147,19 @@ export type ListTreesQuery = {
         email: string,
         createdAt: string,
         updatedAt: string,
+        owner?: string | null,
       } | null,
       createdAt: string,
       updatedAt: string,
       accountTreesId: string,
+      owner?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
+};
+
+export type OnCreateAccountSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateAccountSubscription = {
@@ -1124,6 +1179,7 @@ export type OnCreateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1138,6 +1194,7 @@ export type OnCreateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1152,12 +1209,18 @@ export type OnCreateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateAccountSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateAccountSubscription = {
@@ -1177,6 +1240,7 @@ export type OnUpdateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1191,6 +1255,7 @@ export type OnUpdateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1205,12 +1270,18 @@ export type OnUpdateAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteAccountSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteAccountSubscription = {
@@ -1230,6 +1301,7 @@ export type OnDeleteAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountEnhancersId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1244,6 +1316,7 @@ export type OnDeleteAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTemplatesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
@@ -1258,12 +1331,18 @@ export type OnDeleteAccountSubscription = {
         createdAt: string,
         updatedAt: string,
         accountTreesId: string,
+        owner?: string | null,
       } | null >,
       nextToken?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnCreateEnhancerSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateEnhancerSubscription = {
@@ -1292,11 +1371,17 @@ export type OnCreateEnhancerSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateEnhancerSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateEnhancerSubscription = {
@@ -1325,11 +1410,17 @@ export type OnUpdateEnhancerSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteEnhancerSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteEnhancerSubscription = {
@@ -1358,11 +1449,17 @@ export type OnDeleteEnhancerSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountEnhancersId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnCreateTemplateSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateTemplateSubscription = {
@@ -1391,12 +1488,18 @@ export type OnCreateTemplateSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateTemplateSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateTemplateSubscription = {
@@ -1425,12 +1528,18 @@ export type OnUpdateTemplateSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteTemplateSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteTemplateSubscription = {
@@ -1459,12 +1568,18 @@ export type OnDeleteTemplateSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     enhancersIds: Array< string | null >,
     createdAt: string,
     updatedAt: string,
     accountTemplatesId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnCreateTreeSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnCreateTreeSubscription = {
@@ -1494,11 +1609,17 @@ export type OnCreateTreeSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnUpdateTreeSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnUpdateTreeSubscription = {
@@ -1528,11 +1649,17 @@ export type OnUpdateTreeSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
+};
+
+export type OnDeleteTreeSubscriptionVariables = {
+  owner?: string | null,
 };
 
 export type OnDeleteTreeSubscription = {
@@ -1562,9 +1689,11 @@ export type OnDeleteTreeSubscription = {
       } | null,
       createdAt: string,
       updatedAt: string,
+      owner?: string | null,
     } | null,
     createdAt: string,
     updatedAt: string,
     accountTreesId: string,
+    owner?: string | null,
   } | null,
 };
