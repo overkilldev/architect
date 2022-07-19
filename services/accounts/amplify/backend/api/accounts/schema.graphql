@@ -1,9 +1,10 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY {
-  globalAuthRule: AuthRule = { allow: public }
-} # FOR TESTING ONLY!
-type Account @model {
+# input AMPLIFY {
+#   globalAuthRule: AuthRule = { allow: public }
+# } # FOR TESTING ONLY!
+
+type Account @model @auth(rules: [{ allow: owner, provider: oidc }]) {
   id: ID!
   name: String!
   lastName: String!
@@ -13,14 +14,14 @@ type Account @model {
   trees: [Tree]! @hasMany
 }
 
-type Enhancer @model {
+type Enhancer @model @auth(rules: [{ allow: owner, provider: oidc }]) {
   id: ID!
   name: String!
   snippets: AWSJSON!
   account: Account @belongsTo
 }
 
-type Template @model {
+type Template @model @auth(rules: [{ allow: owner, provider: oidc }]) {
   id: ID!
   name: String!
   content: String!
@@ -28,7 +29,7 @@ type Template @model {
   enhancersIds: [ID]!
 }
 
-type Tree @model {
+type Tree @model @auth(rules: [{ allow: owner, provider: oidc }]) {
   id: ID!
   name: String!
   nodes: AWSJSON!

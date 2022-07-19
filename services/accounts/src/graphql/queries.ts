@@ -17,6 +17,7 @@ export const getAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -29,6 +30,7 @@ export const getAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -41,11 +43,13 @@ export const getAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -72,6 +76,7 @@ export const listAccounts = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       nextToken
     }
@@ -99,10 +104,12 @@ export const getEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
@@ -124,10 +131,12 @@ export const listEnhancers = /* GraphQL */ `
           email
           createdAt
           updatedAt
+          owner
         }
         createdAt
         updatedAt
         accountEnhancersId
+        owner
       }
       nextToken
     }
@@ -155,11 +164,13 @@ export const getTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
@@ -181,11 +192,13 @@ export const listTemplates = /* GraphQL */ `
           email
           createdAt
           updatedAt
+          owner
         }
         enhancersIds
         createdAt
         updatedAt
         accountTemplatesId
+        owner
       }
       nextToken
     }
@@ -214,10 +227,12 @@ export const getTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
@@ -240,10 +255,12 @@ export const listTrees = /* GraphQL */ `
           email
           createdAt
           updatedAt
+          owner
         }
         createdAt
         updatedAt
         accountTreesId
+        owner
       }
       nextToken
     }

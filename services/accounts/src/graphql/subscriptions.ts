@@ -3,8 +3,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateAccount = /* GraphQL */ `
-  subscription OnCreateAccount {
-    onCreateAccount {
+  subscription OnCreateAccount($owner: String) {
+    onCreateAccount(owner: $owner) {
       id
       name
       lastName
@@ -17,6 +17,7 @@ export const onCreateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -29,6 +30,7 @@ export const onCreateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -41,17 +43,19 @@ export const onCreateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onUpdateAccount = /* GraphQL */ `
-  subscription OnUpdateAccount {
-    onUpdateAccount {
+  subscription OnUpdateAccount($owner: String) {
+    onUpdateAccount(owner: $owner) {
       id
       name
       lastName
@@ -64,6 +68,7 @@ export const onUpdateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -76,6 +81,7 @@ export const onUpdateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -88,17 +94,19 @@ export const onUpdateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onDeleteAccount = /* GraphQL */ `
-  subscription OnDeleteAccount {
-    onDeleteAccount {
+  subscription OnDeleteAccount($owner: String) {
+    onDeleteAccount(owner: $owner) {
       id
       name
       lastName
@@ -111,6 +119,7 @@ export const onDeleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -123,6 +132,7 @@ export const onDeleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -135,17 +145,19 @@ export const onDeleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
 export const onCreateEnhancer = /* GraphQL */ `
-  subscription OnCreateEnhancer {
-    onCreateEnhancer {
+  subscription OnCreateEnhancer($owner: String) {
+    onCreateEnhancer(owner: $owner) {
       id
       name
       snippets
@@ -165,16 +177,18 @@ export const onCreateEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
 export const onUpdateEnhancer = /* GraphQL */ `
-  subscription OnUpdateEnhancer {
-    onUpdateEnhancer {
+  subscription OnUpdateEnhancer($owner: String) {
+    onUpdateEnhancer(owner: $owner) {
       id
       name
       snippets
@@ -194,16 +208,18 @@ export const onUpdateEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
 export const onDeleteEnhancer = /* GraphQL */ `
-  subscription OnDeleteEnhancer {
-    onDeleteEnhancer {
+  subscription OnDeleteEnhancer($owner: String) {
+    onDeleteEnhancer(owner: $owner) {
       id
       name
       snippets
@@ -223,16 +239,18 @@ export const onDeleteEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
 export const onCreateTemplate = /* GraphQL */ `
-  subscription OnCreateTemplate {
-    onCreateTemplate {
+  subscription OnCreateTemplate($owner: String) {
+    onCreateTemplate(owner: $owner) {
       id
       name
       content
@@ -252,17 +270,19 @@ export const onCreateTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
 export const onUpdateTemplate = /* GraphQL */ `
-  subscription OnUpdateTemplate {
-    onUpdateTemplate {
+  subscription OnUpdateTemplate($owner: String) {
+    onUpdateTemplate(owner: $owner) {
       id
       name
       content
@@ -282,17 +302,19 @@ export const onUpdateTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
 export const onDeleteTemplate = /* GraphQL */ `
-  subscription OnDeleteTemplate {
-    onDeleteTemplate {
+  subscription OnDeleteTemplate($owner: String) {
+    onDeleteTemplate(owner: $owner) {
       id
       name
       content
@@ -312,17 +334,19 @@ export const onDeleteTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
 export const onCreateTree = /* GraphQL */ `
-  subscription OnCreateTree {
-    onCreateTree {
+  subscription OnCreateTree($owner: String) {
+    onCreateTree(owner: $owner) {
       id
       name
       nodes
@@ -343,16 +367,18 @@ export const onCreateTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
 export const onUpdateTree = /* GraphQL */ `
-  subscription OnUpdateTree {
-    onUpdateTree {
+  subscription OnUpdateTree($owner: String) {
+    onUpdateTree(owner: $owner) {
       id
       name
       nodes
@@ -373,16 +399,18 @@ export const onUpdateTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
 export const onDeleteTree = /* GraphQL */ `
-  subscription OnDeleteTree {
-    onDeleteTree {
+  subscription OnDeleteTree($owner: String) {
+    onDeleteTree(owner: $owner) {
       id
       name
       nodes
@@ -403,10 +431,12 @@ export const onDeleteTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
