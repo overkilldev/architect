@@ -1,9 +1,12 @@
-import { HTMLAttributes } from "react";
+import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 // Interfaces and types from component SocialButton
 
 // Component Props
 export interface SocialButtonProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, "ref"> {
+  extends DetailedHTMLProps<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    HTMLButtonElement
+  > {
   icon: JSX.Element;
   title: string;
 }

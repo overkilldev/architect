@@ -1,20 +1,21 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 import { SocialButtonProps as Props } from "./SocialButton.types";
 
-const SocialButton: React.FC<Props> = props => {
+const SocialButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const { icon, title, ...rest } = props;
 
   return (
-    <div
+    <button
       className="SocialButton rounded-lg border-[1px] border-white p-2 flex justify-around cursor-pointer"
       {...rest}
+      ref={ref}
     >
       {icon}
       {title}
-    </div>
+    </button>
   );
-};
+});
 
 SocialButton.defaultProps = {};
 
