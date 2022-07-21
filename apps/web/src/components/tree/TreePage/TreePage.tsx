@@ -19,7 +19,7 @@ const TreePage = () => {
   );
   const { id: selectedNodeId } = selectedNode ?? {};
 
-  const dimensionsClasses = "flex flex-col flex-1 w-full";
+  const dimensionsClasses = "flex flex-col flex-1 w-full h-full";
   const dimensionsStyles = {
     height: `calc(100% - ${TABS_HEIGHT}px)`,
     width: "calc(100% - var(--sidebar-width))"
@@ -44,26 +44,28 @@ const TreePage = () => {
   );
 
   return (
-    <div className={dimensionsClasses}>
-      {pathname === "/workspace" ? tabs : null}
-      <div style={dimensionsStyles} className={dimensionsClasses}>
-        {treesIds.map(treeId => {
-          return (
-            <div
-              style={dimensionsStyles}
-              className={`absolute ${dimensionsClasses} ${
-                treeId === activeTreeId ? "z-20 visible" : "z-10 invisible"
-              }`}
-              key={treeId}
-            >
-              <ReactFlowProvider>
-                <Tree id={treeId} />
-              </ReactFlowProvider>
-            </div>
-          );
-        })}
+    <div className="relative flex flex-1 w-full h-full">
+      <div className={`${dimensionsClasses} relative`}>
+        {pathname === "/workspace" ? tabs : null}
+        <div style={dimensionsStyles} className={dimensionsClasses}>
+          {treesIds.map(treeId => {
+            return (
+              <div
+                style={dimensionsStyles}
+                className={`absolute ${dimensionsClasses} ${
+                  treeId === activeTreeId ? "z-20 visible" : "z-10 invisible"
+                }`}
+                key={treeId}
+              >
+                <ReactFlowProvider>
+                  <Tree id={treeId} />
+                </ReactFlowProvider>
+              </div>
+            );
+          })}
+        </div>
+        <Outlet />
       </div>
-      <Outlet />
       <NodeDrawer
         key={`${activeTreeId}|${selectedNodeId}`}
         treeId={activeTreeId}
