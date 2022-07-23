@@ -47,10 +47,12 @@ const NodeDrawer: React.FC<Props> = props => {
 
   const submitHandler: SubmitHandler<NodeFormValues> = values => {
     if (!selectedNode) throw new Error("There must be a selected node now");
-    const trees = starter?.type === "trees" ? account?.trees : undefined;
-    const tree = trees?.find(tree => tree.id === starter?.value);
+    const { type: starterType, value: starterValue } = starter ?? {};
+    const { label: starterLabel = "" } = starter ?? {};
+    const trees = starterType === "trees" ? account?.trees : undefined;
+    const tree = trees?.find(tree => tree.id === starterValue);
     if (tree) {
-      addSubTree(tree, selectedNode, { ...values, treeId });
+      addSubTree(tree, selectedNode, { ...values, starterLabel, treeId });
       closeHandler();
       return;
     }
@@ -95,7 +97,7 @@ const NodeDrawer: React.FC<Props> = props => {
           <ContentAutocomplete
             {...register("starterId")}
             onOptionChange={optionChangeHandler}
-            disabled={formMode === "EDIT" && !!getValues()["starterId"]}
+            disabled={formMode === "EDIT" && !!getValues("starterId")}
           />
           <Input
             label="Alias"

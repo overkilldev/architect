@@ -45,7 +45,7 @@
   "scripts": {
     "vscode:prepublish": "yarn run compile",
     "build": "npx tsc -p ./",
-    "start": "cross-env code --extensionDevelopmentPath=$(pwd)",
+    "start": "sh start.sh",
     "watch": "tsc -watch -p ./",
     "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts --max-warnings=0",

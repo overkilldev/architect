@@ -200,14 +200,21 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
   },
   addSubTree: treeId => (subTree, parentNode, data) => {
     const { nodes: treeNodes, edges: treeEdges } = subTree;
+    const { starterLabel, ...nodeData } = data;
     // Get the new group node
-    const groupNode = get().addNode(treeId)(data, parentNode, "groupNode");
+    const groupNode = get().addNode(treeId)(nodeData, parentNode, "groupNode");
+    const { id: groupNodeId, data: groupNodeData } = groupNode;
+    const { absolutePathname: groupNodeAbsolutePathname } = groupNodeData;
     // Get current nodes and edges
     const nodes = get().nodes.get(treeId);
     const edges = get().edges.get(treeId);
     // Clone tree edges
     const newEdges = treeEdges.map(edge => ({ ...edge }));
+    // Clone tree nodes
     const newNodes = treeNodes.map(node => {
+      const { type: nodeType, data: nodeData } = node;
+      const { pathname: nodePathname } = nodeData;
+      const { absolutePathname: nodeAbsolutePathname } = nodeData;
       // Create new id for each upcoming tree node
       const newNodeId = uuidv4();
       // For each node we edit all related edges
@@ -222,10 +229,20 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
         // The target id is changed for the node's one if are equal
         if (edge.target === node.id) edge.target = newNodeId;
       });
+      const newNodePathname =
+        nodeType === "rootNode" ? starterLabel : nodePathname;
+      let newNodeAbsolutePathname = nodeAbsolutePathname?.replace(
+        "./",
+        `${groupNodeAbsolutePathname}/`
+      );
+      newNodeAbsolutePathname =
+        nodeType === "rootNode"
+          ? groupNodeAbsolutePathname
+          : newNodeAbsolutePathname;
       const newNode = {
         ...node,
         id: newNodeId,
-        parentNode: groupNode.id,
+        parentNode: groupNodeId,
         extent: "parent"
       };
       newNode.data = {
@@ -233,17 +250,18 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
         // @ts-ignore FIXME: fix types
         treeId,
         // @ts-ignore FIXME: fix types
-        node: newNode
+        node: newNode,
+        // The root node takes the template label as name
+        pathname: newNodePathname,
+        absolutePathname: newNodeAbsolutePathname
       };
       return newNode;
     });
-    console.log("new nodes", { newNodes });
     get().setNodes(treeId)([
       ...nodes!,
       ...(newNodes as BaseNode<BaseNodeData>[])
     ]);
     get().setEdges(treeId)([...edges!, ...newEdges]);
-    console.log({ subTree, groupNode, newEdges });
   }
 }));
 

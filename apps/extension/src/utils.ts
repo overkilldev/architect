@@ -40,7 +40,8 @@ export const messageReceivedHandler = async (message: Messages) => {
     }
     case "generate": {
       const { data: nodes } = message;
-      let directoryPath = vscode.workspace.workspaceFolders?.[0].uri.path ?? "";
+      let directoryPath =
+        vscode.workspace.workspaceFolders?.[0].uri.fsPath ?? "";
       if (!(await fs.stat(directoryPath)).isDirectory()) {
         directoryPath = path.dirname(directoryPath);
       }

@@ -19,11 +19,13 @@ const TreeFAB: React.FC<Props> = props => {
     vscode?.postMessage({
       command: "generate",
       source: "web",
-      data: nodes.map(n => {
-        // @ts-ignore must be delete to avoid issues with circular dependencies
-        delete n.data.node;
-        return n;
-      })
+      data: nodes
+        .filter(node => node.type !== "groupNode")
+        .map(node => {
+          // @ts-ignore must be delete to avoid issues with circular dependencies
+          delete node.data.node;
+          return node;
+        })
     });
   };
 

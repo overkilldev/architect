@@ -4,6 +4,7 @@ import { FC } from "react";
 import { Edge, NodeChange, NodeProps, OnInit } from "react-flow-renderer";
 import { OnConnect, OnEdgesChange } from "react-flow-renderer";
 
+import { ContentOption } from "components/global/ContentAutocomplete/ContentAutocomplete.types";
 import { BaseNode } from "components/tree/BaseNode/BaseNode.types";
 import { DefaultNode } from "components/tree/DefaultNode/DefaultNode.types";
 import { DefaultNodeData } from "components/tree/DefaultNode/DefaultNode.types";
@@ -60,7 +61,11 @@ export interface TreeProviderValue {
   deleteNode: (treeId: Tree["id"]) => (node: DefaultNode) => void;
   addSubTree: (
     treeId: Tree["id"]
-  ) => (subTreeId: Tree, parentNode: BaseNode, nodeData: AddNodeData) => void;
+  ) => (subTreeId: Tree, parentNode: BaseNode, data: TreeData) => void;
+}
+
+export interface TreeData extends AddNodeData {
+  starterLabel: ContentOption["label"];
 }
 
 export interface AddNodeData
