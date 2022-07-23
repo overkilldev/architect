@@ -207,33 +207,40 @@ const useTreeStore = create<TreeProviderValue>((set, get) => ({
     const edges = get().edges.get(treeId);
     // Clone tree edges
     const newEdges = treeEdges.map(edge => ({ ...edge }));
+    const newNodes = treeNodes.map(node => {
+      // Create new id for each upcoming tree node
+      const newNodeId = uuidv4();
+      // For each node we edit all related edges
+      newEdges.forEach(edge => {
+        // Since the edge id is constructed with the union of the parent node
+        // id and the node id, here it replaces the corresponding id value
+        if (edge.id.includes(node.id)) {
+          edge.id = edge.id.replace(node.id, newNodeId);
+        }
+        // The source id is changed for the node's one if are equal
+        if (edge.source === node.id) edge.source = newNodeId;
+        // The target id is changed for the node's one if are equal
+        if (edge.target === node.id) edge.target = newNodeId;
+      });
+      const newNode = {
+        ...node,
+        id: newNodeId,
+        parentNode: groupNode.id,
+        extent: "parent"
+      };
+      newNode.data = {
+        ...newNode.data,
+        // @ts-ignore FIXME: fix types
+        treeId,
+        // @ts-ignore FIXME: fix types
+        node: newNode
+      };
+      return newNode;
+    });
+    console.log("new nodes", { newNodes });
     get().setNodes(treeId)([
       ...nodes!,
-      ...(treeNodes.map(node => {
-        // Create new id for each upcoming tree node
-        const newNodeId = uuidv4();
-        // For each node we edit all related edges
-        newEdges.forEach(edge => {
-          // Since the edge id is constructed with the union of the parent node
-          // id and the node id, here it replaces the corresponding id value
-          if (edge.id.includes(node.id)) {
-            edge.id = edge.id.replace(node.id, newNodeId);
-          }
-          // The source id is changed for the node's one if are equal
-          if (edge.source === node.id) edge.source = newNodeId;
-          // The target id is changed for the node's one if are equal
-          if (edge.target === node.id) edge.target = newNodeId;
-        });
-        const newNode = {
-          ...node,
-          id: newNodeId,
-          parentNode: groupNode.id,
-          extent: "parent"
-        };
-        // @ts-ignore FIXME: fix types
-        newNode.data.node = newNode;
-        return newNode;
-      }) as BaseNode<BaseNodeData>[])
+      ...(newNodes as BaseNode<BaseNodeData>[])
     ]);
     get().setEdges(treeId)([...edges!, ...newEdges]);
     console.log({ subTree, groupNode, newEdges });
