@@ -22,6 +22,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, Props>((props, ref) => {
         w-full p-2 rounded-md bg-black text-white
         focus:ring-2 focus:ring-violet-500/50 focus:outline outline-offset-[-1px] focus:outline-1 focus:outline-violet-500
         focus-visible:ring-2 focus-visible:ring-violet-500/50 focus-visible:outline focus-visible:outline-1 focus-visible:outline-violet-500
+        disabled:ring-0 disabled:bg-gray-600 disabled:cursor-not-allowed
         "
       />
       {errorMessage ? (

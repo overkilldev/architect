@@ -20,7 +20,7 @@ const Tree: React.FC<Props> = props => {
 
   return (
     <ReactFlow
-      className="h-auto flex-1 bg-black"
+      className="Tree h-auto flex-1 bg-black"
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}

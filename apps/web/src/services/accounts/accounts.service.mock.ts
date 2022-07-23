@@ -1,12 +1,40 @@
 // Accounts services mock data
+import { Template } from "@architect/types";
 
-import { AccountResponse } from "./accounts.service.types";
+import { AccountResponse, TemplateResponse } from "./accounts.service.types";
 import { buildAccount } from "testing/builders/accounts.builders";
 import { buildResponse } from "testing/builders/services.builders";
+import { buildTemplate } from "testing/builders/templates.builders";
 import { buildEdge, buildNode } from "testing/builders/trees.builders";
 import { buildTree } from "testing/builders/trees.builders";
 
 const defaultTree = buildTree({ name: "Component" });
+
+const componentTemplate = buildTemplate({
+  name: "Component",
+  content: `import React from "react";
+
+const Component: React.FC<any> = props => {
+  return <div>Component</div>;
+};
+
+Component.defaultProps = {};
+
+export default Component;
+
+  `
+});
+
+const typesTemplate = buildTemplate({
+  name: "Component types",
+  content: `// Component types and interfaces
+
+export interface ComponentProps {
+  className?: string;
+}
+
+`
+});
 
 const folder = buildNode(
   {
@@ -24,9 +52,10 @@ const component = buildNode(
     pathname: "component.tsx",
     absolutePathname: "./component.tsx",
     treeId: defaultTree.id,
-    content: "// Component",
+    content: componentTemplate.content,
     alias: "Markup",
-    parentId: folder.id
+    parentId: folder.id,
+    starterId: componentTemplate.id
   },
   {
     type: "fileNode"
@@ -52,9 +81,10 @@ const types = buildNode(
     pathname: "component.types.ts",
     absolutePathname: "./component.types.ts",
     treeId: defaultTree.id,
-    content: "// Component types",
     alias: "Types",
-    parentId: folder.id
+    content: typesTemplate.content,
+    parentId: folder.id,
+    starterId: typesTemplate.id
   },
   {
     type: "fileNode"
@@ -111,8 +141,25 @@ const stylesEdge = buildEdge({
 
 defaultTree.edges = [componentEdge, testEdge, typesEdge, stylesEdge];
 
-const mockedAccount = buildAccount({ trees: [defaultTree] });
+const runtimeTemplates: Template[] = [];
 
-export const mockedAccountResponse: AccountResponse = buildResponse({
-  data: mockedAccount
-});
+const mockedAccount = () => {
+  return buildAccount({
+    trees: [defaultTree],
+    templates: [componentTemplate, typesTemplate, ...runtimeTemplates]
+  });
+};
+
+export const mockedAccountResponse = (): AccountResponse => {
+  return buildResponse({
+    data: mockedAccount()
+  });
+};
+
+export const mockedTemplateResponse = (
+  overrides: Partial<Template> = {}
+): TemplateResponse => {
+  const newTemplate = buildTemplate(overrides);
+  runtimeTemplates.push(newTemplate);
+  return buildResponse({ data: newTemplate });
+};

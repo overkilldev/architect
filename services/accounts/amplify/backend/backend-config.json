@@ -40,7 +40,24 @@
               "apiKeyExpirationDays": 7
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "authaccounts68933643"
+              }
+            },
+            {
+              "authenticationType": "OPENID_CONNECT",
+              "openIDConnectConfig": {
+                "name": "Github",
+                "issuerUrl": "https://1day88if8a.execute-api.us-east-2.amazonaws.com/develop/",
+                "clientId": "dda911c33da5507a6ba7",
+                "iatTTL": "3600000",
+                "authTTL": "3600000"
+              }
+            }
+          ]
         }
       }
     }

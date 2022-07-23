@@ -1,5 +1,5 @@
 import { Drawer as DrawerUI, DrawerBody, DrawerFooter } from "@chakra-ui/react";
-import { DrawerHeader, DrawerOverlay, DrawerContent } from "@chakra-ui/react";
+import { DrawerHeader, DrawerContent } from "@chakra-ui/react";
 import { DrawerCloseButton } from "@chakra-ui/react";
 import { FC } from "react";
 
@@ -10,7 +10,6 @@ const Drawer: FC<DrawerProps> = props => {
 
   return (
     <DrawerUI {...rest}>
-      <DrawerOverlay />
       <DrawerContent
         style={{
           backgroundColor: "rgb(28 25 23)",

@@ -29,13 +29,14 @@ const NodeDrawer: React.FC<Props> = props => {
   const [starter, setStarter] = useState<ContentOption>();
   const { id, data } = selectedNode ?? {};
   const { absolutePathname, pathname, alias, description } = data ?? {};
+  const { starterId } = data ?? {};
+  const defaultValues = { pathname, alias, description, starterId };
   const formMethods = useForm<NodeFormValues>({
     mode: "onBlur",
     resolver: yupResolver(nodeFormSchema),
-    defaultValues:
-      formMode === "EDIT" ? { pathname, alias, description } : undefined
+    defaultValues: formMode === "EDIT" ? defaultValues : undefined
   });
-  const { handleSubmit, register, formState, reset } = formMethods;
+  const { handleSubmit, register, formState, reset, getValues } = formMethods;
   const { errors } = formState;
 
   const closeHandler = () => {
@@ -94,6 +95,7 @@ const NodeDrawer: React.FC<Props> = props => {
           <ContentAutocomplete
             {...register("starterId")}
             onOptionChange={optionChangeHandler}
+            disabled={formMode === "EDIT" && !!getValues()["starterId"]}
           />
           <Input
             label="Alias"

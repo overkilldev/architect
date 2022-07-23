@@ -20,6 +20,7 @@ export const createAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -32,6 +33,7 @@ export const createAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -44,11 +46,13 @@ export const createAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -70,6 +74,7 @@ export const updateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -82,6 +87,7 @@ export const updateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -94,11 +100,13 @@ export const updateAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -120,6 +128,7 @@ export const deleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountEnhancersId
+          owner
         }
         nextToken
       }
@@ -132,6 +141,7 @@ export const deleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTemplatesId
+          owner
         }
         nextToken
       }
@@ -144,11 +154,13 @@ export const deleteAccount = /* GraphQL */ `
           createdAt
           updatedAt
           accountTreesId
+          owner
         }
         nextToken
       }
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -177,10 +189,12 @@ export const createEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
@@ -209,10 +223,12 @@ export const updateEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
@@ -241,10 +257,12 @@ export const deleteEnhancer = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountEnhancersId
+      owner
     }
   }
 `;
@@ -273,11 +291,13 @@ export const createTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
@@ -306,11 +326,13 @@ export const updateTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
@@ -339,11 +361,13 @@ export const deleteTemplate = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       enhancersIds
       createdAt
       updatedAt
       accountTemplatesId
+      owner
     }
   }
 `;
@@ -373,10 +397,12 @@ export const createTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
@@ -406,10 +432,12 @@ export const updateTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;
@@ -439,10 +467,12 @@ export const deleteTree = /* GraphQL */ `
         }
         createdAt
         updatedAt
+        owner
       }
       createdAt
       updatedAt
       accountTreesId
+      owner
     }
   }
 `;

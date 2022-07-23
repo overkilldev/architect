@@ -71,6 +71,9 @@ vi.mock("aws-amplify", () => {
       })),
       currentAuthenticatedUser: vi.fn(() => ({}))
     },
+    Hub: {
+      listen: vi.fn(() => {})
+    },
     default: {
       configure: () => {}
     }

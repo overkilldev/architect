@@ -15,6 +15,7 @@ export interface NodeData {
   absolutePathname: string | undefined;
   alias?: string | undefined;
   description?: string;
+  starterId?: string;
   rawContent?: string;
   content?: string;
   parentId: Node["id"] | undefined;

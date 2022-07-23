@@ -1,11 +1,12 @@
-import { forwardRef, useCallback } from "react";
+import React, { forwardRef, useCallback, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 import Autocomplete from "../Autocomplete/Autocomplete";
 import Button from "../Button/Button";
-import Link from "../Link/Link";
 import { ContentAutocompleteProps as Props } from "./ContentAutocomplete.types";
 import { ContentOption } from "./ContentAutocomplete.types";
+import useGlobalsStore from "contexts/globals/globals.context";
 import { useFetchAccount } from "services/accounts/accounts.service.hooks";
 
 const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
@@ -13,8 +14,13 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
     const { onOptionChange, ...rest } = props;
     const { data: account } = useFetchAccount();
     const { setValue, control } = useFormContext();
+    const navigate = useNavigate();
+    const [selectedOption, setSelectedOption] = useState<ContentOption>();
+    const closeDrawer = useGlobalsStore(state => state.nodeDrawer.onClose);
     const { templates = [], trees = [] } = account ?? {};
-    const starterId = useWatch({ name: props.name, control });
+    const name = props.name;
+    const starterId = useWatch({ name, control });
+    const pathname: string = useWatch({ name: "pathname", control }) ?? "";
 
     const optionChangeHandler = useCallback(
       (option: ContentOption) => {
@@ -29,18 +35,25 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
             break;
           }
           case "trees":
-            // TODO: maybe nothing and later create a node type container
             break;
           default:
             throw new Error(`type ${option.type} is not handled`);
         }
         onOptionChange?.(option);
+        setSelectedOption(option);
       },
       [onOptionChange, setValue, templates]
     );
 
     const editContentHandler = () => {
-      // TODO: navigate to editor
+      if (!selectedOption) return;
+      const { value, type } = selectedOption;
+      const extensionRaw = pathname.match(/\.[0-9a-z]+$/i)?.[0] ?? ".txt";
+      const extension = extensionRaw.replace(".", "");
+      const pathSegments = pathname.split("/");
+      const filename = pathSegments[pathSegments.length - 1];
+      navigate("editor", { state: { id: value, type, extension, filename } });
+      closeDrawer();
     };
 
     if (!account) return null;
@@ -67,11 +80,8 @@ const ContentAutocomplete = forwardRef<HTMLInputElement, Props>(
     const lastOption = {
       label: "Crear",
       value: "",
-      item: (
-        <Link to="/enhancedTemplates/">
-          <div onClick={() => console.log("creating")}>Crear</div>
-        </Link>
-      )
+      item: <div onClick={editContentHandler}>Crear</div>,
+      type: "templates"
     };
 
     return (
